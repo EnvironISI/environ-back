@@ -4,11 +4,17 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const expressSanitizer = require('express-sanitizer');
 const bodyParser = require('body-parser');
-const expressValidator = require('express-validator'); 
+const expressValidator = require('express-validator');
+const fileUpload = require('express-fileupload');
+var {firebase} = require('./config/firebaseConfig');
 
 app.use(bodyParser.json(), bodyParser.urlencoded({ extended: true }));
 app.use(expressSanitizer());
 app.use(cookieParser());
+app.use(fileUpload({
+  useTempFiles : true,
+  tempFileDir : '/tmp/'
+}));
 app.set('trust proxy', 1);
 app.use(session({
   secret: 'webbookfca',
@@ -33,7 +39,7 @@ app.use(function(req, res, next) {
   next();
 });
 
-require('./routes/auth.route.js')(app);
+require('./routes/auth.route.js')(app, firebase);
 //require('./config/passport/passport.js')(passport, models.user);
 //Sync Database
 /*models.sequelize.sync().then(function() {
