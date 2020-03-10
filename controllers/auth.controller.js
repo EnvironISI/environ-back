@@ -173,14 +173,17 @@ exports.delete = function(req, res, err){
 
 }
 exports.recoverPassword = function(req, res, err){
-    var user = firebase.auth().currentUser;
-    var emailAddress = user.email;
-
-    firebase.auth().sendPasswordResetEmail(emailAddress).then(function() {
-        // Email sent.
-        res.send('Email to recover password has been sent');
-    }).catch(function(error) {
-        console.log(error);
-        res.send(error);
-    });
+    var email = req.body.email;
+    admin.auth().getUserByEmail(email).then(function(userRecord){
+        console.log(userRecord)
+        firebase.auth().sendPasswordResetEmail(userRecord.email).then(function() {
+            // Email sent.
+            res.send('Email to recover password has been sent');
+        }).catch(function(error) {
+            console.log(error);
+            res.send(error);
+        });
+    }).catch(error => {
+        console.log(error)
+    })
 }
