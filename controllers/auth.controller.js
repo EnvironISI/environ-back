@@ -8,6 +8,7 @@ var exports = module.exports = function(firebase){};
 
 exports.user = function(req, res, err){
     admin.auth().getUser(req.user.uid).then((userRecord) => {
+        console.log(userRecord)
         res.status(200).send({user: req.user, roles: userRecord.customClaims})
     });
 }
@@ -73,19 +74,25 @@ exports.register = function(req, res, err){
         },
         json: true 
         };
+
         request(options, function (error, response, body) {
             if (error) throw new Error(error);
             // Store hash in database
-            admin.database().ref('/users/'+ result.user.uid).set({hubspot_id: body.companyId, email: email}, function(error){
-                if(error){
-                    res.status(400).send(error);
-                }
-                else{
-                    admin.auth().setCustomUserClaims(result.user.uid, {empresa: true}).then(() => {
-                        res.status(200).send("Companhia " + name + " foi criada com o ID: " + body.companyId);
-                    });
-                }
-            });
+            admin.auth().updateUser(result.user.uid, {
+                phoneNumber: phone,
+                displayName: name
+            }).then(() => {
+                admin.database().ref('/users/'+ result.user.uid).set({hubspot_id: body.companyId, email: email}, function(error){
+                    if(error){
+                        res.status(400).send(error);
+                    }
+                    else{
+                        admin.auth().setCustomUserClaims(result.user.uid, {empresa: true}).then(() => {
+                            res.status(200).send("Companhia " + name + " foi criada com o ID: " + body.companyId);
+                        });
+                    }
+                });
+            })
         })
     })
     .catch(function(error) {
