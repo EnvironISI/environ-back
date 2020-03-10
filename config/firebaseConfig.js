@@ -20,6 +20,7 @@ firebase.initializeApp({
 });
   
 firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE);
+firebase.auth().useDeviceLanguage();
 
 module.exports = {
     admin: admin,

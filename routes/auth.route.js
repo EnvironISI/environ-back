@@ -4,7 +4,7 @@ module.exports = function(app, firebase) {
     app.post('/login', authController.login);
     app.get('/user', isLoggedIn, authController.user);
     app.get('/logout', isLoggedIn, authController.logout);
-    app.get('/login', (req, res)=>{res.send('Login não efetuado')});
+    app.get('/login', (req, res)=>{res.status(401).send('Login não efetuado')});
 
     app.put('/edit/:uid', isLoggedIn, authController.edit);
     app.delete('/delete/:uid', isLoggedIn, authController.delete);

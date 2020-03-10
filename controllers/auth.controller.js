@@ -8,7 +8,7 @@ var exports = module.exports = function(firebase){};
 
 exports.user = function(req, res, err){
     admin.auth().getUser(req.user.uid).then((userRecord) => {
-        res.send({user: req.user, roles: userRecord.customClaims})
+        res.status(200).send({user: req.user, roles: userRecord.customClaims})
     });
 }
 exports.login = function(req, res, err){
@@ -25,7 +25,7 @@ exports.login = function(req, res, err){
                 res.cookie('__session', sessionCookie, options);
                 
                 admin.auth().verifyIdToken(idToken).then(function(decodedClaims) {
-                    res.send(result.user);
+                    res.status(200).send(result.user);
                 });
                     
             }, error => {
@@ -34,15 +34,15 @@ exports.login = function(req, res, err){
             });
         })
     }).catch(function(error) {
-        res.send(error)
+        res.status(500).send(error)
     });
 }
 exports.logout = function(req, res, err){
     firebase.auth().signOut().then(result => {
         res.clearCookie("__session");
-        res.send("Logout Sucessfully")
+        res.status(200).send("Logout Sucessfully")
     }).catch(function (err) {
-        res.send(err);
+        res.status(500).send(err);
     });
 }
 exports.register = function(req, res, err){
@@ -82,14 +82,14 @@ exports.register = function(req, res, err){
                 }
                 else{
                     admin.auth().setCustomUserClaims(result.user.uid, {empresa: true}).then(() => {
-                        res.send("Companhia " + name + " foi criada com o ID: " + body.companyId);
+                        res.status(200).send("Companhia " + name + " foi criada com o ID: " + body.companyId);
                     });
                 }
             });
         })
     })
     .catch(function(error) {
-        res.send(error)
+        res.status(500).send(error)
     })
 }
 exports.edit = function(req, res, err){
@@ -138,14 +138,15 @@ exports.edit = function(req, res, err){
                             displayName: display_name,
                             photoURL: photo_url
                         }).then(() => {
-                            res.send("Empresa " + name + " foi alterada");
+                            res.status(200).send("Empresa " + name + " foi alterada");
                         })
                     });
                 }
             });
         })
     }).catch(error => {
-        console.log(error)
+        console.log(error);
+        res.status(500).send("Server Error");
     })
 }
 exports.delete = function(req, res, err){
@@ -165,25 +166,25 @@ exports.delete = function(req, res, err){
                     console.log("logout com sucesso")
                 }
                 admin.database().ref("/users/"+uid).remove(function(){
-                    res.send("Empresa removida com sucesso!");
+                    res.status(200).send("Empresa removida com sucesso!");
                 })
             })
         })
+    }).catch(error => {
+        console.log(error);
+        res.status(500).send("Server Error");
     })
 
 }
 exports.recoverPassword = function(req, res, err){
     var email = req.body.email;
     admin.auth().getUserByEmail(email).then(function(userRecord){
-        console.log(userRecord)
         firebase.auth().sendPasswordResetEmail(userRecord.email).then(function() {
             // Email sent.
-            res.send('Email to recover password has been sent');
-        }).catch(function(error) {
-            console.log(error);
-            res.send(error);
-        });
-    }).catch(error => {
-        console.log(error)
-    })
+            res.status(200).send('Email to recover password has been sent');
+        })
+    }).catch(function(error) {
+        console.log(error);
+        res.status(500).send(error);
+    });
 }
