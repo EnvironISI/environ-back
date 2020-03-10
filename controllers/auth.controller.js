@@ -172,3 +172,15 @@ exports.delete = function(req, res, err){
     })
 
 }
+exports.recoverPassword = function(req, res, err){
+    var user = firebase.auth().currentUser;
+    var emailAddress = user.email;
+
+    firebase.auth().sendPasswordResetEmail(emailAddress).then(function() {
+        // Email sent.
+        res.send('Email to recover password has been sent');
+    }).catch(function(error) {
+        console.log(error);
+        res.send(error);
+    });
+}

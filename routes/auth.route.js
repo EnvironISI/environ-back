@@ -8,7 +8,7 @@ module.exports = function(app, firebase) {
 
     app.put('/edit/:uid', isLoggedIn, authController.edit);
     app.delete('/delete/:uid', isLoggedIn, authController.delete);
-
+    app.get('/recoverPassword', isLoggedIn, authController.recoverPassword);
     function isLoggedIn(req, res, next) {
         var user = firebase.auth().currentUser;
         if(user !== null) {
