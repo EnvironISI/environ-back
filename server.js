@@ -6,7 +6,7 @@ const cors = require("cors");
 app.use(cors({
   exposedHeaders: ['Location'],
   allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept'],
-  allowedOrigins: 'http://localhost:8080'
+  allowedOrigins: ['http://localhost:8080', 'https://environ-front.herokuapp.com/', 'http://environ-front.herokuapp.com/']
 }));
 app.use('/assets', express.static('assets'));
 app.use('/views', express.static('views'));

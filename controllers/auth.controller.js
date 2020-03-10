@@ -8,7 +8,6 @@ var exports = module.exports = function(firebase){};
 
 exports.user = function(req, res, err){
     admin.auth().getUser(req.user.uid).then((userRecord) => {
-        console.log(userRecord)
         res.status(200).send({user: req.user, roles: userRecord.customClaims})
     });
 }
