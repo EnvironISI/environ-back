@@ -7,10 +7,7 @@ var {admin, firebase} = require('../config/firebaseConfig.js');
 var exports = module.exports = {};
 
 exports.user = function(req, res, err){
-    firebase.auth().onAuthStateChanged(function(user) {
-        res.send(user.uid);
-    })
- 
+    res.send(req.user.uid);
     /*admin.auth().getUser(req.user.uid).then((userRecord) => {
         res.status(200).send({user: req.user, roles: userRecord.customClaims})
     });*/
