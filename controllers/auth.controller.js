@@ -4,12 +4,13 @@ const jsonMessages = require(jsonMessagesPath + "login");
 var request = require("request");
 var {admin, firebase} = require('../config/firebaseConfig.js');
 
-var exports = module.exports = function(firebase){};
+var exports = module.exports = {};
 
 exports.user = function(req, res, err){
-    admin.auth().getUser(req.user.uid).then((userRecord) => {
+    res.send(req.user.uid);
+    /*admin.auth().getUser(req.user.uid).then((userRecord) => {
         res.status(200).send({user: req.user, roles: userRecord.customClaims})
-    });
+    });*/
 }
 exports.login = function(req, res, err){
     var password = req.sanitize('password').escape();
