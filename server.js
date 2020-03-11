@@ -2,12 +2,15 @@ const port = process.env.PORT || 8080;
 const host = process.env.HOST || '127.0.0.1';
 const express = require('express');
 const app = express();
+var logger = require('morgan');
 const cors = require("cors");
+
 app.use(cors({
   exposedHeaders: ['Location'],
-  allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept'],
-  allowedOrigins: ['http://localhost:8080', 'https://environ-front.herokuapp.com/', 'http://environ-front.herokuapp.com/']
+  credentials: true, 
+  origin: ['http://localhost:8080', 'https://environ-front.herokuapp.com', 'http://environ-front.herokuapp.com', 'http://192.168.64.2']
 }));
+app.use(logger('dev'));
 app.use('/assets', express.static('assets'));
 app.use('/views', express.static('views'));
 app.listen(port, function(err) {

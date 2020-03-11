@@ -7,33 +7,29 @@ var {admin, firebase} = require('../config/firebaseConfig.js');
 var exports = module.exports = {};
 
 exports.user = function(req, res, err){
-    res.send(req.user.uid);
-    /*admin.auth().getUser(req.user.uid).then((userRecord) => {
-        res.status(200).send({user: req.user, roles: userRecord.customClaims})
-    });*/
+    res.send(req.user);
 }
 exports.login = function(req, res, err){
     var password = req.sanitize('password').escape();
     var email = req.sanitize('email').escape();
 
-    firebase.auth().signInWithEmailAndPassword(email, password).then(function (result){
-        const expiresIn = 60 * 60 * 24 * 5 * 1000;
-        result.user.getIdToken().then((idToken) => {
-            admin.auth().createSessionCookie(idToken, {expiresIn}).then((sessionCookie) => {
-            
-                // Set cookie policy for session cookie and set in response.
+    firebase.auth().signInWithEmailAndPassword(email, password).then(result =>{
+        result.user.getIdToken().then(idToken => {
+            const expiresIn = 60 * 60 * 24 * 5 * 1000;
+            admin.auth().createSessionCookie(idToken, {expiresIn})
+            .then((sessionCookie) => {
+                // Set cookie policy for session cookie.
                 const options = {maxAge: expiresIn, httpOnly: true, secure: true};
-                res.cookie('__session', sessionCookie, options);
-                
-                admin.auth().verifyIdToken(idToken).then(function(decodedClaims) {
-                    res.status(200).send(result.user);
-                });
-                    
+                res.cookie('session', sessionCookie, options);
+                res.status(200).send({data: result.user, token: idToken});
             }, error => {
-                res.status(401).send('UNAUTHORIZED REQUEST!');
                 console.log(error);
+                res.status(401).send('UNAUTHORIZED REQUEST!');
             });
-        })
+        });
+    }).then(() => {
+        // A page redirect would suffice as the persistence is set to NONE.
+        return firebase.auth().signOut();
     }).catch(function(error) {
         res.status(500).send(error)
     });
@@ -56,7 +52,12 @@ exports.register = function(req, res, err){
     var nif = req.sanitize('nif').escape();
     var password = req.sanitize('password').escape();
     
-    firebase.auth().createUserWithEmailAndPassword(email, password).then(function(result){
+    admin.auth().createUser({
+        email: email,
+        password: password,
+        phoneNumber: phone,
+        displayName: name
+    }).then(function(result){
 
         var options = {method: 'POST', 
         url: 'https://api.hubapi.com/companies/v2/companies',
@@ -78,21 +79,16 @@ exports.register = function(req, res, err){
         request(options, function (error, response, body) {
             if (error) throw new Error(error);
             // Store hash in database
-            admin.auth().updateUser(result.user.uid, {
-                phoneNumber: phone,
-                displayName: name
-            }).then(() => {
-                admin.database().ref('/users/'+ result.user.uid).set({hubspot_id: body.companyId, email: email}, function(error){
-                    if(error){
-                        res.status(400).send(error);
-                    }
-                    else{
-                        admin.auth().setCustomUserClaims(result.user.uid, {empresa: true}).then(() => {
-                            res.status(200).send("Companhia " + name + " foi criada com o ID: " + body.companyId);
-                        });
-                    }
-                });
-            })
+            admin.database().ref('/users/'+ result.user.uid).set({hubspot_id: body.companyId, email: email}, function(error){
+                if(error){
+                    res.status(400).send(error);
+                }
+                else{
+                    admin.auth().setCustomUserClaims(result.user.uid, {empresa: true}).then(() => {
+                        res.status(200).send("Companhia " + name + " foi criada com o ID: " + body.companyId);
+                    });
+                }
+            });
         })
     })
     .catch(function(error) {

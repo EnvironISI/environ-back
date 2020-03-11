@@ -10,19 +10,19 @@ module.exports = function(app) {
     app.put('/edit/:uid', isLoggedIn, authController.edit);
     app.delete('/delete/:uid', isLoggedIn, authController.delete);
     app.post('/recoverPassword', authController.recoverPassword);
-    function isLoggedIn(req, res, next) {
-        firebase.auth().currentUser.getIdToken(true).then(function(idToken){
-            var user = firebase.auth().currentUser;
-            if(user != null){
-                req.user = user;
-                next();
-            }else{
-                res.redirect('/login');
-            }
-        }).catch(error =>{
-            console.log(error);
-            res.status(500).send(error);
-        })
-    }
 
+    function isLoggedIn(req, res, next) {
+        if(req.headers.authtoken){
+            var idToken = req.headers.authtoken;
+            admin.auth().verifyIdToken(idToken).then(function(decodeToken){
+                admin.auth().getUser(decodeToken.uid).then(user => {
+                    req.user = user;
+                    next();
+                })
+            }).catch(error =>{
+                console.log(error);
+                res.status(500).send(error);
+            })
+        }
+    }
 };
