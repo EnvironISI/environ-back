@@ -54,8 +54,6 @@ exports.login = function(req, res, err){
     res.status(401).send('UNAUTHORIZED REQUEST!');
     return;
   }
-  // Set session expiration to 5 days.
-  const expiresIn = 60 * 60 * 24 * 5 * 1000;
   // Create the session cookie. This will also verify the ID token in the process.
   // The session cookie will have the same claims as the ID token.
   // To only allow session cookie setting on recent sign-in, auth_time in ID token
@@ -63,7 +61,7 @@ exports.login = function(req, res, err){
   admin.auth().createSessionCookie(idToken, {expiresIn})
     .then((sessionCookie) => {
      // Set cookie policy for session cookie.
-    const options = {expires: new Date(Date.now() + expiresIn), httpOnly: true, secure: true};
+    const options = {expires: new Date(Date.now() + 60 * 60 * 24 * 5 * 1000), httpOnly: true, secure: true};
     res.cookie('session', sessionCookie, options);
     res.end(JSON.stringify({status: 'success'}));
     }, error => {
