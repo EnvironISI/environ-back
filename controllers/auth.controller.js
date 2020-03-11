@@ -9,8 +9,8 @@ var exports = module.exports = {};
 exports.user = function(req, res, err){
     res.send(req.user);
 }
-/*exports.login = function(req, res, err){
-    var password = req.sanitize('password').escape();
+exports.login = function(req, res, err){
+    /*var password = req.sanitize('password').escape();
     var email = req.sanitize('email').escape();
 
     firebase.auth().signInWithEmailAndPassword(email, password).then(result =>{
@@ -32,9 +32,33 @@ exports.user = function(req, res, err){
         return firebase.auth().signOut();
     }).catch(function(error) {
         res.status(500).send(error)
+    });*/
+    // Get the ID token passed and the CSRF token.
+    
+  const idToken = req.body.idToken.toString();
+  const csrfToken = req.body.csrfToken.toString();
+  // Guard against CSRF attacks.
+  if (csrfToken !== req.cookies.csrfToken) {
+    res.status(401).send('UNAUTHORIZED REQUEST!');
+    return;
+  }
+  // Set session expiration to 5 days.
+  const expiresIn = 60 * 60 * 24 * 5 * 1000;
+  // Create the session cookie. This will also verify the ID token in the process.
+  // The session cookie will have the same claims as the ID token.
+  // To only allow session cookie setting on recent sign-in, auth_time in ID token
+  // can be checked to ensure user was recently signed in before creating a session cookie.
+  admin.auth().createSessionCookie(idToken, {expiresIn})
+    .then((sessionCookie) => {
+     // Set cookie policy for session cookie.
+     const options = {maxAge: expiresIn, httpOnly: true, secure: true};
+     res.cookie('session', sessionCookie, options);
+     res.end(JSON.stringify({status: 'success'}));
+    }, error => {
+     res.status(401).send('UNAUTHORIZED REQUEST!');
     });
 }
-exports.logout = function(req, res, err){
+/*exports.logout = function(req, res, err){
     admin.auth().revokeRefreshTokens(req.user.uid).then(() => {
         return admin.auth().getUser(req.user.uid);
     }).then(userRecord => {
