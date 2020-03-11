@@ -13,6 +13,7 @@ module.exports = function(app) {
 
     function isLoggedIn(req, res, next) {
         const sessionCookie = req.cookies.session || '';
+        console.log(sessionCookie)
         admin.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */)
             .then((decodedClaims) => {
                 console.log(decodedClaims);
