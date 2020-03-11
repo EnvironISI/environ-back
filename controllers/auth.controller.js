@@ -37,6 +37,7 @@ exports.login = function(req, res, err){
 
   const idToken = req.body.idToken
   const csrfToken = req.body.csrfToken
+  console.log(csrfToken)
   // Guard against CSRF attacks.
   if (csrfToken !== req.cookies.csrfToken) {
     res.status(401).send('UNAUTHORIZED REQUEST!');
@@ -58,7 +59,7 @@ exports.login = function(req, res, err){
         cookie: {
           secure: true,
           maxAge: 60000,
-          httpOnly: true,
+          httpOnly: false,
         }
     };
      res.cookie('session', sessionCookie, options);
