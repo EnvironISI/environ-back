@@ -35,11 +35,13 @@ exports.login = function(req, res, err){
     });
 }
 exports.logout = function(req, res, err){
-    firebase.auth().signOut().then(result => {
-        res.status(200).send("Logout Sucessfully " + result)
-    }).catch(function (err) {
-        res.status(500).send(err);
-    });
+    admin.auth().revokeRefreshTokens(req.user.uid).then(() => {
+        return admin.auth().getUser(req.user.uid);
+    }).then(userRecord => {
+        return new Date(userRecord.tokensValidAfterTime).getTime() / 1000;
+    }).then((timestamp) => {
+        console.log('Tokens revoked at: ', timestamp);
+    })
 }
 exports.register = function(req, res, err){
     var name = req.sanitize('name').escape();
