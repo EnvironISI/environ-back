@@ -12,7 +12,18 @@ module.exports = function(app) {
     //app.post('/recoverPassword', authController.recoverPassword);
 
     function isLoggedIn(req, res, next) {
-        if(req.headers.authtoken){
+        const sessionCookie = req.cookies.session || '';
+        admin.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */)
+            .then((decodedClaims) => {
+                console.log(decodedClaims);
+                next();
+              //serveContentForUser('/profile', req, res, decodedClaims);
+            })
+            .catch(error => {
+              // Session cookie is unavailable or invalid. Force user to login.
+              res.redirect('/login');
+            });
+        /*if(req.headers.authtoken){
             var idToken = req.headers.authtoken;
             admin.auth().verifyIdToken(idToken).then(function(decodeToken){
                 admin.auth().getUser(decodeToken.uid).then(user => {
@@ -24,6 +35,6 @@ module.exports = function(app) {
             })
         }else{
             res.status(403).send("Não autorizado!");
-        }
+        }*/
     }
 };
