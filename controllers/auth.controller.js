@@ -9,7 +9,7 @@ var exports = module.exports = {};
 exports.user = function(req, res, err){
     res.send(req.user);
 }
-exports.login = function(req, res, err){
+/*exports.login = function(req, res, err){
     var password = req.sanitize('password').escape();
     var email = req.sanitize('email').escape();
 
@@ -42,7 +42,7 @@ exports.logout = function(req, res, err){
     }).then((timestamp) => {
         console.log('Tokens revoked at: ', timestamp);
     })
-}
+}*/
 exports.register = function(req, res, err){
     var name = req.sanitize('name').escape();
     var email = req.sanitize('email').escape();
@@ -180,7 +180,7 @@ exports.delete = function(req, res, err){
     })
 
 }
-exports.recoverPassword = function(req, res, err){
+/*exports.recoverPassword = function(req, res, err){
     var email = req.body.email;
     admin.auth().getUserByEmail(email).then(function(userRecord){
         firebase.auth().sendPasswordResetEmail(userRecord.email).then(function() {
@@ -191,4 +191,4 @@ exports.recoverPassword = function(req, res, err){
         console.log(error);
         res.status(500).send(error);
     });
-}
+}*/

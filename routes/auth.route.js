@@ -1,15 +1,15 @@
 const authController = require('../controllers/auth.controller.js');
-var {firebase, admin} = require('../config/firebaseConfig.js');
+var {admin} = require('../config/firebaseConfig.js');
 module.exports = function(app) {
     app.post('/register', authController.register);
-    app.post('/login', authController.login);
+    //app.post('/login', authController.login);
     app.get('/user', isLoggedIn, authController.user);
-    app.get('/logout', isLoggedIn, authController.logout);
-    app.get('/login', (req, res)=>{res.status(401).send('Login não efetuado')});
+    //app.get('/logout', isLoggedIn, authController.logout);
+    //app.get('/login', (req, res)=>{res.status(401).send('Login não efetuado')});
 
     app.put('/edit/:uid', isLoggedIn, authController.edit);
     app.delete('/delete/:uid', isLoggedIn, authController.delete);
-    app.post('/recoverPassword', authController.recoverPassword);
+    //app.post('/recoverPassword', authController.recoverPassword);
 
     function isLoggedIn(req, res, next) {
         if(req.headers.authtoken){
@@ -20,9 +20,10 @@ module.exports = function(app) {
                     next();
                 })
             }).catch(error =>{
-                console.log(error);
-                res.status(500).send(error);
+                res.status(403).send("Não autorizado!");
             })
+        }else{
+            res.status(403).send("Não autorizado!");
         }
     }
 };
