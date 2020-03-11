@@ -3,12 +3,12 @@ var {admin} = require('../config/firebaseConfig.js');
 module.exports = function(app) {
     app.post('/register', authController.register);
     app.post('/login', authController.login);
-    app.get('/user', isLoggedIn, authController.user);
+    app.get('/user', authController.user);
     //app.get('/logout', isLoggedIn, authController.logout);
     app.get('/login', (req, res)=>{res.status(401).send('Login não efetuado')});
 
-    app.put('/edit/:uid', isLoggedIn, authController.edit);
-    app.delete('/delete/:uid', isLoggedIn, authController.delete);
+    app.put('/edit/:uid', authController.edit);
+    app.delete('/delete/:uid', authController.delete);
     //app.post('/recoverPassword', authController.recoverPassword);
 
     /*function isLoggedIn(req, res, next) {
