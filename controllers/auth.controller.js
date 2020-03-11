@@ -80,6 +80,9 @@ exports.logout = function(req, res, err){
     admin.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */).then((decodedClaims) => {
         res.clearCookie('session');
         res.status(200).send('Logout Successfully');
+    }).catch(error => {
+        console.log(error);
+        res.status(500).send(error)
     })
 }
 exports.register = function(req, res, err){
