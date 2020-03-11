@@ -67,7 +67,7 @@ exports.login = function(req, res, err){
         const options = {expires: new Date(Date.now() + 60 * 60 * 24 * 5 * 1000), httpOnly: true, secure: true};
         res.cookie('session', sessionCookie, options);
         console.log('nice')
-        res.end(JSON.stringify({status: 'success'}));
+        res.end(JSON.stringify({status: 'success', msg: req.session}));
     }, error => {
         console.log(error);
         res.status(401).send('UNAUTHORIZED REQUEST!');
