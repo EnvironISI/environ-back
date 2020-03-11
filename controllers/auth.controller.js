@@ -51,7 +51,16 @@ exports.login = function(req, res, err){
   admin.auth().createSessionCookie(idToken, {expiresIn})
     .then((sessionCookie) => {
      // Set cookie policy for session cookie.
-     const options = {maxAge: expiresIn, httpOnly: true, secure: true};
+     const options = {
+        secret: 'webbookfca',
+        resave: true,
+        saveUninitialized: true,
+        cookie: {
+          secure: true,
+          maxAge: 60000,
+          httpOnly: true,
+        }
+    };
      res.cookie('session', sessionCookie, options);
      res.end(JSON.stringify({status: 'success'}));
     }, error => {
