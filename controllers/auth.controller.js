@@ -34,9 +34,9 @@ exports.login = function(req, res, err){
         res.status(500).send(error)
     });*/
     // Get the ID token passed and the CSRF token.
-    
-  const idToken = req.body.idToken.toString();
-  const csrfToken = req.body.csrfToken.toString();
+
+  const idToken = req.body.idToken
+  const csrfToken = req.body.csrfToken
   // Guard against CSRF attacks.
   if (csrfToken !== req.cookies.csrfToken) {
     res.status(401).send('UNAUTHORIZED REQUEST!');
