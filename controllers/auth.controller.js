@@ -51,7 +51,7 @@ exports.login = function(req, res, err){
   admin.auth().createSessionCookie(idToken, {expiresIn})
     .then((sessionCookie) => {
      // Set cookie policy for session cookie.
-    const options = {expires: new Date(Date.now() + 900000), httpOnly: true, secure: true};
+    const options = {expires: expiresIn, httpOnly: true, secure: true};
     res.cookie('session', sessionCookie, options);
     res.end(JSON.stringify({status: 'success'}));
     }, error => {
