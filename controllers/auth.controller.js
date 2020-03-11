@@ -7,7 +7,19 @@ var {admin, firebase} = require('../config/firebaseConfig.js');
 var exports = module.exports = {};
 
 exports.user = function(req, res, err){
-    res.send(req.user);
+    const sessionCookie = req.cookies.session || '';
+    // Verify the session cookie. In this case an additional check is added to detect
+    // if the user's Firebase session was revoked, user deleted/disabled, etc.
+    admin.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */).then((decodedClaims) => {
+      admin.auth().getUser(decodedClaims.uid).then(user => {
+          res.status(200).send(user);
+      })
+    })
+    .catch((error) => {
+      // Session cookie is unavailable or invalid. Force user to login.
+      console.log(error)
+      res.redirect('/login');
+    });
 }
 exports.login = function(req, res, err){
     /*var password = req.sanitize('password').escape();
@@ -51,7 +63,7 @@ exports.login = function(req, res, err){
   admin.auth().createSessionCookie(idToken, {expiresIn})
     .then((sessionCookie) => {
      // Set cookie policy for session cookie.
-    const options = {expires: new Date(Date.now() + 60 * 60 * 24 * 5 * 1000), httpOnly: true, secure: true};
+    const options = {expires: new Date(Date.now() + expiresIn), httpOnly: true, secure: true};
     res.cookie('session', sessionCookie, options);
     res.end(JSON.stringify({status: 'success'}));
     }, error => {

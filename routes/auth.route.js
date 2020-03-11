@@ -11,9 +11,9 @@ module.exports = function(app) {
     app.delete('/delete/:uid', isLoggedIn, authController.delete);
     //app.post('/recoverPassword', authController.recoverPassword);
 
-    function isLoggedIn(req, res, next) {
+    /*function isLoggedIn(req, res, next) {
         const sessionCookie = req.cookies.session || '';
-        admin.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */)
+        admin.auth().verifySessionCookie(sessionCookie, true)
             .then((decodedClaims) => {
                 console.log(decodedClaims.uid);
                 next();
@@ -23,7 +23,7 @@ module.exports = function(app) {
               // Session cookie is unavailable or invalid. Force user to login.
               res.redirect('/login');
             });
-        /*if(req.headers.authtoken){
+        if(req.headers.authtoken){
             var idToken = req.headers.authtoken;
             admin.auth().verifyIdToken(idToken).then(function(decodeToken){
                 admin.auth().getUser(decodeToken.uid).then(user => {
@@ -35,6 +35,6 @@ module.exports = function(app) {
             })
         }else{
             res.status(403).send("Não autorizado!");
-        }*/
-    }
+        }
+    }*/
 };
