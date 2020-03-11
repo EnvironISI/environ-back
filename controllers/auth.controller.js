@@ -70,15 +70,15 @@ exports.login = function(req, res, err){
      res.status(401).send('UNAUTHORIZED REQUEST!');
     });
 }
-/*exports.logout = function(req, res, err){
-    admin.auth().revokeRefreshTokens(req.user.uid).then(() => {
-        return admin.auth().getUser(req.user.uid);
-    }).then(userRecord => {
-        return new Date(userRecord.tokensValidAfterTime).getTime() / 1000;
-    }).then((timestamp) => {
-        console.log('Tokens revoked at: ', timestamp);
+exports.logout = function(req, res, err){
+    const sessionCookie = req.cookies.session || '';
+    // Verify the session cookie. In this case an additional check is added to detect
+    // if the user's Firebase session was revoked, user deleted/disabled, etc.
+    admin.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */).then((decodedClaims) => {
+        res.clearCookie('session');
+        res.status(200).send('Logout Successfully');
     })
-}*/
+}
 exports.register = function(req, res, err){
     var name = req.sanitize('name').escape();
     var email = req.sanitize('email').escape();
