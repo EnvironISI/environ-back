@@ -36,8 +36,7 @@ exports.login = function(req, res, err){
 }
 exports.logout = function(req, res, err){
     firebase.auth().signOut().then(result => {
-        res.clearCookie("__session");
-        res.status(200).send("Logout Sucessfully")
+        res.status(200).send("Logout Sucessfully " + result)
     }).catch(function (err) {
         res.status(500).send(err);
     });
