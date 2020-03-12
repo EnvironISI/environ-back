@@ -126,6 +126,8 @@ exports.edit = function(req, res, err){
     //var sector = req.sanitize('sector').escape();
     var nif = req.sanitize('nif').escape();
 
+    var sessionCookie = req.cookies.session || '';
+
     admin.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */).then((decodedClaims) => {
         if(uid == decodedClaims.uid || decodedClaims.admin){
             admin.database().ref('/users/' + uid).once('value').then(snapshot => {
@@ -180,7 +182,7 @@ exports.edit = function(req, res, err){
 }
 exports.delete = function(req, res, err){
     var uid = req.params.uid;
-
+    var sessionCookie = req.cookies.session || '';
     admin.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */).then((decodedClaims) => {
         if(decodedClaims.uid == decodedClaims.admin){
             admin.database().ref("/users/"+uid).once('value').then(function(snapshot){ 
