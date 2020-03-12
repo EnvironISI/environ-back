@@ -12,7 +12,7 @@ exports.user = function(req, res, err){
     // if the user's Firebase session was revoked, user deleted/disabled, etc.
     admin.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */).then((decodedClaims) => {
       admin.auth().getUser(decodedClaims.uid).then(user => {
-          res.status(200).send({data: user, token: sessionCookie});
+          res.status(200).send({user: user, token: sessionCookie});
       })
     })
     .catch((error) => {
