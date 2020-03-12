@@ -162,7 +162,7 @@ exports.edit = function(req, res, err){
                                 displayName: name,
                                 photoURL: photo_url
                             }).then(() => {
-                                res.status(200).send("Empresa " + name + " foi alterada");
+                                res.status(200).send({data: "Empresa " + name + " foi alterada"});
                             })
                         }
                     }).catch(error => {
