@@ -39,14 +39,10 @@ app.use(function(req, res, next) {
   next();
 });
 
-require('./routes/auth.route.js')(app, firebase);
-//require('./config/passport/passport.js')(passport, models.user);
-//Sync Database
-/*models.sequelize.sync().then(function() {
-  console.log('Nice! Database looks fine');
+//Hubspot Routes - Authentication
+require('./routes/auth.route.js')(app);
+//Moloni Routes - Events System
+require('./routes/service.route.js')(app)
 
-}).catch(function(err) {
-  console.log(err, "Something went wrong with the Database Update!");
-});*/
 app.use('/', router);
 module.exports = app;
