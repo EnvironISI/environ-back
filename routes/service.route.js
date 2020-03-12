@@ -1,12 +1,7 @@
 const servicesController = require('../controllers/services.controller.js');
-var {admin} = require('../config/firebaseConfig.js');
+var request = require('request');
 
 module.exports = function(app){
-    app.get('/moloni', moloniAPI)
-    app.post('/createEvent', moloniAPI, servicesController.createEvent);
-
-}
-
-function moloniAPI(){
-    res.send(req)
+    app.get('/products', servicesController.products)
+    app.post('/createEvent', servicesController.createEvent);
 }

@@ -1,5 +1,4 @@
 const authController = require('../controllers/auth.controller.js');
-var {admin} = require('../config/firebaseConfig.js');
 module.exports = function(app) {
     app.post('/register', authController.register);
     //app.post('/sessionLogin', authController.sessionLogin);
