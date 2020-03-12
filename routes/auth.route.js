@@ -5,7 +5,7 @@ module.exports = function(app) {
     app.post('/login', authController.login);
     app.get('/user', authController.user);
     app.get('/logout', authController.logout);
-    app.get('/login', (req, res)=>{res.status(401).send('Acesso Não Autorizado')});
+    app.get('/login', (req, res)=>{res.status(401).send(JSON.stringify({data: 'Acesso Não Autorizado'}))});
     app.post('/recoverPassword', authController.recoverPassword);
 
     app.put('/edit/:uid', authController.edit);
