@@ -41,7 +41,7 @@ exports.login = function(req, res, err){
                 // Set cookie policy for session cookie.
                 const options = {expires: new Date(Date.now() + 60 * 60 * 24 * 5 * 1000), httpOnly: true, secure: true};
                 res.cookie('session', sessionCookie, options);
-                res.end({status: 'success', msg: req.session});
+                res.end({status: 'success'});
             }, error => {
                 console.log(error);
                 res.redirect('/login');
