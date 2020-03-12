@@ -12,7 +12,7 @@ exports.user = function(req, res, err){
     // if the user's Firebase session was revoked, user deleted/disabled, etc.
     admin.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */).then((decodedClaims) => {
       admin.auth().getUser(decodedClaims.uid).then(user => {
-          res.status(200).send(user);
+          res.status(200).send({user: user, claims: decodedClaims});
       })
     })
     .catch((error) => {
@@ -150,35 +150,34 @@ exports.edit = function(req, res, err){
     //var sector = req.sanitize('sector').escape();
     var nif = req.sanitize('nif').escape();
 
-    admin.database().ref('/users/' + uid).once('value').then(snapshot => {
-        var userInfo = snapshot.val();
+    admin.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */).then((decodedClaims) => {
+        admin.database().ref('/users/' + uid).once('value').then(snapshot => {
+            var userInfo = snapshot.val();
 
-        var options = {
-            method: 'PUT', 
-            url: `https://api.hubapi.com/companies/v2/companies/${userInfo.hubspot_id}`,
-            qs: {hapikey: 'e2c3af5b-f5fa-4cb8-a190-0409f322b8f8'},
-            headers: {'Content-Type': 'application/json' },
-            body:{ 
-                properties:
-               [{ name: 'name', value: name },
-                { name: 'email', value: email},
-                { name: 'phone', value: phone},
-                { name: 'city', value: city},
-                { name: 'country', value: country},
-                //{ name: 'industry', value: sector},
-                { name: 'nif', value: nif}] 
-            },
-            json: true 
-        };
-    
-        request(options, function (error, response, body) {
-            // Store hash in database
-            admin.database().ref('/users/'+ uid).set({hubspot_id: body.companyId, email: email}, function(error){
-                if(error){
-                    res.status(400).send(error);
-                }
-                else{
-                    admin.auth().setCustomUserClaims(uid, {empresa: true}).then(() => {
+            var options = {
+                method: 'PUT', 
+                url: `https://api.hubapi.com/companies/v2/companies/${userInfo.hubspot_id}`,
+                qs: {hapikey: 'e2c3af5b-f5fa-4cb8-a190-0409f322b8f8'},
+                headers: {'Content-Type': 'application/json' },
+                body:{ 
+                    properties:
+                    [{ name: 'name', value: name },
+                    { name: 'email', value: email},
+                    { name: 'phone', value: phone},
+                    { name: 'city', value: city},
+                    { name: 'country', value: country},
+                    //{ name: 'industry', value: sector},
+                    { name: 'nif', value: nif}] 
+                },
+                json: true 
+            };
+            request(options, function (error, response, body) {
+                // Store hash in database
+                admin.database().ref('/users/'+ uid).set({hubspot_id: body.companyId, email: email}, function(error){
+                    if(error){
+                        res.status(400).send(error);
+                    }
+                    else{
                         admin.auth().updateUser(uid, {
                             email: email,
                             displayName: display_name,
@@ -186,19 +185,26 @@ exports.edit = function(req, res, err){
                         }).then(() => {
                             res.status(200).send("Empresa " + name + " foi alterada");
                         })
-                    });
-                }
-            });
+                    }
+                }).catch(error => {
+                    console.log(error);
+                    res.status(500).send(error);
+                })
+            })
+        }).catch(error => {
+            console.log(error);
+            res.status(500).send(error);
         })
     }).catch(error => {
         console.log(error);
-        res.status(500).send("Server Error");
+        res.status(401).send("Accesso não autorizado");
     })
 }
 exports.delete = function(req, res, err){
     var uid = req.params.uid;
 
-    admin.database().ref("/users/"+uid).once('value').then(function(snapshot){ 
+    admin.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */).then((decodedClaims) => {
+        admin.database().ref("/users/"+uid).once('value').then(function(snapshot){ 
         admin.auth().deleteUser(uid).then(function(){ 
             var userInfo = snapshot.val(); 
             var options = {method: 'DELETE', 
@@ -211,14 +217,18 @@ exports.delete = function(req, res, err){
                     firebase.auth().signOut();
                     console.log("logout com sucesso")
                 }
-                admin.database().ref("/users/"+uid).remove(function(){
-                    res.status(200).send("Empresa removida com sucesso!");
+                    admin.database().ref("/users/"+uid).remove(function(){
+                        res.status(200).send("Empresa removida com sucesso!");
+                    })
                 })
             })
+        }).catch(error => {
+            console.log(error);
+            res.status(500).send("Server Error");
         })
     }).catch(error => {
         console.log(error);
-        res.status(500).send("Server Error");
+        res.status(401).send("Acesso não autorizado");
     })
 
 }
