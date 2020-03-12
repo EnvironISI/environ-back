@@ -26,7 +26,7 @@ exports.user = function(req, res, err){
                     /*info.nif = body.properties.nif;
                     info.country = body.properties.nif;
                     info.city = body.city;*/
-                    res.status(200).send(body);
+                    res.status(200).send(body.properties);
                 }) 
             }).catch(error => {
                 console.log(error);
