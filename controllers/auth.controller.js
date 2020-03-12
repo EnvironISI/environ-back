@@ -27,7 +27,7 @@ exports.login = function(req, res, err){
     const csrfToken = req.body.csrfToken
     // Guard against CSRF attacks.
     if (csrfToken !== req.cookies.csrfToken) {
-        res.status(401).send('UNAUTHORIZED REQUEST!');
+        res.redirect('/login');
         return;
     }
     // Set session expiration to 5 days.
@@ -44,7 +44,7 @@ exports.login = function(req, res, err){
         res.end(JSON.stringify({status: 'success', msg: req.session}));
     }, error => {
         console.log(error);
-        res.status(401).send('UNAUTHORIZED REQUEST!');
+        res.redirect('/login');
     });
 }
 exports.logout = function(req, res, err){
@@ -52,15 +52,13 @@ exports.logout = function(req, res, err){
     // Verify the session cookie. In this case an additional check is added to detect
     // if the user's Firebase session was revoked, user deleted/disabled, etc.
     res.clearCookie('session');
-    admin.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */).then((decodedClaims) => {
-        admin.auth().verifySessionCookie(sessionCookie).then((decodedClaims) => {
-            return admin.auth().revokeRefreshTokens(decodedClaims.sub);
-        }).then(() => {
-            res.status(200).send('Logout Successfully');
-        })   
+    admin.auth().verifySessionCookie(sessionCookie).then((decodedClaims) => {
+        return admin.auth().revokeRefreshTokens(decodedClaims.sub);
+    }).then(() => {
+        res.status(200).send('Logout Successfully');
     }).catch(error => {
         console.log(error);
-        res.status(500).send(error)
+        res.redirect('/login');
     })
 }
 exports.register = function(req, res, err){
@@ -177,7 +175,7 @@ exports.edit = function(req, res, err){
         }
     }).catch(error => {
         console.log(error);
-        res.status(401).send("Accesso não autorizado");
+        res.redirect('/login');
     })
 }
 exports.delete = function(req, res, err){
@@ -210,7 +208,7 @@ exports.delete = function(req, res, err){
         }
     }).catch(error => {
         console.log(error);
-        res.status(401).send("Acesso não autorizado");
+        res.redirect('/login');
     })
 
 }
