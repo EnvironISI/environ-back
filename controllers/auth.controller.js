@@ -24,6 +24,7 @@ exports.user = function(req, res, err){
                 };
                 request(options, function (error, response, body) {
                     if(error) res.status(500).send({error: error});
+                    console.log(body)
                     info.nif = body.nif;
                     info.country = body.country;
                     info.city = body.city;
