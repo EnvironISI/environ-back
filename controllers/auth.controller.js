@@ -11,11 +11,22 @@ exports.user = function(req, res, err){
     // Verify the session cookie. In this case an additional check is added to detect
     // if the user's Firebase session was revoked, user deleted/disabled, etc.
     admin.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */).then((decodedClaims) => {
-      admin.auth().getUser(decodedClaims.uid).then(user => {
-          res.status(200).send({user: user, token: sessionCookie});
-      })
-    })
-    .catch((error) => {
+        admin.auth().getUser(decodedClaims.uid).then(user => {
+            var options = {
+                method: 'GET', 
+                url: `https://api.hubapi.com/companies/v2/companies/${userInfo.hubspot_id}`,
+                qs: {hapikey: 'e2c3af5b-f5fa-4cb8-a190-0409f322b8f8'},
+                headers: {'Content-Type': 'application/json'}
+            };
+            request(options, function (error, response, body) {
+                if(error) res.status(500).send({error: error});
+                user.nif = body.nif;
+                user.country = body.country;
+                user.city = body.city;
+                res.status(200).send({user: user, token: sessionCookie});
+            }) 
+        })
+    }).catch((error) => {
       // Session cookie is unavailable or invalid. Force user to login.
       console.log(error)
       res.redirect('/login');
