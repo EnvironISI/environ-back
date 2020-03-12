@@ -12,7 +12,7 @@ exports.user = function(req, res, err){
     // if the user's Firebase session was revoked, user deleted/disabled, etc.
     admin.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */).then((decodedClaims) => {
       admin.auth().getUser(decodedClaims.uid).then(user => {
-          res.status(200).send(JSON.stringify({data: user, token: sessionCookie}));
+          res.status(200).send({data: user, token: sessionCookie});
       })
     })
     .catch((error) => {
@@ -41,7 +41,7 @@ exports.login = function(req, res, err){
                 // Set cookie policy for session cookie.
                 const options = {expires: new Date(Date.now() + 60 * 60 * 24 * 5 * 1000), httpOnly: true, secure: true};
                 res.cookie('session', sessionCookie, options);
-                res.end(JSON.stringify({status: 'success', msg: req.session}));
+                res.end({status: 'success', msg: req.session});
             }, error => {
                 console.log(error);
                 res.redirect('/login');
@@ -63,7 +63,7 @@ exports.logout = function(req, res, err){
     admin.auth().verifySessionCookie(sessionCookie).then((decodedClaims) => {
         return admin.auth().revokeRefreshTokens(decodedClaims.sub);
     }).then(() => {
-        res.status(200).send(JSON.stringify({data: 'Logout Successfully'}));
+        res.status(200).send({data: 'Logout Successfully'});
     }).catch(error => {
         console.log(error);
         res.redirect('/login');
@@ -103,24 +103,24 @@ exports.register = function(req, res, err){
         };
 
         request(options, function (error, response, body) {
-            if (error) res.status(500).send(JSON.stringify({error: error}));
+            if (error) res.status(500).send({error: error});
             // Store hash in database
             admin.database().ref('/users/'+ result.uid).set({hubspot_id: body.companyId, email: email}).then(() => {
                 admin.auth().setCustomUserClaims(result.uid, {empresa: true}).then(() => {
-                    res.status(200).send(JSON.stringify({data: "Companhia " + name + " foi criada com o ID: " + body.companyId}));
+                    res.status(200).send({data: "Companhia " + name + " foi criada com o ID: " + body.companyId});
                 }).catch(error => {
                     console.log(error)
-                    res.status(500).send(JSON.stringify({error: error}))
+                    res.status(500).send({error: error})
                 })
             }).catch(error => {
                 console.log(error)
-                res.status(500).send(JSON.stringify({error: error}))
+                res.status(500).send({error: error})
             })
         })
     })
     .catch(function(error) {
         console.log(error)
-        res.status(500).send(JSON.stringify({error: error}))
+        res.status(500).send({error: error})
     })
 }
 exports.edit = function(req, res, err){
@@ -160,7 +160,7 @@ exports.edit = function(req, res, err){
                     json: true 
                 };
                 request(options, function (error, response, body) {
-                    if(error) res.status(500).send(JSON.stringify({error: error}));
+                    if(error) res.status(500).send({error: error});
                     // Store hash in database
                     admin.database().ref('/users/'+ uid).set({hubspot_id: body.companyId, email: email}).then(() => {
                         admin.auth().updateUser(uid, {
@@ -171,16 +171,16 @@ exports.edit = function(req, res, err){
                             res.status(200).send({data: "Empresa " + name + " foi alterada"});
                         }).catch(error => {
                             console.log(error);
-                            res.status(500).send(JSON.stringify({error: error}))
+                            res.status(500).send({error: error})
                         })
                     }).catch(error => {
                         console.log(error);
-                        res.status(500).send(JSON.stringify({error: error}))
+                        res.status(500).send({error: error})
                     })
                 })
             }).catch(error => {
                 console.log(error);
-                res.status(500).send(JSON.stringify({error: error}))
+                res.status(500).send({error: error})
             })
         }else{
             res.redirect('/login');
@@ -204,24 +204,24 @@ exports.delete = function(req, res, err){
                         qs: {hapikey: 'e2c3af5b-f5fa-4cb8-a190-0409f322b8f8'}
                     };
                     request(options, function (error, response, body) {
-                        if (error) res.status(500).send(JSON.stringify({error: error}));
+                        if (error) res.status(500).send({error: error});
                         if(uid == decodedClaims.uid){
                             res.redirect('/logout');
                         }
                         admin.database().ref("/users/"+uid).remove(function(){
-                            res.status(200).send(JSON.stringify({data: "Empresa removida com sucesso!"}));
+                            res.status(200).send({data: "Empresa removida com sucesso!"});
                         }).catch(error => {
                             console.log(error);
-                            res.status(500).send(JSON.stringify({error: error}))
+                            res.status(500).send({error: error})
                         })
                     })
                 }).catch(error => {
                     console.log(error);
-                    res.status(500).send(JSON.stringify({error: error}))
+                    res.status(500).send({error: error})
                 })
             }).catch(error => {
                 console.log(error);
-                res.status(500).send(JSON.stringify({error: error}))
+                res.status(500).send({error: error})
             })
         }else{
             res.redirect('/login');
@@ -236,9 +236,9 @@ exports.recoverPassword = function(req, res, err){
     var email = req.body.email;
     firebase.auth().sendPasswordResetEmail(email).then(() => {
         // Email sent.
-        res.status(200).send(JSON.stringify({data: "Email sent successfully"}));
+        res.status(200).send({data: "Email sent successfully"});
     }).catch(error => {
         console.log(error)
-        res.status(500).send(JSON.stringify({error: error}))
+        res.status(500).send({error: error});
     })
 }

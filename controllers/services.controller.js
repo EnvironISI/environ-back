@@ -52,9 +52,9 @@ exports.createEvent = function(req, res, err){
             moloni.products('insert', params, function(error, result){
                 if(error) {
                     console.log(error)
-                    res.status(400).send(error);
+                    res.status(400).send(JSON.stringify({error: error}));
                 }else{
-                    res.status(200).send(result);
+                    res.status(200).send(JSON.stringify({data: result}));
                 }
             })
         })
