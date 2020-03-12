@@ -105,12 +105,12 @@ exports.register = function(req, res, err){
         request(options, function (error, response, body) {
             if (error) throw new Error(error);
             // Store hash in database
-            admin.database().ref('/users/'+ result.user.uid).set({hubspot_id: body.companyId, email: email}, function(error){
+            admin.database().ref('/users/'+ result.uid).set({hubspot_id: body.companyId, email: email}, function(error){
                 if(error){
                     res.status(400).send(error);
                 }
                 else{
-                    admin.auth().setCustomUserClaims(result.user.uid, {empresa: true}).then(() => {
+                    admin.auth().setCustomUserClaims(result.uid, {empresa: true}).then(() => {
                         res.status(200).send("Companhia " + name + " foi criada com o ID: " + body.companyId);
                     }).catch(error => {
                         console.log(error)
