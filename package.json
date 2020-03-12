@@ -5,6 +5,7 @@
   "main": "server.js",
   "author": "EnvironINC",
   "dependencies": {
+    "@hubspot/api-client": "^0.4.0",
     "body-parser": "^1.16.0",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.4",

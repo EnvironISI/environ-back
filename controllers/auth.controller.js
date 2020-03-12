@@ -112,9 +112,15 @@ exports.register = function(req, res, err){
                 else{
                     admin.auth().setCustomUserClaims(result.user.uid, {empresa: true}).then(() => {
                         res.status(200).send("Companhia " + name + " foi criada com o ID: " + body.companyId);
-                    });
+                    }).catch(error => {
+                        console.log(error)
+                        res.status(500).send({error: error})
+                    })
                 }
-            });
+            }).catch(error => {
+                console.log(error)
+                res.status(500).send({error: error})
+            })
         })
     })
     .catch(function(error) {
