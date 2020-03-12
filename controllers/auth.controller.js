@@ -116,6 +116,7 @@ exports.register = function(req, res, err){
 }
 exports.edit = function(req, res, err){
     const uid = req.params.uid;
+
     const photo_url = req.body.photo_url;
     const display_name = req.sanitize('display_name').escape();
     var name = req.sanitize('name').escape();
@@ -174,6 +175,8 @@ exports.edit = function(req, res, err){
                 console.log(error);
                 res.status(500).send(error);
             })
+        }else{
+            res.redirect('/login');
         }
     }).catch(error => {
         console.log(error);
@@ -207,6 +210,8 @@ exports.delete = function(req, res, err){
                 console.log(error);
                 res.status(500).send("Server Error");
             })
+        }else{
+            res.redirect('/login');
         }
     }).catch(error => {
         console.log(error);
