@@ -30,7 +30,8 @@ exports.createEvent = function(req, res, err){
                 reference: name,
                 summary: summary,
                 price: 0.0,
-                unid_id: 1076333,
+                unit_id: 1076333,
+                has_stock: 1,
                 properties: [
                     {
                         property_id: 11542,
