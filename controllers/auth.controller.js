@@ -21,7 +21,7 @@ exports.user = function(req, res, err){
       res.redirect('/login');
     });
 }
-exports.login = function(req, res, err){
+exports.sessionLogin = function(req, res, err){
     // Get the ID token passed and the CSRF token.
     const idToken = req.body.idToken
     const csrfToken = req.body.csrfToken
@@ -46,6 +46,25 @@ exports.login = function(req, res, err){
         console.log(error);
         res.redirect('/login');
     });
+}
+exports.login = function(req, res, err){
+    var email = req.body.email;
+    var password = req.body.password;
+    firebase.auth().signInWithEmailAndPassword(email, password).then(user => {
+        // Get the user's ID token as it is needed to exchange for a session cookie.
+        return user.user.getIdToken().then(idToken => {
+            // Session login endpoint is queried and the session cookie is set.
+            // CSRF protection should be taken into account.
+            // ...
+            res.status(200).send({idToken: idToken});
+        });
+    }).then(() => {
+        // A page redirect would suffice as the persistence is set to NONE.
+        return firebase.auth().signOut();
+    }).catch(error => {
+        console.log(error);
+        res.status(500).send(error)
+    })
 }
 exports.logout = function(req, res, err){
     const sessionCookie = req.cookies.session || '';

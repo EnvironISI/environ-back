@@ -1,5 +1,5 @@
 const admin = require('firebase-admin');
-//const firebase = require('firebase');
+const firebase = require('firebase');
 const serviceAccount = require('../isienviron-firebase-adminsdk-2g8b8-00fd0102b6.json');
 
 admin.initializeApp({
@@ -8,7 +8,7 @@ admin.initializeApp({
     storageBucket: "isienviron.appspot.com"
 });
 
-/*firebase.initializeApp({
+firebase.initializeApp({
     apiKey: "AIzaSyB8MYslNwT_i3mCs7UhuiU4ZlF8TFmU5P8",
     authDomain: "isienviron.firebaseapp.com",
     databaseURL: "https://isienviron.firebaseio.com",
@@ -20,9 +20,9 @@ admin.initializeApp({
 });
   
 firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE);
-firebase.auth().useDeviceLanguage();*/
+firebase.auth().useDeviceLanguage();
 
 module.exports = {
     admin: admin,
-    //firebase: firebase
+    firebase: firebase
 }
