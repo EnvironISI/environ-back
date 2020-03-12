@@ -32,6 +32,7 @@ exports.createEvent = function(req, res, err){
                 price: 0.0,
                 unit_id: 1076333,
                 has_stock: 1,
+                exemption_reason: "none",
                 properties: [
                     {
                         property_id: 11542,
