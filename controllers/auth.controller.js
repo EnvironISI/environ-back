@@ -20,15 +20,13 @@ exports.user = function(req, res, err){
                     method: 'GET', 
                     url: `https://api.hubapi.com/companies/v2/companies/${userInfo.hubspot_id}`,
                     qs: {hapikey: 'e2c3af5b-f5fa-4cb8-a190-0409f322b8f8'},
-                    headers: {'Content-Type': 'application/json'}
                 };
                 request(options, function (error, response, body) {
                     if(error) res.status(500).send({error: error});
-                    console.log(body)
-                    info.nif = body.nif;
-                    info.country = body.country;
+                    info.nif = body.properties.nif;
+                    info.country = body.properties.nif;
                     info.city = body.city;
-                    res.status(200).send({user: info, token: sessionCookie});
+                    res.status(200).send({user: body, token: sessionCookie});
                 }) 
             }).catch(error => {
                 console.log(error);
