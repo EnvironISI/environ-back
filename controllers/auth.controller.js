@@ -23,9 +23,9 @@ exports.user = function(req, res, err){
                 };
                 request(options, function (error, response, body) {
                     if(error) res.status(500).send({error: error});
-                    info.nif = body.properties.nif;
+                    /*info.nif = body.properties.nif;
                     info.country = body.properties.nif;
-                    info.city = body.city;
+                    info.city = body.city;*/
                     res.status(200).send({user: body, token: sessionCookie});
                 }) 
             }).catch(error => {
