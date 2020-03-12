@@ -78,7 +78,6 @@ exports.register = function(req, res, err){
     var sector = req.sanitize('sector').escape();
     var nif = req.sanitize('nif').escape();
     var password = req.sanitize('password').escape();
-    
     admin.auth().createUser({
         email: email,
         password: password,
