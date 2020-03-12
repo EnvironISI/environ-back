@@ -33,6 +33,7 @@ exports.createEvent = function(req, res, err){
                 unit_id: 1076333,
                 has_stock: 1,
                 exemption_reason: "none",
+                warehouses: [],
                 properties: [
                     {
                         property_id: 11542,
