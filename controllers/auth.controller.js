@@ -12,6 +12,7 @@ exports.user = function(req, res, err){
     // if the user's Firebase session was revoked, user deleted/disabled, etc.
     admin.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */).then((decodedClaims) => {
         admin.auth().getUser(decodedClaims.uid).then(user => {
+            let info = user;
             admin.database().ref('/users/' + decodedClaims.uid).once('value').then(snapshot => {
                 var userInfo = snapshot.val();
                 
@@ -23,10 +24,10 @@ exports.user = function(req, res, err){
                 };
                 request(options, function (error, response, body) {
                     if(error) res.status(500).send({error: error});
-                    user.nif = body.nif;
-                    user.country = body.country;
-                    user.city = body.city;
-                    res.status(200).send({user: user, token: sessionCookie});
+                    info.nif = body.nif;
+                    info.country = body.country;
+                    info.city = body.city;
+                    res.status(200).send({user: info, token: sessionCookie});
                 }) 
             }).catch(error => {
                 console.log(error);
