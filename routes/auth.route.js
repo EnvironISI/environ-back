@@ -9,32 +9,4 @@ module.exports = function(app) {
 
     app.put('/edit/:uid', authController.edit);
     app.delete('/delete/:uid', authController.delete);
-    //app.post('/recoverPassword', authController.recoverPassword);
-
-    /*function isLoggedIn(req, res, next) {
-        const sessionCookie = req.cookies.session || '';
-        admin.auth().verifySessionCookie(sessionCookie, true)
-            .then((decodedClaims) => {
-                console.log(decodedClaims.uid);
-                next();
-              //serveContentForUser('/profile', req, res, decodedClaims);
-            })
-            .catch(error => {
-              // Session cookie is unavailable or invalid. Force user to login.
-              res.redirect('/login');
-            });
-        if(req.headers.authtoken){
-            var idToken = req.headers.authtoken;
-            admin.auth().verifyIdToken(idToken).then(function(decodeToken){
-                admin.auth().getUser(decodeToken.uid).then(user => {
-                    req.user = user;
-                    next();
-                })
-            }).catch(error =>{
-                res.status(403).send("Não autorizado!");
-            })
-        }else{
-            res.status(403).send("Não autorizado!");
-        }
-    }*/
 };

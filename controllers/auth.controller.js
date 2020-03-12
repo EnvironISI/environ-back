@@ -12,7 +12,7 @@ exports.user = function(req, res, err){
     // if the user's Firebase session was revoked, user deleted/disabled, etc.
     admin.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */).then((decodedClaims) => {
       admin.auth().getUser(decodedClaims.uid).then(user => {
-          res.status(200).send({user: user, claims: decodedClaims});
+          res.status(200).send({user: user, token: sessionCookie});
       })
     })
     .catch((error) => {
@@ -22,40 +22,14 @@ exports.user = function(req, res, err){
     });
 }
 exports.login = function(req, res, err){
-    /*var password = req.sanitize('password').escape();
-    var email = req.sanitize('email').escape();
-
-    firebase.auth().signInWithEmailAndPassword(email, password).then(result =>{
-        result.user.getIdToken().then(idToken => {
-            const expiresIn = 60 * 60 * 24 * 5 * 1000;
-            admin.auth().createSessionCookie(idToken, {expiresIn})
-            .then((sessionCookie) => {
-                // Set cookie policy for session cookie.
-                const options = {maxAge: expiresIn, httpOnly: true, secure: true};
-                res.cookie('session', sessionCookie, options);
-                res.status(200).send({data: result.user, token: idToken});
-            }, error => {
-                console.log(error);
-                res.status(401).send('UNAUTHORIZED REQUEST!');
-            });
-        });
-    }).then(() => {
-        // A page redirect would suffice as the persistence is set to NONE.
-        return firebase.auth().signOut();
-    }).catch(function(error) {
-        res.status(500).send(error)
-    });*/
     // Get the ID token passed and the CSRF token.
-
     const idToken = req.body.idToken
     const csrfToken = req.body.csrfToken
     // Guard against CSRF attacks.
-
     if (csrfToken !== req.cookies.csrfToken) {
         res.status(401).send('UNAUTHORIZED REQUEST!');
         return;
     }
-
     // Set session expiration to 5 days.
     const expiresIn = 60 * 60 * 24 * 5 * 1000;
     // Create the session cookie. This will also verify the ID token in the process.
@@ -236,15 +210,3 @@ exports.delete = function(req, res, err){
     })
 
 }
-/*exports.recoverPassword = function(req, res, err){
-    var email = req.body.email;
-    admin.auth().getUserByEmail(email).then(function(userRecord){
-        firebase.auth().sendPasswordResetEmail(userRecord.email).then(function() {
-            // Email sent.
-            res.status(200).send('Email to recover password has been sent');
-        })
-    }).catch(function(error) {
-        console.log(error);
-        res.status(500).send(error);
-    });
-}*/
