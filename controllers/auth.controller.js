@@ -118,7 +118,6 @@ exports.edit = function(req, res, err){
     const uid = req.params.uid;
 
     const photo_url = req.body.photo_url;
-    const display_name = req.sanitize('display_name').escape();
     var name = req.sanitize('name').escape();
     var email = req.sanitize('email').escape();
     var phone = req.sanitize('phone').escape();
@@ -160,7 +159,7 @@ exports.edit = function(req, res, err){
                         else{
                             admin.auth().updateUser(uid, {
                                 email: email,
-                                displayName: display_name,
+                                displayName: name,
                                 photoURL: photo_url
                             }).then(() => {
                                 res.status(200).send("Empresa " + name + " foi alterada");
