@@ -51,9 +51,13 @@ exports.logout = function(req, res, err){
     const sessionCookie = req.cookies.session || '';
     // Verify the session cookie. In this case an additional check is added to detect
     // if the user's Firebase session was revoked, user deleted/disabled, etc.
+    res.clearCookie('session');
     admin.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */).then((decodedClaims) => {
-        res.clearCookie('session');
-        res.status(200).send('Logout Successfully');
+        admin.auth().verifySessionCookie(sessionCookie).then((decodedClaims) => {
+            return admin.auth().revokeRefreshTokens(decodedClaims.sub);
+        }).then(() => {
+            res.status(200).send('Logout Successfully');
+        })   
     }).catch(error => {
         console.log(error);
         res.status(500).send(error)
