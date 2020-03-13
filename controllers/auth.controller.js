@@ -115,12 +115,6 @@ exports.register = function(req, res, err){
     var password = req.sanitize('password').escape();
     let type = req.sanitize('type').escape();
 
-    console.log(type);
-
-    if(type != "empresa" || type != "camara"){
-        res.status(400).send({error: "Escolha entre empresa ou camara"});
-    }
-
     admin.auth().createUser({
         email: email,
         password: password,
@@ -169,8 +163,7 @@ exports.register = function(req, res, err){
                 res.status(500).send({error: error})
             })
         })
-    })
-    .catch(function(error) {
+    }).catch(function(error) {
         console.log(error)
         res.status(500).send({error: error})
     })
