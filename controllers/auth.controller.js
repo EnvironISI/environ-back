@@ -113,10 +113,12 @@ exports.register = function(req, res, err){
     var sector = req.sanitize('sector').escape();
     var nif = req.sanitize('nif').escape();
     var password = req.sanitize('password').escape();
-    var type = req.sanitize('type').escape();
+    let type = req.sanitize('type').escape();
+
+    console.log(type);
 
     if(type != "empresa" || type != "camara"){
-        res.status(400).send({error: "Escolha entre \"empresa\" ou \"camara\""});
+        res.status(400).send({error: "Escolha entre empresa ou camara"});
     }
 
     admin.auth().createUser({
