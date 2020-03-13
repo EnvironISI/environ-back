@@ -29,6 +29,7 @@ exports.user = function(req, res, err){
                     else if(user.customClaims.camara) role = 'camara';
                     info = {
                         uid: user.uid, 
+                        name: user.displayName,
                         email: user.email, 
                         emailVerfied: user.emailVerified, 
                         phoneNumber: user.phoneNumber, 
