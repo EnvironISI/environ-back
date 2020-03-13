@@ -158,6 +158,9 @@ exports.register = function(req, res, err){
                         res.status(500).send({error: error})
                     })
                 }
+                else{
+                    res.status(400).send({error: "Insira o tipo camara ou empresa"})
+                }
             }).catch(error => {
                 console.log(error)
                 res.status(500).send({error: error})
