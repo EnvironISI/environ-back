@@ -12,21 +12,35 @@ exports.user = function(req, res, err){
     // if the user's Firebase session was revoked, user deleted/disabled, etc.
     admin.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */).then((decodedClaims) => {
         admin.auth().getUser(decodedClaims.uid).then(user => {
-            let info = user;
             admin.database().ref('/users/' + decodedClaims.uid).once('value').then(snapshot => {
                 var userInfo = snapshot.val();
-                
+                let info = [];
+                let role;
                 var options = {
                     method: 'GET', 
                     url: `https://api.hubapi.com/companies/v2/companies/${userInfo.hubspot_id}`,
                     qs: {hapikey: 'e2c3af5b-f5fa-4cb8-a190-0409f322b8f8'},
+                    json: true
                 };
                 request(options, function (error, response, body) {
                     if(error) res.status(500).send({error: error});
-                    /*info.nif = body.properties.nif;
-                    info.country = body.properties.nif;
-                    info.city = body.city;*/
-                    res.status(200).send(body.properties);
+                    if(user.customClaims.empresa) role = 'empresa';
+                    else if(user.customClaims.admin) role = 'admin';
+                    else if(user.customClaims.camara) role = 'camara';
+                    info = {
+                        uid: user.uid, 
+                        email: user.email, 
+                        emailVerfied: user.emailVerified, 
+                        phoneNumber: user.phoneNumber, 
+                        photoUrl: user.photoURL,
+                        role: role,
+                        disabled: user.disabled,
+                        nif: body.properties.nif.value,
+                        country: body.properties.country.value,
+                        city: body.properties.city.value,
+                        setor: body.properties.industry.value
+                    };
+                    res.status(200).send({user: info, token: sessionCookie});
                 }) 
             }).catch(error => {
                 console.log(error);
@@ -60,7 +74,7 @@ exports.login = function(req, res, err){
             // can be checked to ensure user was recently signed in before creating a session cookie.
             admin.auth().createSessionCookie(idToken, {expiresIn}).then((sessionCookie) => {
                 // Set cookie policy for session cookie.
-                const options = {expires: new Date(Date.now() + 60 * 60 * 24 * 5 * 1000), httpOnly: true, secure: true};
+                const options = {expires: new Date(Date.now() + 60 * 60 * 24 * 5 * 1000), httpOnly: false, secure: false};
                 res.cookie('session', sessionCookie, options);
                 res.send({status: 'success'})
             }, error => {
