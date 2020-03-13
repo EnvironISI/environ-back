@@ -12,4 +12,5 @@ module.exports = function(app) {
 
     app.put('/edit/:uid', authController.edit);
     app.delete('/delete/:uid', authController.delete);
+    app.put('/setadmin/:uid', authController.setAdmin);
 };

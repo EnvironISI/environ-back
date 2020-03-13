@@ -113,6 +113,11 @@ exports.register = function(req, res, err){
     var sector = req.sanitize('sector').escape();
     var nif = req.sanitize('nif').escape();
     var password = req.sanitize('password').escape();
+    var type = req.sanitize('type').escape();
+
+    if(type != "empresa" || type != "camara"){
+        res.status(400).send({error: "Escolha entre \"empresa\" ou \"camara\""});
+    }
 
     admin.auth().createUser({
         email: email,
@@ -141,12 +146,22 @@ exports.register = function(req, res, err){
             if (error) res.status(500).send({error: error});
             // Store hash in database
             admin.database().ref('/users/'+ result.uid).set({hubspot_id: body.companyId, email: email}).then(() => {
-                admin.auth().setCustomUserClaims(result.uid, {empresa: true}).then(() => {
-                    res.status(200).send({data: "Companhia " + name + " foi criada com o ID: " + body.companyId});
-                }).catch(error => {
-                    console.log(error)
-                    res.status(500).send({error: error})
-                })
+                if(type == "empresa"){
+                    admin.auth().setCustomUserClaims(result.uid, {empresa: true}).then(() => {
+                        res.status(200).send({data: "Companhia " + name + " foi criada com o ID: " + body.companyId});
+                    }).catch(error => {
+                        console.log(error)
+                        res.status(500).send({error: error})
+                    })
+                }
+                else if(type == "camara"){
+                    admin.auth().setCustomUserClaims(result.uid, {camara: true}).then(() => {
+                        res.status(200).send({data: "Companhia " + name + " foi criada com o ID: " + body.companyId});
+                    }).catch(error => {
+                        console.log(error)
+                        res.status(500).send({error: error})
+                    })
+                }
             }).catch(error => {
                 console.log(error)
                 res.status(500).send({error: error})
@@ -275,5 +290,29 @@ exports.recoverPassword = function(req, res, err){
     }).catch(error => {
         console.log(error)
         res.status(500).send({error: error});
+    })
+}
+
+exports.setAdmin = function(req, res, err){
+    var uid = req.params.uid;
+    var sessionCookie = req.cookies.session || '';
+
+    admin.auth().verifySessionCookie(sessionCookie).then(decodedClaims => {
+        admin.auth().getUser(decodedClaims.uid).then(user => {
+            if(user.customClaims.admin){
+                admin.auth().setCustomUserClaims(uid, {admin: true}).then(() => {
+                    res.status(200).send({data: "Utilizador " + uid + " é agora Administrador!"});
+                })
+            }
+            else{
+                res.status(401).send('Não está autorizado fazer esta ação');
+            }
+        }).catch(error => {
+            console.log(error);
+            res.status(500).send({error: error});
+        })
+    }).catch(error => {
+        console.log(error);
+        res.redirect('/login');
     })
 }
