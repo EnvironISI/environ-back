@@ -12,6 +12,7 @@ exports.user = function(req, res, err){
     // if the user's Firebase session was revoked, user deleted/disabled, etc.
     admin.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */).then((decodedClaims) => {
         admin.auth().getUser(decodedClaims.uid).then(user => {
+            console.log(user)
             admin.database().ref('/users/' + decodedClaims.uid).once('value').then(snapshot => {
                 var userInfo = snapshot.val();
                 let info = [];
@@ -211,17 +212,11 @@ exports.edit = function(req, res, err){
                 request(options, function (error, response, body) {
                     if(error) res.status(500).send({error: error});
                     // Store hash in database
-                    admin.database().ref('/users/'+ uid).set({hubspot_id: body.companyId, email: email}).then(() => {
-                        admin.auth().updateUser(uid, {
-                            email: email,
-                            displayName: name,
-                            photoURL: photo_url
-                        }).then(() => {
-                            res.status(200).send({data: "Empresa " + name + " foi alterada"});
-                        }).catch(error => {
-                            console.log(error);
-                            res.status(500).send({error: error})
-                        })
+                    admin.auth().updateUser(uid, {
+                        displayName: name,
+                        photoURL: photo_url
+                    }).then(() => {
+                        res.status(200).send({data: "Empresa " + name + " foi alterada"});
                     }).catch(error => {
                         console.log(error);
                         res.status(500).send({error: error})
@@ -326,7 +321,27 @@ exports.recoverPassword = function(req, res, err){
         res.status(500).send({error: error});
     })
 }
+exports.changeEmail = function(req, res, err){
+    var sessionCookie = req.session.cookies || '';
+    var email = req.sanitize('email').escape();
 
+    admin.auth().verifySessionCookie(sessionCookie, true).then((decodedClaims) => {
+        admin.auth().updateUser(decodedClaims.uid, {email: email}).then(() => {
+            admin.auth().generateEmailVerificationLink(email).then(() => {
+                res.status(200).send({data: "Email enviado para verificação"})
+            }).catch(error => {
+                console.log(error);
+                res.status(500).send({error: error})
+            })
+        }).catch(error => {
+            console.log(error);
+            res.status(500).send({error: error})
+        })
+    }).catch(error => {
+        console.log(error);
+        res.redirect('/login')
+    })
+}
 exports.setAdmin = function(req, res, err){
     var uid = req.params.uid;
     var sessionCookie = req.cookies.session || '';

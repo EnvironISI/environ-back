@@ -9,7 +9,7 @@ module.exports = function(app) {
         res.status(401).send({data: 'Acesso Não Autorizado'})
     });
     app.post('/recoverPassword', authController.recoverPassword);
-
+    app.post('/changeEmail', authController.changeEmail);
     app.put('/edit/:uid', authController.edit);
     app.delete('/delete/user/:uid', authController.delete);
     app.delete('/delete/me', authController.deleteMe)
