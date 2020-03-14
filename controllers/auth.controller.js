@@ -17,6 +17,7 @@ exports.user = function(req, res, err){
                 var userInfo = snapshot.val();
                 let info = [];
                 let role;
+                var {uid, displayName, email, emailVerified, phoneNumber, photoURL, disabled} = user;
                 var options = {
                     method: 'GET', 
                     url: `https://api.hubapi.com/companies/v2/companies/${userInfo.hubspot_id}`,
@@ -24,23 +25,31 @@ exports.user = function(req, res, err){
                     json: true
                 };
                 request(options, function (error, response, body) {
+                    var nif = body.properties.nif.value;
+                    var country = body.properties.country.value;
+                    var city = body.properties.city.value;
+                    var setor = body.properties.setor.value;
+                    if(nif == undefined) nif = null;
+                    if(country == undefined) country = null;
+                    if(city == undefined) country = null;
+                    if(setor == undefined) country = null;
                     if(error) res.status(500).send({error: error});
                     if(user.customClaims.empresa) role = 'empresa';
                     else if(user.customClaims.admin) role = 'admin';
                     else if(user.customClaims.camara) role = 'camara';
                     info = {
-                        uid: user.uid, 
-                        name: user.displayName,
-                        email: user.email, 
-                        emailVerfied: user.emailVerified, 
-                        phoneNumber: user.phoneNumber, 
-                        photoUrl: user.photoURL,
+                        uid: uid, 
+                        name: displayName,
+                        email: email, 
+                        emailVerfied: emailVerified, 
+                        phoneNumber: phoneNumber, 
+                        photoUrl: photoURL,
                         role: role,
-                        disabled: user.disabled,
-                        nif: body.properties.nif.value,
-                        country: body.properties.country.value,
-                        city: body.properties.city.value,
-                        setor: body.properties.industry.value
+                        disabled: disabled,
+                        nif: nif,
+                        country: country,
+                        city: city,
+                        setor: setor
                     };
                     res.status(200).send({user: info, token: sessionCookie});
                 }) 
