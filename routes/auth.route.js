@@ -12,6 +12,6 @@ module.exports = function(app) {
 
     app.put('/edit/:uid', authController.edit);
     app.delete('/delete/user/:uid', authController.delete);
-    app.delete('/delete/me', authController.deleteME)
+    app.delete('/delete/me', authController.deleteMe)
     app.put('/setadmin/:uid', authController.setAdmin);
 };
