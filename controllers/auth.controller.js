@@ -96,8 +96,8 @@ exports.logout = function(req, res, err){
     const sessionCookie = req.cookies.session || '';
     // Verify the session cookie. In this case an additional check is added to detect
     // if the user's Firebase session was revoked, user deleted/disabled, etc.
-    res.clearCookie('session');
     admin.auth().verifySessionCookie(sessionCookie).then((decodedClaims) => {
+        res.clearCookie('session');
         return admin.auth().revokeRefreshTokens(decodedClaims.sub);
     }).then(() => {
         res.status(200).send({data: 'Logout Successfully'});
@@ -185,23 +185,23 @@ exports.register = function(req, res, err){
         res.status(400).send({error: "Insira o tipo camara ou empresa"})
     }
 }
-exports.edit = function(req, res, err){
-    const uid = req.params.uid;
 
+//User
+exports.edit = function(req, res, err){
     const photo_url = req.body.photo_url;
     var name = req.sanitize('name').escape();
-    var email = req.sanitize('email').escape();
-    var phone = req.sanitize('phone').escape();
     var city = req.sanitize('city').escape();
     var country = req.sanitize('country').escape();
-    //var sector = req.sanitize('sector').escape();
     var nif = req.sanitize('nif').escape();
+    var phone = req.body.phone;
 
     var sessionCookie = req.cookies.session || '';
 
     admin.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */).then((decodedClaims) => {
-        if(uid == decodedClaims.uid || decodedClaims.admin){
-            admin.database().ref('/users/' + uid).once('value').then(snapshot => {
+        admin.database().ref('/users/' + decodedClaims.uid).once('value').then(snapshot => {
+            admin.auth().getUser(uid).then(user => {
+                if(photo_url == null) photo_url = user.photoURL
+                if(phone == null) phone = user.phoneNumber
                 var userInfo = snapshot.val();
 
                 var options = {
@@ -211,16 +211,15 @@ exports.edit = function(req, res, err){
                     headers: {'Content-Type': 'application/json' },
                     body:{ 
                         properties:
-                        [{ name: 'name', value: name },
-                        { name: 'email', value: email},
-                        { name: 'phone', value: phone},
-                        { name: 'city', value: city},
-                        { name: 'country', value: country},
-                        //{ name: 'industry', value: sector},
-                        { name: 'nif', value: nif}] 
-                    },
+                            [{ name: 'name', value: name },
+                            { name: 'city', value: city},
+                            { name: 'country', value: country},
+                            { name: 'nif', value: nif},
+                            { name: 'phone', value: phone}] 
+                        },
                     json: true 
                 };
+
                 request(options, function (error, response, body) {
                     if(error) res.status(500).send({error: error});
                     // Store hash in database
@@ -233,60 +232,19 @@ exports.edit = function(req, res, err){
                         console.log(error);
                         res.status(500).send({error: error})
                     })
-                })
-            }).catch(error => {
-                console.log(error);
-                res.status(500).send({error: error})
-            })
-        }else{
-            res.redirect('/denied');
-        }
-    }).catch(error => {
-        console.log(error);
-        res.redirect('/denied');
-    })
-}
-exports.delete = function(req, res, err){
-    var uid = req.params.uid;
-    var sessionCookie = req.cookies.session || '';
-
-    admin.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */).then((decodedClaims) => {
-        if(decodedClaims.uid == uid || decodedClaims.admin){
-            admin.database().ref("/users/"+uid).once('value').then(snapshot => { 
-                admin.auth().deleteUser(uid).then(() => { 
-                    var userInfo = snapshot.val(); 
-                    var options = {method: 'DELETE', 
-                        url: `https://api.hubapi.com/companies/v2/companies/${userInfo.hubspot_id}`,
-                        qs: {hapikey: 'e2c3af5b-f5fa-4cb8-a190-0409f322b8f8'}
-                    };
-                    request(options, function (error, response, body) {
-                        if (error) res.status(500).send({error: error});
-                        if(uid == decodedClaims.uid){
-                            res.redirect('/logout');
-                        }
-                        admin.database().ref("/users/"+uid).remove(function(){
-                            res.status(200).send({data: "Empresa removida com sucesso!"});
-                        }).catch(error => {
-                            console.log(error);
-                            res.status(500).send({error: error})
-                        })
-                    })
                 }).catch(error => {
                     console.log(error);
                     res.status(500).send({error: error})
                 })
-            }).catch(error => {
-                console.log(error);
-                res.status(500).send({error: error})
             })
-        }else{
-            res.redirect('/denied');
-        }
+        }).catch(error => {
+            console.log(error);
+            res.status(500).send({error: error})
+        })
     }).catch(error => {
         console.log(error);
         res.redirect('/denied');
     })
-
 }
 exports.deleteMe = function(req, res, err){
     var sessionCookie = req.cookies.session || '';
@@ -359,6 +317,8 @@ exports.changeEmail = function(req, res, err){
         res.redirect('/denied')
     })
 }
+
+//Admin
 exports.setAdmin = function(req, res, err){
     var uid = req.params.uid;
     var sessionCookie = req.cookies.session || '';
@@ -381,4 +341,46 @@ exports.setAdmin = function(req, res, err){
         console.log(error);
         res.redirect('/denied');
     })
+}
+exports.delete = function(req, res, err){
+    var uid = req.params.uid;
+    var sessionCookie = req.cookies.session || '';
+
+    admin.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */).then((decodedClaims) => {
+        if(decodedClaims.uid == uid || decodedClaims.admin){
+            admin.database().ref("/users/"+uid).once('value').then(snapshot => { 
+                admin.auth().deleteUser(uid).then(() => { 
+                    var userInfo = snapshot.val(); 
+                    var options = {method: 'DELETE', 
+                        url: `https://api.hubapi.com/companies/v2/companies/${userInfo.hubspot_id}`,
+                        qs: {hapikey: 'e2c3af5b-f5fa-4cb8-a190-0409f322b8f8'}
+                    };
+                    request(options, function (error, response, body) {
+                        if (error) res.status(500).send({error: error});
+                        if(uid == decodedClaims.uid){
+                            res.redirect('/logout');
+                        }
+                        admin.database().ref("/users/"+uid).remove(function(){
+                            res.status(200).send({data: "Empresa removida com sucesso!"});
+                        }).catch(error => {
+                            console.log(error);
+                            res.status(500).send({error: error})
+                        })
+                    })
+                }).catch(error => {
+                    console.log(error);
+                    res.status(500).send({error: error})
+                })
+            }).catch(error => {
+                console.log(error);
+                res.status(500).send({error: error})
+            })
+        }else{
+            res.redirect('/denied');
+        }
+    }).catch(error => {
+        console.log(error);
+        res.redirect('/denied');
+    })
+
 }
