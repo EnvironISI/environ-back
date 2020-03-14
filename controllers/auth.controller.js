@@ -29,10 +29,10 @@ exports.user = function(req, res, err){
                     var country = body.properties.country.value;
                     var city = body.properties.city.value;
                     var setor = body.properties.setor.value;
-                    if(nif == undefined) nif = null;
-                    if(country == undefined) country = null;
-                    if(city == undefined) country = null;
-                    if(setor == undefined) country = null;
+                    if(nif == undefined) nif = '';
+                    if(country == undefined) country = '';
+                    if(city == undefined) city = '';
+                    if(setor == undefined) setor = '';
                     if(error) res.status(500).send({error: error});
                     if(user.customClaims.empresa) role = 'empresa';
                     else if(user.customClaims.admin) role = 'admin';
