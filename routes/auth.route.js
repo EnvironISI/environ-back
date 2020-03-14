@@ -8,15 +8,4 @@ module.exports = function(app) {
     app.get('/denied', (req, res) => {
         res.status(401).send('Acesso não autorizado!');
     })
-
-    /* Alterar depois
-    //User Routes
-    app.post('/recoverPassword', authController.recoverPassword);
-    app.post('/changeEmail', authController.changeEmail);
-    app.put('/edit/', authController.edit);
-    app.delete('/delete/me', authController.deleteMe)
-
-    //Admin Routes
-    app.delete('/delete/user/:uid', authController.delete);
-    app.put('/setadmin/:uid', authController.setAdmin);*/
 };

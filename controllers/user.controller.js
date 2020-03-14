@@ -7,12 +7,12 @@ var exports = module.exports = {};
 
 //User
 exports.edit = function(req, res, err){
-    const photo_url = req.body.photo_url;
     var name = req.sanitize('name').escape();
     var city = req.sanitize('city').escape();
     var country = req.sanitize('country').escape();
     var nif = req.sanitize('nif').escape();
     var phone = req.body.phone;
+    var photo_url = req.body.photo_url;
 
     var sessionCookie = req.cookies.session || '';
 
@@ -65,41 +65,6 @@ exports.edit = function(req, res, err){
         res.redirect('/denied');
     })
 }
-exports.deleteMe = function(req, res, err){
-    var sessionCookie = req.cookies.session || '';
-
-    admin.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */).then((decodedClaims) => {
-        admin.database().ref("/users/" + decodedClaims.uid).once('value').then(snapshot => { 
-            admin.auth().deleteUser(decodedClaims.uid).then(() => { 
-                var userInfo = snapshot.val(); 
-                var options = {method: 'DELETE', 
-                    url: `https://api.hubapi.com/companies/v2/companies/${userInfo.hubspot_id}`,
-                    qs: {hapikey: 'e2c3af5b-f5fa-4cb8-a190-0409f322b8f8'}
-                };
-                request(options, function (error, response, body) {
-                    if (error) res.status(500).send({error: error});
-                    admin.database().ref("/users/" + decodedClaims.uid).remove(function(){
-                        res.status(200).send({data: "Empresa removida com sucesso!"});
-                        res.redirect('/logout');
-                    }).catch(error => {
-                        console.log(error);
-                        res.status(500).send({error: error})
-                    })
-                })
-            }).catch(error => {
-                console.log(error);
-                res.status(500).send({error: error})
-            })
-        }).catch(error => {
-            console.log(error);
-            res.status(500).send({error: error})
-        })
-    }).catch(error => {
-        console.log(error);
-        res.redirect('/denied');
-    })
-
-}
 exports.recoverPassword = function(req, res, err){
     var email = req.body.email;
     firebase.auth().sendPasswordResetEmail(email).then(() => {
@@ -135,4 +100,39 @@ exports.changeEmail = function(req, res, err){
         console.log(error);
         res.redirect('/denied')
     })
+}
+exports.deleteMe = function(req, res, err){
+    var sessionCookie = req.cookies.session || '';
+
+    admin.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */).then((decodedClaims) => {
+        admin.database().ref("/users/" + decodedClaims.uid).once('value').then(snapshot => { 
+            admin.auth().deleteUser(decodedClaims.uid).then(() => { 
+                var userInfo = snapshot.val(); 
+                var options = {method: 'DELETE', 
+                    url: `https://api.hubapi.com/companies/v2/companies/${userInfo.hubspot_id}`,
+                    qs: {hapikey: 'e2c3af5b-f5fa-4cb8-a190-0409f322b8f8'}
+                };
+                request(options, function (error, response, body) {
+                    if (error) res.status(500).send({error: error});
+                    admin.database().ref("/users/" + decodedClaims.uid).remove(function(){
+                        res.status(200).send({data: "Empresa removida com sucesso!"});
+                        res.redirect('/logout');
+                    }).catch(error => {
+                        console.log(error);
+                        res.status(500).send({error: error})
+                    })
+                })
+            }).catch(error => {
+                console.log(error);
+                res.status(500).send({error: error})
+            })
+        }).catch(error => {
+            console.log(error);
+            res.status(500).send({error: error})
+        })
+    }).catch(error => {
+        console.log(error);
+        res.redirect('/denied');
+    })
+
 }

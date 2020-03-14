@@ -1,5 +1,8 @@
 const app = require('./server');
 const router = require('./routes/main.route');
+const admin = require('./routes/admin.route');
+const user = require('./routes/user.route');
+const service = require('./routes/service.route');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const expressSanitizer = require('express-sanitizer');
@@ -41,8 +44,9 @@ app.use(function(req, res, next) {
 
 //Hubspot Routes - Authentication
 require('./routes/auth.route.js')(app);
-//Moloni Routes - Events System
-require('./routes/service.route.js')(app)
 
+app.use('/admin', admin);
+app.use('/user', user);
+app.use('/service', service)
 app.use('/', router);
 module.exports = app;
