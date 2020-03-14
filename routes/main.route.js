@@ -18,6 +18,7 @@ router.post('/recoverPassword', userController.recoverPassword);
 router.post('/changeEmail', userController.changeEmail);
 router.put('/edit/', userController.edit);
 router.delete('/delete/me', userController.deleteMe)
+router.get('/hello', (req, res) => {res.send('hello'); res.end()})
 
 //Admin Routes
 router.delete('/admin/delete/:uid', adminController.delete);
