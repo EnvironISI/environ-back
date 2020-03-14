@@ -55,7 +55,7 @@ exports.user = function(req, res, err){
     }).catch((error) => {
       // Session cookie is unavailable or invalid. Force user to login.
       console.log(error)
-      res.redirect('/login');
+      res.redirect('/denied');
     });
 }
 exports.login = function(req, res, err){
@@ -81,7 +81,7 @@ exports.login = function(req, res, err){
                 res.send({status: 'success'})
             }, error => {
                 console.log(error);
-                res.redirect('/login');
+                res.redirect('/denied');
             });
         });
     }).then(() => {
@@ -103,7 +103,7 @@ exports.logout = function(req, res, err){
         res.status(200).send({data: 'Logout Successfully'});
     }).catch(error => {
         console.log(error);
-        res.redirect('/login');
+        res.redirect('/denied');
     })
 }
 exports.register = function(req, res, err){
@@ -124,46 +124,58 @@ exports.register = function(req, res, err){
             phoneNumber: phone,
             displayName: name
         }).then(function(result){
-            var options = {method: 'POST', 
-            url: 'https://api.hubapi.com/companies/v2/companies',
-            qs: {hapikey: 'e2c3af5b-f5fa-4cb8-a190-0409f322b8f8'},
-            headers: {'Content-Type': 'application/json' },
-            body:{ 
-                properties:
-            [{ name: 'name', value: name },
-                { name: 'email', value: email},
-                { name: 'phone', value: phone},
-                { name: 'city', value: city},
-                { name: 'country', value: country},
-                { name: 'industry', value: sector},
-                { name: 'nif', value: nif}] 
-            },
-            json: true 
-            };
-            request(options, function (error, response, body) {
-                if (error) res.status(500).send({error: error});
-                // Store hash in database
-                admin.database().ref('/users/'+ result.uid).set({hubspot_id: body.companyId, email: email}).then(() => {
-                    if(type == "empresa"){
-                        admin.auth().setCustomUserClaims(result.uid, {empresa: true}).then(() => {
-                            res.status(200).send({data: "Companhia " + name + " foi criada com o ID: " + body.companyId});
-                        }).catch(error => {
-                            console.log(error)
-                            res.status(500).send({error: error})
-                        })
-                    }
-                    else if(type == "camara"){
-                        admin.auth().setCustomUserClaims(result.uid, {camara: true}).then(() => {
-                            res.status(200).send({data: "Companhia " + name + " foi criada com o ID: " + body.companyId});
-                        }).catch(error => {
-                            console.log(error)
-                            res.status(500).send({error: error})
-                        })
-                    }
+            admin.auth().createCustomToken(result.uid).then(token => {
+                firebase.auth().signInWithCustomToken(token).then(result => {
+                    return result.user.sendEmailVerification();
                 }).catch(error => {
-                    console.log(error)
+                    console.log(error);
                     res.status(500).send({error: error})
                 })
+            }).then(() => {
+                var options = {method: 'POST', 
+                    url: 'https://api.hubapi.com/companies/v2/companies',
+                    qs: {hapikey: 'e2c3af5b-f5fa-4cb8-a190-0409f322b8f8'},
+                    headers: {'Content-Type': 'application/json' },
+                    body:{ 
+                        properties:
+                        [{ name: 'name', value: name },
+                        { name: 'email', value: email},
+                        { name: 'phone', value: phone},
+                        { name: 'city', value: city},
+                        { name: 'country', value: country},
+                        { name: 'industry', value: sector},
+                        { name: 'nif', value: nif}] 
+                    },
+                    json: true 
+                };
+                request(options, function (error, response, body) {
+                    if (error) res.status(500).send({error: error});
+                    // Store hash in database
+                    admin.database().ref('/users/'+ result.uid).set({hubspot_id: body.companyId, email: email}).then(() => {
+                        if(type == "empresa"){
+                            admin.auth().setCustomUserClaims(result.uid, {empresa: true}).then(() => {
+                                res.status(200).send({data: "Companhia " + name + " foi criada com o ID: " + body.companyId});
+                            }).catch(error => {
+                                console.log(error)
+                                res.status(500).send({error: error})
+                            })
+                        }
+                        else if(type == "camara"){
+                            admin.auth().setCustomUserClaims(result.uid, {camara: true}).then(() => {
+                                res.status(200).send({data: "Companhia " + name + " foi criada com o ID: " + body.companyId});
+                            }).catch(error => {
+                                console.log(error)
+                                res.status(500).send({error: error})
+                            })
+                        }
+                    }).catch(error => {
+                        console.log(error)
+                        res.status(500).send({error: error})
+                    })
+                })
+            }).catch(error => {
+                console.log(error)
+                res.status(500).send({error: error})
             })
         }).catch(function(error) {
             console.log(error)
@@ -227,11 +239,11 @@ exports.edit = function(req, res, err){
                 res.status(500).send({error: error})
             })
         }else{
-            res.redirect('/login');
+            res.redirect('/denied');
         }
     }).catch(error => {
         console.log(error);
-        res.redirect('/login');
+        res.redirect('/denied');
     })
 }
 exports.delete = function(req, res, err){
@@ -268,11 +280,11 @@ exports.delete = function(req, res, err){
                 res.status(500).send({error: error})
             })
         }else{
-            res.redirect('/login');
+            res.redirect('/denied');
         }
     }).catch(error => {
         console.log(error);
-        res.redirect('/login');
+        res.redirect('/denied');
     })
 
 }
@@ -307,7 +319,7 @@ exports.deleteMe = function(req, res, err){
         })
     }).catch(error => {
         console.log(error);
-        res.redirect('/login');
+        res.redirect('/denied');
     })
 
 }
@@ -323,12 +335,17 @@ exports.recoverPassword = function(req, res, err){
 }
 exports.changeEmail = function(req, res, err){
     var sessionCookie = req.cookies.session || '';
-    var email = req.sanitize('email').escape();
+    var email = req.body.email;
 
     admin.auth().verifySessionCookie(sessionCookie, true).then((decodedClaims) => {
-        admin.auth().updateUser(decodedClaims.uid, {email: email}).then(() => {
-            admin.auth().generateEmailVerificationLink(email, {url: 'https://isienviron.firebaseapp.com/'}).then((link) => {
-                res.status(200).send({data: "Link " + link + " verificar email" })
+        admin.auth().createCustomToken(decodedClaims.uid).then(token => {
+            firebase.auth().signInWithCustomToken(token).then(result => {
+                result.user.updateEmail(email).then(() => {
+                    res.status(200).send({data: "Email alterado com sucesso"});
+                }).catch(error => {
+                    console.log(error);
+                    res.status(500).send({error: error})
+                })
             }).catch(error => {
                 console.log(error);
                 res.status(500).send({error: error})
@@ -339,7 +356,7 @@ exports.changeEmail = function(req, res, err){
         })
     }).catch(error => {
         console.log(error);
-        res.redirect('/login')
+        res.redirect('/denied')
     })
 }
 exports.setAdmin = function(req, res, err){
@@ -362,6 +379,6 @@ exports.setAdmin = function(req, res, err){
         })
     }).catch(error => {
         console.log(error);
-        res.redirect('/login');
+        res.redirect('/denied');
     })
 }
