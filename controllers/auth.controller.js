@@ -26,14 +26,11 @@ exports.user = function(req, res, err){
                 };
                 request(options, function (error, response, body) {
                     console.log(body)
-                    var nif = body.properties.nif.value;
-                    var country = body.properties.country.value;
-                    var city = body.properties.city.value;
-                    var setor = body.properties.setor.value;
-                    if(nif == undefined) nif = '';
-                    if(country == undefined) country = '';
-                    if(city == undefined) city = '';
-                    if(setor == undefined) setor = '';
+                    var nif, country, city, setor;
+                    if(body.properties.nif.value !== undefined) nif = body.properties.nif.value;
+                    if(body.properties.country.value !== undefined) country = body.properties.country.value;
+                    if(body.properties.city.value !== undefined) city = body.properties.city.value;
+                    if(body.properties.industry.value !== undefined) setor = body.properties.industry.value;
                     if(error) res.status(500).send({error: error});
                     if(user.customClaims.empresa) role = 'empresa';
                     else if(user.customClaims.admin) role = 'admin';
