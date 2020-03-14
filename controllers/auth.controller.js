@@ -27,10 +27,10 @@ exports.user = function(req, res, err){
                 request(options, function (error, response, body) {
                     console.log(body)
                     var nif, country, city, setor;
-                    if(body.properties.nif.value !== undefined) nif = body.properties.nif.value;
-                    if(body.properties.country.value !== undefined) country = body.properties.country.value;
-                    if(body.properties.city.value !== undefined) city = body.properties.city.value;
-                    if(body.properties.industry.value !== undefined) setor = body.properties.industry.value;
+                    if(body.properties.nif !== undefined) nif = body.properties.nif.value;
+                    if(body.properties.country !== undefined) country = body.properties.country.value;
+                    if(body.properties.city !== undefined) city = body.properties.city.value;
+                    if(body.properties.industry !== undefined) setor = body.properties.industry.value;
                     if(error) res.status(500).send({error: error});
                     if(user.customClaims.empresa) role = 'empresa';
                     else if(user.customClaims.admin) role = 'admin';
