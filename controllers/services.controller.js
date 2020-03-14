@@ -1,8 +1,9 @@
 const jsonMessagesPath = __dirname + "/../assets/jsonMessages/";
 const jsonMessages = require(jsonMessagesPath + "services");
+
+var request = require('request');
 var {admin} = require('../config/firebaseConfig.js');
 var {moloni} = require('../config/moloniConfig.js');
-var request = require('request');
 
 var exports = module.exports = {};
 

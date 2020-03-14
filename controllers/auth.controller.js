@@ -24,7 +24,6 @@ exports.user = function(req, res, err){
                     json: true
                 };
                 request(options, function (error, response, body) {
-                    console.log(body)
                     var nif, country, city, setor;
                     if(body.properties.nif !== undefined) nif = body.properties.nif.value;
                     if(body.properties.country !== undefined) country = body.properties.country.value;
