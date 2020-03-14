@@ -322,13 +322,13 @@ exports.recoverPassword = function(req, res, err){
     })
 }
 exports.changeEmail = function(req, res, err){
-    var sessionCookie = req.session.cookies || '';
+    var sessionCookie = req.cookies.session || '';
     var email = req.sanitize('email').escape();
 
     admin.auth().verifySessionCookie(sessionCookie, true).then((decodedClaims) => {
         admin.auth().updateUser(decodedClaims.uid, {email: email}).then(() => {
-            admin.auth().generateEmailVerificationLink(email).then(() => {
-                res.status(200).send({data: "Email enviado para verificação"})
+            admin.auth().generateEmailVerificationLink(email, {url: 'https://isienviron.firebaseapp.com/'}).then((link) => {
+                res.status(200).send({data: "Link " + link + " verificar email" })
             }).catch(error => {
                 console.log(error);
                 res.status(500).send({error: error})
