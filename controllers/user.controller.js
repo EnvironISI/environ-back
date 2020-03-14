@@ -43,7 +43,7 @@ exports.edit = function(req, res, err){
                 request(options, function (error, response, body) {
                     if(error) res.status(500).send({error: error});
                     // Store hash in database
-                    admin.auth().updateUser(uid, {
+                    admin.auth().updateUser(decodedClaims.uid, {
                         displayName: name,
                         photoURL: photo_url
                     }).then(() => {
