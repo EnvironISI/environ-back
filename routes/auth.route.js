@@ -9,7 +9,7 @@ module.exports = function(app) {
         res.status(401).send('Acesso não autorizado!');
     })
 
-    /* Alterar depois */
+    /* Alterar depois
     //User Routes
     app.post('/recoverPassword', authController.recoverPassword);
     app.post('/changeEmail', authController.changeEmail);
@@ -18,5 +18,5 @@ module.exports = function(app) {
 
     //Admin Routes
     app.delete('/delete/user/:uid', authController.delete);
-    app.put('/setadmin/:uid', authController.setAdmin);
+    app.put('/setadmin/:uid', authController.setAdmin);*/
 };
