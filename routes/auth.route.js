@@ -11,6 +11,7 @@ module.exports = function(app) {
     app.post('/recoverPassword', authController.recoverPassword);
 
     app.put('/edit/:uid', authController.edit);
-    app.delete('/delete/:uid', authController.delete);
+    app.delete('/delete/user/:uid', authController.delete);
+    app.delete('/delete/me', authController.deleteME)
     app.put('/setadmin/:uid', authController.setAdmin);
 };
