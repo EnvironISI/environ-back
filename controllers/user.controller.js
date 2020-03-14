@@ -84,8 +84,6 @@ exports.changeEmail = function (req, res, err) {
     var sessionCookie = req.cookies.session || '';
     var email = req.sanitize('email').escape();
 
-    console.log(email)
-
     admin.auth().verifySessionCookie(sessionCookie, true).then((decodedClaims) => {
         admin.auth().createCustomToken(decodedClaims.uid).then(token => {
             firebase.auth().signInWithCustomToken(token).then(result => {
@@ -139,39 +137,35 @@ exports.deleteMe = function (req, res, err) {
 
     admin.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */).then((decodedClaims) => {
         admin.database().ref("/users/" + decodedClaims.uid).once('value').then(snapshot => {
-            admin.auth().deleteUser(decodedClaims.uid).then(() => {
-                var userInfo = snapshot.val();
-                var options = {
-                    method: 'DELETE',
-                    url: `https://api.hubapi.com/companies/v2/companies/${userInfo.hubspot_id}`,
-                    qs: { hapikey: 'e2c3af5b-f5fa-4cb8-a190-0409f322b8f8' }
-                };
-                try {
-                    request(options, function (error, response, body) {
-                        if (error) res.status(500).send({ error: error });
-                        admin.database().ref("/users/" + decodedClaims.uid).remove(function () {
-                            res.status(200).send({ data: "Empresa removida com sucesso!" });
-                            res.redirect('/logout');
-                        }).catch(error => {
-                            console.log(error);
-                            res.status(500).send({ error: error })
-                        })
+            var userInfo = snapshot.val();
+            var options = {
+                method: 'DELETE',
+                url: `https://api.hubapi.com/companies/v2/companies/${userInfo.hubspot_id}`,
+                qs: { hapikey: 'e2c3af5b-f5fa-4cb8-a190-0409f322b8f8' }
+            };
+            try {
+                request(options);
+                admin.database().ref("/users/" + decodedClaims.uid).remove(function () {
+                    admin.auth().deleteUser(decodedClaims.uid).then(() => {
+                        res.status(200).send({ data: "Empresa removida com sucesso!" });
+                    }).catch(error => {
+                        console.log(error);
+                        res.status(500).send({ error: error })
                     })
-                } catch (error) {
+                }).catch(error => {
                     console.log(error);
                     res.status(500).send({ error: error })
-                }
-            }).catch(error => {
+                })
+            } catch (error) {
                 console.log(error);
                 res.status(500).send({ error: error })
-            })
+            }
         }).catch(error => {
             console.log(error);
             res.status(500).send({ error: error })
         })
     }).catch(error => {
         console.log(error);
-        res.redirect('/denied');
+        res.status(500).send({ error: error })
     })
-
 }
