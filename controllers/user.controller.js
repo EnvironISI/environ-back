@@ -18,7 +18,7 @@ exports.edit = function(req, res, err){
 
     admin.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */).then((decodedClaims) => {
         admin.database().ref('/users/' + decodedClaims.uid).once('value').then(snapshot => {
-            admin.auth().getUser(uid).then(user => {
+            admin.auth().getUser(decodedClaims.uid).then(user => {
                 if(photo_url == null) photo_url = user.photoURL
                 if(phone == null) phone = user.phoneNumber
                 var userInfo = snapshot.val();
