@@ -294,7 +294,7 @@ exports.deleteMe = function(req, res, err){
                 };
                 request(options, function (error, response, body) {
                     if (error) res.status(500).send({error: error});
-                    admin.database().ref("/users/"+uid).remove(function(){
+                    admin.database().ref("/users/" + decodedClaims.uid).remove(function(){
                         res.status(200).send({data: "Empresa removida com sucesso!"});
                         res.redirect('/logout');
                     }).catch(error => {
