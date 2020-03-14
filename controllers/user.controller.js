@@ -147,7 +147,9 @@ exports.deleteMe = function (req, res, err) {
                 request(options);
                 admin.database().ref("/users/" + decodedClaims.uid).remove(function () {
                     admin.auth().deleteUser(decodedClaims.uid).then(() => {
+                        res.clearCookie('session');
                         res.status(200).send({ data: "Empresa removida com sucesso!" });
+                        res.end();
                     }).catch(error => {
                         console.log(error);
                         res.status(500).send({ error: error })
