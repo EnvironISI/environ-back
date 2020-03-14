@@ -101,6 +101,32 @@ exports.changeEmail = function(req, res, err){
         res.redirect('/denied')
     })
 }
+exports.changePhone = function(req, res, err){
+    var sessionCookie = req.cookies.session || '';
+    var phone = req.body.phone;
+
+    admin.auth().verifySessionCookie(sessionCookie, true).then((decodedClaims) => {
+        admin.auth().createCustomToken(decodedClaims.uid).then(token => {
+            firebase.auth().signInWithCustomToken(token).then(result => {
+                result.user.updatePhoneNumber(phone).then(() => {
+                    res.status(200).send({data: "Número de telemóvel alterado com sucesso"});
+                }).catch(error => {
+                    console.log(error);
+                    res.status(500).send({error: error})
+                })
+            }).catch(error => {
+                console.log(error);
+                res.status(500).send({error: error})
+            })
+        }).catch(error => {
+            console.log(error);
+            res.status(500).send({error: error})
+        })
+    }).catch(error => {
+        console.log(error);
+        res.redirect('/denied')
+    })
+}
 exports.deleteMe = function(req, res, err){
     var sessionCookie = req.cookies.session || '';
 
