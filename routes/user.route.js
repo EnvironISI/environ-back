@@ -6,6 +6,7 @@ const jsonMessages = require(jsonMessagesPath + "login");
 user.put('/edit', userController.edit);
 user.post('/recoverPassword', userController.recoverPassword);
 user.post('/changeEmail', userController.changeEmail);
-user.delete('/delete/me', userController.deleteMe)
+user.post('/changePhone', userController.changePhone);
+user.delete('/delete/me', userController.deleteMe);
 
 module.exports = user;
