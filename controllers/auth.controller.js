@@ -72,28 +72,24 @@ exports.login = function (req, res, err) {
     var email = req.body.email;
     var password = req.body.password;
     firebase.auth().signInWithEmailAndPassword(email, password).then(user => {
-        // Get the user's ID token as it is needed to exchange for a session cookie.
-        return user.user.getIdToken().then(idToken => {
-            // Session login endpoint is queried and the session cookie is set.
-            // CSRF protection should be taken into account.
-            // ...
-            //res.status(200).send({idToken: idToken});
-            // Set session expiration to 5 days.
-            const expiresIn = 60 * 60 * 24 * 5 * 1000;
-            // Create the session cookie. This will also verify the ID token in the process.
-            // The session cookie will have the same claims as the ID token.
-            // To only allow session cookie setting on recent sign-in, auth_time in ID token
-            // can be checked to ensure user was recently signed in before creating a session cookie.
-            admin.auth().createSessionCookie(idToken, { expiresIn }).then((sessionCookie) => {
-                // Set cookie policy for session cookie.
-                const options = { expires: new Date(Date.now() + 60 * 60 * 24 * 5 * 1000), httpOnly: false, secure: false };
-                res.cookie('session', sessionCookie, options);
-                res.send({ status: 'success' })
-            }, error => {
-                console.log(error);
-                res.redirect('/denied');
+        if(user.user.emailVerified == false){
+            res.status(400).send({error: "Por favor, verifique o seu email primeiro!"});
+            res.end();
+        }
+        else{
+            return user.user.getIdToken().then(idToken => {
+                const expiresIn = 60 * 60 * 24 * 5 * 1000;
+                admin.auth().createSessionCookie(idToken, { expiresIn }).then((sessionCookie) => {
+                    // Set cookie policy for session cookie.
+                    const options = { expires: new Date(Date.now() + 60 * 60 * 24 * 5 * 1000), httpOnly: false, secure: false };
+                    res.cookie('session', sessionCookie, options);
+                    res.send({ status: 'success' })
+                }, error => {
+                    console.log(error);
+                    res.redirect('/denied');
+                });
             });
-        });
+        }
     }).then(() => {
         // A page redirect would suffice as the persistence is set to NONE.
         return firebase.auth().signOut();

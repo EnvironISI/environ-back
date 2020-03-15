@@ -171,3 +171,6 @@ exports.deleteMe = function (req, res, err) {
         res.status(500).send({ error: error })
     })
 }
+exports.all = function (req, res, err){
+    
+}
