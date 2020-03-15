@@ -5,6 +5,7 @@ module.exports = function(app) {
     app.post('/login', authController.login);
     app.get('/user', authController.user);
     app.get('/logout', authController.logout);
+    app.post('/requestEmailVerification', authController.requestEmailVerification);
     app.get('/denied', (req, res) => {
         res.status(401).send('Acesso não autorizado!');
     })

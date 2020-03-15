@@ -197,3 +197,30 @@ exports.register = function (req, res, err) {
         res.status(400).send({ error: "Insira o tipo camara ou empresa" })
     }
 }
+exports.requestEmailVerification = function (req, res, err){
+    var email = req.sanitize('email').escape();
+    admin.auth().getUserByEmail(email).then(user => {
+        admin.auth().createCustomToken(user.uid).then(token => {
+            firebase.auth().signInWithCustomToken(token).then(result => {
+                result.user.sendEmailVerification().then(() => {
+                }).catch(error => {
+                    console.log(error);
+                    res.status(500).send({error: error});
+                    res.end();
+                })
+            }).catch(error => {
+                console.log(error);
+                res.status(500).send({error: error});
+                res.end();
+            })
+        }).catch(error => {
+            console.log(error);
+            res.status(500).send({error: error});
+            res.end();
+        })
+    }).catch(error => {
+        console.log(error);
+        res.status(500).send({error: error});
+        res.end();
+    })
+}
