@@ -72,7 +72,7 @@ exports.login = function (req, res, err) {
     var email = req.body.email;
     var password = req.body.password;
     firebase.auth().signInWithEmailAndPassword(email, password).then(user => {
-        if(user.user.emailVerified == false){
+        if(!user.user.emailVerified){
             res.status(400).send({error: "Por favor, verifique o seu email primeiro!"});
             res.end();
         }
