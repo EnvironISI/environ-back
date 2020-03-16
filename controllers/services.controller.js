@@ -90,7 +90,7 @@ exports.adminAccept = function(req, res, err){
                     },
                 ],
             }
-            moloni.products('update', params, function(){
+            moloni.products('update', params, function(error, result){
                 if(error) {
                     console.log(error)
                     res.status(400).send(JSON.stringify({error: error}));
