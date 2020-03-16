@@ -129,7 +129,7 @@ exports.camaraAccept = function(req, res, err){
 
     adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
         if(decodedClaims.admin || decodedClaims.camara){
-            moloni.products('getOne', {company_id: 126979, product_id: eventId,}, function(error, result){
+            moloni.products('getOne', {company_id: 126979, product_id: eventId}, function(error, result){
                 var params = {
                     company_id: 126979,
                     product_id: eventId,
@@ -143,7 +143,7 @@ exports.camaraAccept = function(req, res, err){
                     properties: [
                         {
                             property_id: 11542,
-                            value: result.properties[0].value
+                            value: result.properties[0].value 
                         },
                         {
                             property_id: 11543,
@@ -151,7 +151,7 @@ exports.camaraAccept = function(req, res, err){
                         },
                         {
                             property_id: 11549,
-                            value:  result.properties[2].value
+                            value: result.properties[2].value
                         }
                     ],
                 }
