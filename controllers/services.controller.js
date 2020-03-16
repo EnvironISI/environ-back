@@ -65,3 +65,76 @@ exports.createEvent = function(req, res, err){
     })
 }
 
+exports.adminAccept = function(req, res, err){
+    var sessionCookie = req.cookies.session || '';
+    
+    var eventId = req.sanitize('eventId').sanitize();
+    var accept = req.sanitize('accept').sanitize();
+
+    adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
+        if(decodedClaims.admin){
+            var params = {
+                company_id: 126979,
+                product_id: eventId,
+                category_id: 2151197,
+                type: 2, 
+                name: name,
+                reference: name,
+                price: 0.0,
+                unit_id: 1076333,
+                has_stock: 1,
+                exemption_reason: "none",
+                stock: 1000,
+                properties: [
+                    {
+                        property_id: 11542,
+                        value: accept
+                    },
+                    {
+                        property_id: 11543,
+                        value: "pendente" 
+                    },
+                    {
+                        property_id: 11549,
+                        value:  user.email
+                    }
+                ],
+            }
+            moloni.products('update', params, function(){
+                if(error) {
+                    console.log(error)
+                    res.status(400).send(JSON.stringify({error: error}));
+                }else{
+                    res.status(200).send(JSON.stringify({data: result}));
+                }
+            })
+        }
+        else{
+            res.redirect('/denied');
+            res.end();
+        }
+    }).catch(error => {
+        console.log(error);
+        res.redirect('/denied');
+        res.end();
+    })
+}
+
+exports.camaraAccept = function(req, res, err){
+    var sessionCookie = req.cookies.session || '';
+
+    adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
+        if(decodedClaims.camara || decodedClaims.admin){
+
+        }
+        else{
+            res.redirect('/denied');
+            res.end();
+        }
+    }).catch(error => {
+        console.log(error);
+        res.redirect('/denied');
+        res.end();
+    })
+}
+
