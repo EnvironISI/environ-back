@@ -1,9 +1,9 @@
-const admin = require('firebase-admin');
+const adminFb = require('firebase-admin');
 const firebase = require('firebase');
 const serviceAccount = require('../isienviron-firebase-adminsdk-2g8b8-00fd0102b6.json');
 
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
+adminFb.initializeApp({
+    credential: adminFb.credential.cert(serviceAccount),
     databaseURL: "https://isienviron.firebaseio.com",
     storageBucket: "isienviron.appspot.com"
 });
@@ -23,6 +23,6 @@ firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE);
 firebase.auth().useDeviceLanguage();
 
 module.exports = {
-    admin: admin,
+    adminFb: adminFb,
     firebase: firebase
 }

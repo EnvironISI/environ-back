@@ -2,7 +2,7 @@ const jsonMessagesPath = __dirname + "/../assets/jsonMessages/";
 const jsonMessages = require(jsonMessagesPath + "login");
 
 var request = require("request");
-var { admin, firebase } = require('../config/firebaseConfig.js');
+var { adminFb, firebase } = require('../config/firebaseConfig.js');
 
 var exports = module.exports = {};
 
@@ -10,9 +10,9 @@ exports.user = function (req, res, err) {
     const sessionCookie = req.cookies.session || '';
     // Verify the session cookie. In this case an additional check is added to detect
     // if the user's Firebase session was revoked, user deleted/disabled, etc.
-    admin.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */).then((decodedClaims) => {
-        admin.auth().getUser(decodedClaims.uid).then(user => {
-            admin.database().ref('/users/' + decodedClaims.uid).once('value').then(snapshot => {
+    adminFb.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */).then((decodedClaims) => {
+        adminFb.auth().getUser(decodedClaims.uid).then(user => {
+            adminFb.database().ref('/users/' + decodedClaims.uid).once('value').then(snapshot => {
                 var userInfo = snapshot.val();
                 let info = [];
                 let role;
@@ -79,7 +79,7 @@ exports.login = function (req, res, err) {
         else{
             return user.user.getIdToken().then(idToken => {
                 const expiresIn = 60 * 60 * 24 * 5 * 1000;
-                admin.auth().createSessionCookie(idToken, { expiresIn }).then((sessionCookie) => {
+                adminFb.auth().createSessionCookie(idToken, { expiresIn }).then((sessionCookie) => {
                     // Set cookie policy for session cookie.
                     const options = { expires: new Date(Date.now() + 60 * 60 * 24 * 5 * 1000), httpOnly: false, secure: false };
                     res.cookie('session', sessionCookie, options);
@@ -102,9 +102,9 @@ exports.logout = function (req, res, err) {
     const sessionCookie = req.cookies.session || '';
     // Verify the session cookie. In this case an additional check is added to detect
     // if the user's Firebase session was revoked, user deleted/disabled, etc.
-    admin.auth().verifySessionCookie(sessionCookie).then((decodedClaims) => {
+    adminFb.auth().verifySessionCookie(sessionCookie).then((decodedClaims) => {
         res.clearCookie('session');
-        return admin.auth().revokeRefreshTokens(decodedClaims.sub);
+        return adminFb.auth().revokeRefreshTokens(decodedClaims.sub);
     }).then(() => {
         res.status(200).send({ data: 'Logout Successfully' });
     }).catch(error => {
@@ -124,13 +124,13 @@ exports.register = function (req, res, err) {
     let type = req.sanitize('type').escape();
 
     if (type == "camara" || type == "empresa") {
-        admin.auth().createUser({
+        adminFb.auth().createUser({
             email: email,
             password: password,
             phoneNumber: phone,
             displayName: name
         }).then(function (result) {
-            admin.auth().createCustomToken(result.uid).then(token => {
+            adminFb.auth().createCustomToken(result.uid).then(token => {
                 firebase.auth().signInWithCustomToken(token).then(result => {
                     return result.user.sendEmailVerification();
                 }).catch(error => {
@@ -159,9 +159,9 @@ exports.register = function (req, res, err) {
                     request(options, function (error, response, body) {
                         if (error) res.status(500).send({ error: error });
                         // Store hash in database
-                        admin.database().ref('/users/' + result.uid).set({ hubspot_id: body.companyId, email: email }).then(() => {
+                        adminFb.database().ref('/users/' + result.uid).set({ hubspot_id: body.companyId, email: email }).then(() => {
                             if (type == "empresa") {
-                                admin.auth().setCustomUserClaims(result.uid, { empresa: true }).then(() => {
+                                adminFb.auth().setCustomUserClaims(result.uid, { empresa: true }).then(() => {
                                     res.status(200).send({ data: "Companhia " + name + " foi criada com o ID: " + body.companyId });
                                 }).catch(error => {
                                     console.log(error)
@@ -169,7 +169,7 @@ exports.register = function (req, res, err) {
                                 })
                             }
                             else if (type == "camara") {
-                                admin.auth().setCustomUserClaims(result.uid, { camara: true }).then(() => {
+                                adminFb.auth().setCustomUserClaims(result.uid, { camara: true }).then(() => {
                                     res.status(200).send({ data: "Companhia " + name + " foi criada com o ID: " + body.companyId });
                                 }).catch(error => {
                                     console.log(error)
@@ -199,8 +199,8 @@ exports.register = function (req, res, err) {
 }
 exports.requestEmailVerification = function (req, res, err){
     var email = req.sanitize('email').escape();
-    admin.auth().getUserByEmail(email).then(user => {
-        admin.auth().createCustomToken(user.uid).then(token => {
+    adminFb.auth().getUserByEmail(email).then(user => {
+        adminFb.auth().createCustomToken(user.uid).then(token => {
             firebase.auth().signInWithCustomToken(token).then(result => {
                 result.user.sendEmailVerification().then(() => {
                 }).catch(error => {

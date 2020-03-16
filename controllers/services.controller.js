@@ -2,7 +2,7 @@ const jsonMessagesPath = __dirname + "/../assets/jsonMessages/";
 const jsonMessages = require(jsonMessagesPath + "services");
 
 var request = require('request');
-var {admin} = require('../config/firebaseConfig.js');
+var {adminFb} = require('../config/firebaseConfig.js');
 var {moloni} = require('../config/moloniConfig.js');
 
 var exports = module.exports = {};
@@ -21,8 +21,8 @@ exports.createEvent = function(req, res, err){
 
     console.log(req.cookies)
 
-    admin.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */).then((decodedClaims) => {
-        admin.auth().getUser(decodedClaims.uid).then(user => {
+    adminFb.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */).then((decodedClaims) => {
+        adminFb.auth().getUser(decodedClaims.uid).then(user => {
             var params = {
                 company_id: 126979, 
                 category_id: 2151197, 

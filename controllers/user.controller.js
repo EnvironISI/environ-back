@@ -2,7 +2,7 @@ const jsonMessagesPath = __dirname + "/../assets/jsonMessages/";
 const jsonMessages = require(jsonMessagesPath + "login");
 
 var request = require('request');
-var { admin, firebase } = require('../config/firebaseConfig.js');
+var { adminFb, firebase } = require('../config/firebaseConfig.js');
 
 var exports = module.exports = {};
 
@@ -17,9 +17,9 @@ exports.edit = function (req, res, err) {
 
     var sessionCookie = req.cookies.session || '';
 
-    admin.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */).then((decodedClaims) => {
-        admin.database().ref('/users/' + decodedClaims.uid).once('value').then(snapshot => {
-            admin.auth().getUser(decodedClaims.uid).then(user => {
+    adminFb.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */).then((decodedClaims) => {
+        adminFb.database().ref('/users/' + decodedClaims.uid).once('value').then(snapshot => {
+            adminFb.auth().getUser(decodedClaims.uid).then(user => {
                 if (photo_url == null) photo_url = user.photoURL
                 if (phone == null) phone = user.phoneNumber
                 var userInfo = snapshot.val();
@@ -43,7 +43,7 @@ exports.edit = function (req, res, err) {
                     request(options, function (error, response, body) {
                         if (error) res.status(500).send({ error: error });
                         // Store hash in database
-                        admin.auth().updateUser(decodedClaims.uid, {
+                        adminFb.auth().updateUser(decodedClaims.uid, {
                             displayName: name,
                             photoURL: photo_url
                         }).then(() => {
@@ -84,8 +84,8 @@ exports.changeEmail = function (req, res, err) {
     var sessionCookie = req.cookies.session || '';
     var email = req.sanitize('email').escape();
 
-    admin.auth().verifySessionCookie(sessionCookie, true).then((decodedClaims) => {
-        admin.auth().createCustomToken(decodedClaims.uid).then(token => {
+    adminFb.auth().verifySessionCookie(sessionCookie, true).then((decodedClaims) => {
+        adminFb.auth().createCustomToken(decodedClaims.uid).then(token => {
             firebase.auth().signInWithCustomToken(token).then(result => {
                 result.user.updateEmail(email).then(() => {
                     res.status(200).send({ data: "Email alterado com sucesso" });
@@ -110,8 +110,8 @@ exports.changePhone = function (req, res, err) {
     var sessionCookie = req.cookies.session || '';
     var phone = req.body.phone;
 
-    admin.auth().verifySessionCookie(sessionCookie, true).then((decodedClaims) => {
-        admin.auth().createCustomToken(decodedClaims.uid).then(token => {
+    adminFb.auth().verifySessionCookie(sessionCookie, true).then((decodedClaims) => {
+        adminFb.auth().createCustomToken(decodedClaims.uid).then(token => {
             firebase.auth().signInWithCustomToken(token).then(result => {
                 result.user.updatePhoneNumber(phone).then(() => {
                     res.status(200).send({ data: "Número de telemóvel alterado com sucesso" });
@@ -135,8 +135,8 @@ exports.changePhone = function (req, res, err) {
 exports.deleteMe = function (req, res, err) {
     var sessionCookie = req.cookies.session || '';
 
-    admin.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */).then((decodedClaims) => {
-        admin.database().ref("/users/" + decodedClaims.uid).once('value').then(snapshot => {
+    adminFb.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */).then((decodedClaims) => {
+        adminFb.database().ref("/users/" + decodedClaims.uid).once('value').then(snapshot => {
             var userInfo = snapshot.val();
             var options = {
                 method: 'DELETE',
@@ -145,8 +145,8 @@ exports.deleteMe = function (req, res, err) {
             };
             try {
                 request(options);
-                admin.database().ref("/users/" + decodedClaims.uid).remove(function () {
-                    admin.auth().deleteUser(decodedClaims.uid).then(() => {
+                adminFb.database().ref("/users/" + decodedClaims.uid).remove(function () {
+                    adminFb.auth().deleteUser(decodedClaims.uid).then(() => {
                         res.clearCookie('session');
                         res.status(200).send({ data: "Empresa removida com sucesso!" });
                         res.end();
@@ -170,7 +170,4 @@ exports.deleteMe = function (req, res, err) {
         console.log(error);
         res.status(500).send({ error: error })
     })
-}
-exports.all = function (req, res, err){
-    
 }
