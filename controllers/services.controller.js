@@ -88,14 +88,6 @@ exports.adminAccept = function(req, res, err){
                         property_id: 11542,
                         value: accept
                     },
-                    {
-                        property_id: 11543,
-                        value: "pendente" 
-                    },
-                    {
-                        property_id: 11549,
-                        value:  user.email
-                    }
                 ],
             }
             moloni.products('update', params, function(){
