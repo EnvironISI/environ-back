@@ -67,9 +67,9 @@ exports.createEvent = function(req, res, err){
 
 exports.adminAccept = function(req, res, err){
     var sessionCookie = req.cookies.session || '';
-    
-    var eventId = req.sanitize('eventId').sanitize();
-    var accept = req.sanitize('accept').sanitize();
+
+    var eventId = req.sanitize('eventId').escape();
+    var accept = req.sanitize('accept').escape();
 
     adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
         if(decodedClaims.admin){
