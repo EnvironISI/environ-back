@@ -119,6 +119,7 @@ exports.register = function (req, res, err) {
     var city = req.sanitize('city').escape();
     var country = req.sanitize('country').escape();
     var sector = req.sanitize('sector').escape();
+    var responsible = req.sanitize('responsible').escape();
     var nif = req.sanitize('nif').escape();
     var password = req.sanitize('password').escape();
     let type = req.sanitize('type').escape();
@@ -151,7 +152,8 @@ exports.register = function (req, res, err) {
                             { name: 'city', value: city },
                             { name: 'country', value: country },
                             { name: 'industry', value: sector },
-                            { name: 'nif', value: nif }]
+                            { name: 'nif', value: nif},
+                            { name: 'responsible', value: responsible}]
                     },
                     json: true
                 };
