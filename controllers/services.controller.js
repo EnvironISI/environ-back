@@ -2,18 +2,18 @@ const jsonMessagesPath = __dirname + "/../assets/jsonMessages/";
 const jsonMessages = require(jsonMessagesPath + "services");
 
 var request = require('request');
-var {adminFb} = require('../config/firebaseConfig.js');
-var {moloni} = require('../config/moloniConfig.js');
+var { adminFb } = require('../config/firebaseConfig.js');
+var { moloni } = require('../config/moloniConfig.js');
 
 var exports = module.exports = {};
 
-exports.products = function(req, res, err){
-    moloni.products('getAll', {company_id:126979}, function(error, result){
+exports.products = function (req, res, err) {
+    moloni.products('getAll', { company_id: 126979 }, function (error, result) {
         res.send(result);
     })
 }
 
-exports.createEvent = function(req, res, err){
+exports.createEvent = function (req, res, err) {
     const sessionCookie = req.cookies.session || '';
 
     var name = req.body.name;
@@ -24,9 +24,9 @@ exports.createEvent = function(req, res, err){
     adminFb.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */).then((decodedClaims) => {
         adminFb.auth().getUser(decodedClaims.uid).then(user => {
             var params = {
-                company_id: 126979, 
-                category_id: 2151197, 
-                type: 2, 
+                company_id: 126979,
+                category_id: 2151197,
+                type: 2,
                 name: name,
                 reference: name,
                 summary: summary,
@@ -42,19 +42,19 @@ exports.createEvent = function(req, res, err){
                     },
                     {
                         property_id: 11543,
-                        value: "pendente" 
+                        value: "pendente"
                     },
                     {
                         property_id: 11549,
-                        value:  user.email
+                        value: user.email
                     }
                 ],
             }
-            moloni.products('insert', params, function(error, result){
-                if(error) {
+            moloni.products('insert', params, function (error, result) {
+                if (error) {
                     console.log(error)
-                    res.status(400).send({error: error});
-                }else{
+                    res.status(400).send({ error: error });
+                } else {
                     res.status(200).send(result);
                 }
             })
@@ -65,15 +65,15 @@ exports.createEvent = function(req, res, err){
     })
 }
 
-exports.adminAccept = function(req, res, err){
+exports.adminAccept = function (req, res, err) {
     var sessionCookie = req.cookies.session || '';
 
     var eventId = req.sanitize('eventId').escape();
     var accept = req.sanitize('accept').escape();
 
     adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
-        if(decodedClaims.admin){
-            moloni.products('getOne', {company_id: 126979, product_id: eventId,}, function(error, result){
+        if (decodedClaims.admin) {
+            moloni.products('getOne', { company_id: 126979, product_id: eventId, }, function (error, result) {
                 var params = {
                     company_id: 126979,
                     product_id: eventId,
@@ -91,26 +91,26 @@ exports.adminAccept = function(req, res, err){
                         },
                         {
                             property_id: 11543,
-                            value: result.properties[1].value 
+                            value: result.properties[1].value
                         },
                         {
                             property_id: 11549,
-                            value:  result.properties[2].value
+                            value: result.properties[2].value
                         }
                     ],
                 }
-                moloni.products('update', params, function(error, result2){
-                    if(error) {
+                moloni.products('update', params, function (error, result2) {
+                    if (error) {
                         console.log(error)
-                        res.status(400).send({error: error});
-                    }else{
+                        res.status(400).send({ error: error });
+                    } else {
                         res.status(200).send(result2);
                     }
                 })
-                if(error) res.status(400).send({error: error});
+                if (error) res.status(400).send({ error: error });
             })
         }
-        else{
+        else {
             res.redirect('/denied');
             res.end();
         }
@@ -121,15 +121,15 @@ exports.adminAccept = function(req, res, err){
     })
 }
 
-exports.camaraAccept = function(req, res, err){
+exports.camaraAccept = function (req, res, err) {
     var sessionCookie = req.cookies.session || '';
 
     var eventId = req.sanitize('eventId').escape();
     var accept = req.sanitize('accept').escape();
 
     adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
-        if(decodedClaims.admin || decodedClaims.camara){
-            moloni.products('getOne', {company_id: 126979, product_id: eventId}, function(error, result){
+        if (decodedClaims.admin || decodedClaims.camara) {
+            moloni.products('getOne', { company_id: 126979, product_id: eventId }, function (error, result) {
                 var params = {
                     company_id: 126979,
                     product_id: eventId,
@@ -143,11 +143,11 @@ exports.camaraAccept = function(req, res, err){
                     properties: [
                         {
                             property_id: 11542,
-                            value: result.properties[0].value 
+                            value: result.properties[0].value
                         },
                         {
                             property_id: 11543,
-                            value: accept 
+                            value: accept
                         },
                         {
                             property_id: 11549,
@@ -155,18 +155,18 @@ exports.camaraAccept = function(req, res, err){
                         }
                     ],
                 }
-                moloni.products('update', params, function(error, result2){
-                    if(error) {
+                moloni.products('update', params, function (error, result2) {
+                    if (error) {
                         console.log(error)
-                        res.status(400).send({error: error});
-                    }else{
+                        res.status(400).send({ error: error });
+                    } else {
                         res.status(200).send(result2);
                     }
                 })
-                if(error) res.status(400).send({error: error});
+                if (error) res.status(400).send({ error: error });
             })
         }
-        else{
+        else {
             res.redirect('/denied');
             res.end();
         }
@@ -177,16 +177,16 @@ exports.camaraAccept = function(req, res, err){
     })
 }
 
-exports.delete = function(req, res, err){
+exports.delete = function (req, res, err) {
     var sessionCookie = req.cookies.session || '';
 
     var eventId = req.sanitize('eventId').escape();
 
     adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
-        if(decodedClaims.admin || decodedClaims.empresa){
-            moloni.products('delete', {company_id: 126979, product_id: eventId}, function(error, result){
-                if(error){
-                    res.status(400).send({error: error});
+        if (decodedClaims.admin || decodedClaims.empresa) {
+            moloni.products('delete', { company_id: 126979, product_id: eventId }, function (error, result) {
+                if (error) {
+                    res.status(400).send({ error: error });
                     res.end();
                 }
                 res.status(200).send(result);
@@ -196,5 +196,31 @@ exports.delete = function(req, res, err){
         console.log(error);
         res.redirect('/denied');
         res.end();
+    })
+}
+
+exports.camaras = function (req, res, err) {
+    var sessionCookie = req.cookies.session || '';
+
+    adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
+        var resp = [];
+        adminFb.auth().listUsers().then((userRecords) => {
+            try {
+                userRecords.users.forEach((user) => {
+                    if (user.customClaims.camara){
+                        resp.push(user.displayName)
+                    }
+                })
+            } catch (error) { console.log(error) }
+            res.status(200).send(resp);
+            res.end()
+        }).catch(error => {
+            console.log(error);
+            res.status(500).send({ error: error });
+            res.end();
+        })
+    }).catch(error => {
+        console.log(error);
+        res.redirect('/denied');
     })
 }
