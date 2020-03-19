@@ -49,7 +49,7 @@ exports.createEvent = function (req, res, err) {
                     price: 0.0,
                     unit_id: 1076333,
                     has_stock: 1,
-                    exemption_reason: "none",
+                    exemption_reason: "",
                     stock: 1,
                     properties: [
                         {
@@ -87,6 +87,10 @@ exports.createEvent = function (req, res, err) {
                         {
                             property_id: 11634,
                             value: address
+                        },
+                        {
+                            property_id: 11640,
+                            value: municipio
                         }
                     ],
                 }
@@ -127,7 +131,7 @@ exports.adminAccept = function (req, res, err) {
                     price: 0.0,
                     unit_id: 1076333,
                     has_stock: 1,
-                    exemption_reason: "none",
+                    exemption_reason: "",
                     stock: 1000,
                     properties: [
                         {
@@ -165,6 +169,10 @@ exports.adminAccept = function (req, res, err) {
                         {
                             property_id: 11634,
                             value: result.properties[8].value
+                        },
+                        {
+                            property_id: 11640,
+                            value: result.properties[9].value
                         }
                     ],
                 }
@@ -207,7 +215,7 @@ exports.camaraAccept = function (req, res, err) {
                     price: 0.0,
                     unit_id: 1076333,
                     has_stock: 1,
-                    exemption_reason: "none",
+                    exemption_reason: "",
                     stock: 1000,
                     properties: [
                         {
@@ -245,6 +253,10 @@ exports.camaraAccept = function (req, res, err) {
                         {
                             property_id: 11634,
                             value: result.properties[8].value
+                        },
+                        {
+                            property_id: 11640,
+                            value: result.properties[9].value
                         }
                     ],
                 }
