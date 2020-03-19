@@ -16,48 +16,93 @@ exports.products = function (req, res, err) {
 exports.createEvent = function (req, res, err) {
     const sessionCookie = req.cookies.session || '';
 
-    var name = req.body.name;
-    var summary = req.body.summary;
-
-    console.log(req.cookies)
-
     adminFb.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */).then((decodedClaims) => {
-        adminFb.auth().getUser(decodedClaims.uid).then(user => {
-            var params = {
-                company_id: 126979,
-                category_id: 2151197,
-                type: 2,
-                name: name,
-                reference: name,
-                summary: summary,
-                price: 0.0,
-                unit_id: 1076333,
-                has_stock: 1,
-                exemption_reason: "none",
-                stock: 1000,
-                properties: [
-                    {
-                        property_id: 11542,
-                        value: "pendente"
-                    },
-                    {
-                        property_id: 11543,
-                        value: "pendente"
-                    },
-                    {
-                        property_id: 11549,
-                        value: user.email
+        adminFb.auth().listUsers().then((userRecords) => {
+
+            var name = req.body.name;
+            var lat = req.body.latitude;
+            var long = req.body.longitude;
+            var address = req.body.address;
+            var initTime = req.body.initTime;
+            var endTime = req.body.endTime;
+            var nrPart = req.body.nrPart;
+            var summary = req.body.summary;
+            var municipio = req.body.municipio;
+
+            try {
+                userRecords.users.forEach((user) => {
+                    if (!user.customClaims.camara == municipio) {
+                        res.status(400).send({error: "O Municipio ainda não se encontra registado no sistema da Environ."})
+                        res.end();
                     }
-                ],
-            }
-            moloni.products('insert', params, function (error, result) {
-                if (error) {
-                    console.log(error)
-                    res.status(400).send({ error: error });
-                } else {
-                    res.status(200).send(result);
+                })
+            } catch (error) { console.log(error) }
+
+            adminFb.auth().getUser(decodedClaims.uid).then(user => {
+                var params = {
+                    company_id: 126979,
+                    category_id: 2151197,
+                    type: 2,
+                    name: name,
+                    reference: name,
+                    summary: summary,
+                    price: 0.0,
+                    unit_id: 1076333,
+                    has_stock: 1,
+                    exemption_reason: "none",
+                    stock: 1,
+                    properties: [
+                        {
+                            property_id: 11542,
+                            value: "pendente"
+                        },
+                        {
+                            property_id: 11543,
+                            value: "pendente"
+                        },
+                        {
+                            property_id: 11549,
+                            value: user.email
+                        },
+                        {
+                            property_id: 11623,
+                            value: lat
+                        },
+                        {
+                            property_id: 11625,
+                            value: long
+                        },
+                        {
+                            property_id: 11627,
+                            value: nrPart
+                        },
+                        {
+                            property_id: 11632,
+                            value: initTime
+                        },
+                        {
+                            property_id: 11633,
+                            value: endTime
+                        },
+                        {
+                            property_id: 11634,
+                            value: address
+                        }
+                    ],
                 }
+                moloni.products('insert', params, function (error, result) {
+                    if (error) {
+                        console.log(error)
+                        res.status(400).send({ error: error });
+                    } else {
+                        res.status(200).send(result);
+                    }
+                })
             })
+        }).catch(error => {
+            console.log(error);
+            res.status(500).send({ error: error })
+            res.end();
         })
     }).catch(error => {
         console.log(error);
@@ -96,6 +141,30 @@ exports.adminAccept = function (req, res, err) {
                         {
                             property_id: 11549,
                             value: result.properties[2].value
+                        },
+                        {
+                            property_id: 11623,
+                            value: result.properties[3].value
+                        },
+                        {
+                            property_id: 11625,
+                            value: result.properties[4].value
+                        },
+                        {
+                            property_id: 11627,
+                            value:result.properties[5].value
+                        },
+                        {
+                            property_id: 11632,
+                            value: result.properties[6].value
+                        },
+                        {
+                            property_id: 11633,
+                            value: result.properties[7].value
+                        },
+                        {
+                            property_id: 11634,
+                            value: result.properties[8].value
                         }
                     ],
                 }
@@ -152,6 +221,30 @@ exports.camaraAccept = function (req, res, err) {
                         {
                             property_id: 11549,
                             value: result.properties[2].value
+                        },
+                        {
+                            property_id: 11623,
+                            value: result.properties[3].value
+                        },
+                        {
+                            property_id: 11625,
+                            value: result.properties[4].value
+                        },
+                        {
+                            property_id: 11627,
+                            value:result.properties[5].value
+                        },
+                        {
+                            property_id: 11632,
+                            value: result.properties[6].value
+                        },
+                        {
+                            property_id: 11633,
+                            value: result.properties[7].value
+                        },
+                        {
+                            property_id: 11634,
+                            value: result.properties[8].value
                         }
                     ],
                 }
@@ -207,7 +300,7 @@ exports.camaras = function (req, res, err) {
         adminFb.auth().listUsers().then((userRecords) => {
             try {
                 userRecords.users.forEach((user) => {
-                    if (user.customClaims.camara){
+                    if (user.customClaims.camara) {
                         resp.push(user.displayName)
                     }
                 })
