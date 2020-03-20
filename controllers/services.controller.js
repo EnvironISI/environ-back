@@ -49,7 +49,7 @@ exports.createEvent = function (req, res, err) {
                     price: 0.0,
                     unit_id: 1076333,
                     has_stock: 1,
-                    exemption_reason: "",
+                    exemption_reason: "M99",
                     stock: 1,
                     properties: [
                         {
