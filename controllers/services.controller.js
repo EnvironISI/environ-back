@@ -18,15 +18,15 @@ exports.createEvent = function (req, res, err) {
     adminFb.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */).then((decodedClaims) => {
         adminFb.auth().listUsers().then((userRecords) => {
 
-            var name = req.body.name;
-            var lat = req.body.latitude;
-            var long = req.body.longitude;
-            var address = req.body.address;
-            var initTime = req.body.initTime;
-            var endTime = req.body.endTime;
-            var nrPart = req.body.nrPart;
-            var summary = req.body.summary;
-            var municipio = req.body.municipio;
+            var name = req.sanitize('name').escape();
+            var lat = req.sanitize('lat').escape();
+            var long = req.sanitize('long').escape();
+            var address = req.sanitize('address').escape();
+            var initTime = req.sanitize('initTime').escape();
+            var endTime = req.sanitize('endTime').escape();
+            var nrPart = req.sanitize('nrPart').escape();
+            var summary = req.sanitize('summary').escape();
+            var municipio = req.sanitize('municipio').escape();
 
             try {
                 userRecords.users.forEach((user) => {
