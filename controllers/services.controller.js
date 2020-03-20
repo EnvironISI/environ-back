@@ -1,7 +1,6 @@
 const jsonMessagesPath = __dirname + "/../assets/jsonMessages/";
 const jsonMessages = require(jsonMessagesPath + "services");
 
-var request = require('request');
 var { adminFb } = require('../config/firebaseConfig.js');
 var { moloni } = require('../config/moloniConfig.js');
 
@@ -31,6 +30,8 @@ exports.createEvent = function (req, res, err) {
 
             try {
                 userRecords.users.forEach((user) => {
+                    console.log(user.customClaims.camara);
+                    console.log(municipio);
                     if (!user.customClaims.camara == municipio) {
                         res.status(400).send({error: "O Municipio ainda não se encontra registado no sistema da Environ."})
                         res.end();
@@ -54,11 +55,7 @@ exports.createEvent = function (req, res, err) {
                     properties: [
                         {
                             property_id: 11542,
-                            value: "pendente"
-                        },
-                        {
-                            property_id: 11543,
-                            value: "pendente"
+                            value: "suspenso"
                         },
                         {
                             property_id: 11549,
@@ -122,70 +119,131 @@ exports.adminAccept = function (req, res, err) {
 
     adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
         if (decodedClaims.admin) {
-            moloni.products('getOne', { company_id: 126979, product_id: eventId, }, function (error, result) {
-                var params = {
-                    company_id: 126979,
-                    product_id: eventId,
-                    category_id: 2151197,
-                    type: 2,
-                    price: 0.0,
-                    unit_id: 1076333,
-                    has_stock: 1,
-                    exemption_reason: "",
-                    stock: 1000,
-                    properties: [
-                        {
-                            property_id: 11542,
-                            value: accept
-                        },
-                        {
-                            property_id: 11543,
-                            value: result.properties[1].value
-                        },
-                        {
-                            property_id: 11549,
-                            value: result.properties[2].value
-                        },
-                        {
-                            property_id: 11623,
-                            value: result.properties[3].value
-                        },
-                        {
-                            property_id: 11625,
-                            value: result.properties[4].value
-                        },
-                        {
-                            property_id: 11627,
-                            value:result.properties[5].value
-                        },
-                        {
-                            property_id: 11632,
-                            value: result.properties[6].value
-                        },
-                        {
-                            property_id: 11633,
-                            value: result.properties[7].value
-                        },
-                        {
-                            property_id: 11634,
-                            value: result.properties[8].value
-                        },
-                        {
-                            property_id: 11640,
-                            value: result.properties[9].value
-                        }
-                    ],
-                }
-                moloni.products('update', params, function (error, result2) {
-                    if (error) {
-                        console.log(error)
-                        res.status(400).send({ error: error });
-                    } else {
-                        res.status(200).send(result2);
+            if(accept == true){
+                moloni.products('getOne', { company_id: 126979, product_id: eventId, }, function (error, result) {
+                    var params = {
+                        company_id: 126979,
+                        product_id: eventId,
+                        category_id: 2151197,
+                        type: 2,
+                        price: 0.0,
+                        unit_id: 1076333,
+                        has_stock: 1,
+                        exemption_reason: "",
+                        stock: 1000,
+                        properties: [
+                            {
+                                property_id: 11542,
+                                value: 'Pendente'
+                            },
+                            {
+                                property_id: 11549,
+                                value: result.properties[2].value
+                            },
+                            {
+                                property_id: 11623,
+                                value: result.properties[3].value
+                            },
+                            {
+                                property_id: 11625,
+                                value: result.properties[4].value
+                            },
+                            {
+                                property_id: 11627,
+                                value:result.properties[5].value
+                            },
+                            {
+                                property_id: 11632,
+                                value: result.properties[6].value
+                            },
+                            {
+                                property_id: 11633,
+                                value: result.properties[7].value
+                            },
+                            {
+                                property_id: 11634,
+                                value: result.properties[8].value
+                            },
+                            {
+                                property_id: 11640,
+                                value: result.properties[9].value
+                            }
+                        ],
                     }
+                    moloni.products('update', params, function (error, result2) {
+                        if (error) {
+                            console.log(error)
+                            res.status(400).send({ error: error });
+                        } else {
+                            res.status(200).send(result2);
+                        }
+                    })
+                    if (error) res.status(400).send({ error: error });
                 })
-                if (error) res.status(400).send({ error: error });
-            })
+            }
+            else{
+                moloni.products('getOne', { company_id: 126979, product_id: eventId, }, function (error, result) {
+                    var params = {
+                        company_id: 126979,
+                        product_id: eventId,
+                        category_id: 2151197,
+                        type: 2,
+                        price: 0.0,
+                        unit_id: 1076333,
+                        has_stock: 1,
+                        exemption_reason: "",
+                        stock: 1000,
+                        properties: [
+                            {
+                                property_id: 11542,
+                                value: 'Rejeitado'
+                            },
+                            {
+                                property_id: 11549,
+                                value: result.properties[2].value
+                            },
+                            {
+                                property_id: 11623,
+                                value: result.properties[3].value
+                            },
+                            {
+                                property_id: 11625,
+                                value: result.properties[4].value
+                            },
+                            {
+                                property_id: 11627,
+                                value:result.properties[5].value
+                            },
+                            {
+                                property_id: 11632,
+                                value: result.properties[6].value
+                            },
+                            {
+                                property_id: 11633,
+                                value: result.properties[7].value
+                            },
+                            {
+                                property_id: 11634,
+                                value: result.properties[8].value
+                            },
+                            {
+                                property_id: 11640,
+                                value: result.properties[9].value
+                            }
+                        ],
+                    }
+                    moloni.products('update', params, function (error, result2) {
+                        if (error) {
+                            console.log(error)
+                            res.status(400).send({ error: error });
+                        } else {
+                            res.status(200).send(result2);
+                        }
+                    })
+                    if (error) res.status(400).send({ error: error });
+                })
+            }
+            
         }
         else {
             res.redirect('/denied');
@@ -206,70 +264,129 @@ exports.camaraAccept = function (req, res, err) {
 
     adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
         if (decodedClaims.admin || decodedClaims.camara) {
-            moloni.products('getOne', { company_id: 126979, product_id: eventId }, function (error, result) {
-                var params = {
-                    company_id: 126979,
-                    product_id: eventId,
-                    category_id: 2151197,
-                    type: 2,
-                    price: 0.0,
-                    unit_id: 1076333,
-                    has_stock: 1,
-                    exemption_reason: "",
-                    stock: 1000,
-                    properties: [
-                        {
-                            property_id: 11542,
-                            value: result.properties[0].value
-                        },
-                        {
-                            property_id: 11543,
-                            value: accept
-                        },
-                        {
-                            property_id: 11549,
-                            value: result.properties[2].value
-                        },
-                        {
-                            property_id: 11623,
-                            value: result.properties[3].value
-                        },
-                        {
-                            property_id: 11625,
-                            value: result.properties[4].value
-                        },
-                        {
-                            property_id: 11627,
-                            value:result.properties[5].value
-                        },
-                        {
-                            property_id: 11632,
-                            value: result.properties[6].value
-                        },
-                        {
-                            property_id: 11633,
-                            value: result.properties[7].value
-                        },
-                        {
-                            property_id: 11634,
-                            value: result.properties[8].value
-                        },
-                        {
-                            property_id: 11640,
-                            value: result.properties[9].value
-                        }
-                    ],
-                }
-                moloni.products('update', params, function (error, result2) {
-                    if (error) {
-                        console.log(error)
-                        res.status(400).send({ error: error });
-                    } else {
-                        res.status(200).send(result2);
+            if(accept == true){
+                moloni.products('getOne', { company_id: 126979, product_id: eventId }, function (error, result) {
+                    var params = {
+                        company_id: 126979,
+                        product_id: eventId,
+                        category_id: 2151197,
+                        type: 2,
+                        price: 0.0,
+                        unit_id: 1076333,
+                        has_stock: 1,
+                        exemption_reason: "",
+                        stock: 1000,
+                        properties: [
+                            {
+                                property_id: 11542,
+                                value: 'Aceite'
+                            },
+                            {
+                                property_id: 11549,
+                                value: result.properties[2].value
+                            },
+                            {
+                                property_id: 11623,
+                                value: result.properties[3].value
+                            },
+                            {
+                                property_id: 11625,
+                                value: result.properties[4].value
+                            },
+                            {
+                                property_id: 11627,
+                                value:result.properties[5].value
+                            },
+                            {
+                                property_id: 11632,
+                                value: result.properties[6].value
+                            },
+                            {
+                                property_id: 11633,
+                                value: result.properties[7].value
+                            },
+                            {
+                                property_id: 11634,
+                                value: result.properties[8].value
+                            },
+                            {
+                                property_id: 11640,
+                                value: result.properties[9].value
+                            }
+                        ],
                     }
+                    moloni.products('update', params, function (error, result2) {
+                        if (error) {
+                            console.log(error)
+                            res.status(400).send({ error: error });
+                        } else {
+                            res.status(200).send(result2);
+                        }
+                    })
+                    if (error) res.status(400).send({ error: error });
                 })
-                if (error) res.status(400).send({ error: error });
-            })
+            }else{
+                moloni.products('getOne', { company_id: 126979, product_id: eventId }, function (error, result) {
+                    var params = {
+                        company_id: 126979,
+                        product_id: eventId,
+                        category_id: 2151197,
+                        type: 2,
+                        price: 0.0,
+                        unit_id: 1076333,
+                        has_stock: 1,
+                        exemption_reason: "",
+                        stock: 1000,
+                        properties: [
+                            {
+                                property_id: 11542,
+                                value: 'Rejeitado'
+                            },
+                            {
+                                property_id: 11549,
+                                value: result.properties[2].value
+                            },
+                            {
+                                property_id: 11623,
+                                value: result.properties[3].value
+                            },
+                            {
+                                property_id: 11625,
+                                value: result.properties[4].value
+                            },
+                            {
+                                property_id: 11627,
+                                value:result.properties[5].value
+                            },
+                            {
+                                property_id: 11632,
+                                value: result.properties[6].value
+                            },
+                            {
+                                property_id: 11633,
+                                value: result.properties[7].value
+                            },
+                            {
+                                property_id: 11634,
+                                value: result.properties[8].value
+                            },
+                            {
+                                property_id: 11640,
+                                value: result.properties[9].value
+                            }
+                        ],
+                    }
+                    moloni.products('update', params, function (error, result2) {
+                        if (error) {
+                            console.log(error)
+                            res.status(400).send({ error: error });
+                        } else {
+                            res.status(200).send(result2);
+                        }
+                    })
+                    if (error) res.status(400).send({ error: error });
+                })
+            }
         }
         else {
             res.redirect('/denied');
@@ -304,7 +421,7 @@ exports.delete = function (req, res, err) {
     })
 }
 
-exports.camaras = function (req, res, err) {
+/*exports.camaras = function (req, res, err) {
     var sessionCookie = req.cookies.session || '';
 
     adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
@@ -328,4 +445,4 @@ exports.camaras = function (req, res, err) {
         console.log(error);
         res.redirect('/denied');
     })
-}
+}*/

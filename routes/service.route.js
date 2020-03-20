@@ -9,6 +9,6 @@ service.post('/request', servicesController.createEvent);
 service.put('/admin/acception', servicesController.adminAccept);
 service.put('/camara/acception', servicesController.camaraAccept)
 service.delete('/delete', servicesController.delete)
-service.get('/camaras', servicesController.camaras)
+//service.get('/camaras', servicesController.camaras)
 
 module.exports = service;
