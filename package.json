@@ -17,6 +17,7 @@
     "firebase": "^7.10.0",
     "firebase-admin": "^8.9.2",
     "fs": "0.0.1-security",
+    "hubspot": "^2.3.9",
     "moloni": "0.0.10",
     "morgan": "^1.9.1",
     "nodemailer": "^4.6.5",

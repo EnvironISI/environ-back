@@ -9,6 +9,7 @@ var {adminFb} = require('../config/firebaseConfig.js');
 admin.delete('/delete/user/:uid', isAdmin, adminController.delete);
 admin.put('/set/:uid', isAdmin, adminController.setAdmin);
 admin.get('/users', isAdmin, adminController.getUsers);
+admin.put('/user/accept/:uid', isAdmin, adminController.acceptUser)
 
 function isAdmin(req, res, next){
     var sessionCookie = req.cookies.session;

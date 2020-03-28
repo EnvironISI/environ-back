@@ -148,3 +148,17 @@ exports.getUsers = function (req, res, err) {
         res.end();
     })
 }
+exports.acceptUser = function(req, res, err){
+    var uid = req.params.uid;
+
+    adminFb.auth().updateUser(uid, {
+        emailVerified: true
+    }).then(result => {
+        res.status(200).send(result);
+        res.end();
+    }).catch(error => {
+        console.log(error);
+        res.status(500).send(error);
+    })
+
+}
