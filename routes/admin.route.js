@@ -6,10 +6,12 @@ const jsonMessages = require(jsonMessagesPath + "login");
 var {adminFb} = require('../config/firebaseConfig.js');
 
 //Admin Routes
-admin.delete('/delete/user/:uid', isAdmin, adminController.delete);
+
 admin.put('/set/:uid', isAdmin, adminController.setAdmin);
 admin.get('/users', isAdmin, adminController.getUsers);
-admin.put('/user/accept/:uid', isAdmin, adminController.acceptUser)
+admin.delete('/delete/user/:uid', isAdmin, adminController.delete);
+admin.put('/accept/user/:uid', isAdmin, adminController.acceptUser)
+admin.put('/enable/user/:uid', isAdmin, adminController.enableUser);
 
 function isAdmin(req, res, next){
     var sessionCookie = req.cookies.session;

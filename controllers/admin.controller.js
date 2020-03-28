@@ -163,3 +163,17 @@ exports.acceptUser = function(req, res, err){
     })
 
 }
+exports.enableUser = function(req, res, err){
+    var uid = req.params.uid;
+
+    adminFb.auth().updateUser(uid, {
+        disabled: false
+    }).then(() => {
+        res.status(200).send("Account enabled Successfully");
+        res.end();
+    }).catch(error => {
+        console.log(error);
+        res.status(500).send(error);
+        res.end();
+    })
+}
