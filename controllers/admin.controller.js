@@ -86,7 +86,7 @@ exports.getUsers = function (req, res, err) {
         let i = 0;
         try {
             userRecords.users.forEach((user) => {
-                var { uid, displayName, email, phoneNumber, photoURL, emailVerified } = user;
+                var { uid, displayName, email, phoneNumber, photoURL, emailVerified, disabled } = user;
                 adminFb.database().ref('/users/' + uid).once('value').then(async (snapshot) => {
                     var userInfo = snapshot.val();
                     var url = new URL(`https://api.hubapi.com/companies/v2/companies/${userInfo.hubspot_id}`)
@@ -121,7 +121,8 @@ exports.getUsers = function (req, res, err) {
                             country: country,
                             city: city,
                             setor: setor,
-                            emailVerified: emailVerified
+                            emailVerified: emailVerified,
+                            disabled: disabled
                         };
                         return obj;
                     }).catch(error => {

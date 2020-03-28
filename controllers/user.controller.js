@@ -136,35 +136,13 @@ exports.deleteMe = function (req, res, err) {
     var sessionCookie = req.cookies.session || '';
 
     adminFb.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */).then((decodedClaims) => {
-        adminFb.database().ref("/users/" + decodedClaims.uid).once('value').then(snapshot => {
-            var userInfo = snapshot.val();
-            var options = {
-                method: 'DELETE',
-                url: `https://api.hubapi.com/companies/v2/companies/${userInfo.hubspot_id}`,
-                qs: { hapikey: 'e2c3af5b-f5fa-4cb8-a190-0409f322b8f8' }
-            };
-            try {
-                request(options);
-                adminFb.database().ref("/users/" + decodedClaims.uid).remove(function () {
-                    adminFb.auth().deleteUser(decodedClaims.uid).then(() => {
-                        res.clearCookie('session');
-                        res.status(200).send({ data: "Empresa removida com sucesso!" });
-                        res.end();
-                    }).catch(error => {
-                        console.log(error);
-                        res.status(500).send({ error: error })
-                    })
-                }).catch(error => {
-                    console.log(error);
-                    res.status(500).send({ error: error })
-                })
-            } catch (error) {
-                console.log(error);
-                res.status(500).send({ error: error })
-            }
+        adminFb.auth().updateUser(decodedClaims.uid, {
+            disabled: true
+        }).then(() => {
+            res.status(200).send('Account disabled Successfully');
         }).catch(error => {
             console.log(error);
-            res.status(500).send({ error: error })
+            res.status(500).send(error);
         })
     }).catch(error => {
         console.log(error);
