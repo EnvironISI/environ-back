@@ -10,6 +10,7 @@ service.put('/admin/acception', servicesController.adminAccept);
 service.put('/camara/acception', servicesController.camaraAccept)
 service.delete('/delete', servicesController.delete)
 service.post('/package/create', servicesController.packageCreate);
+service.get('/camara', servicesController.camaraEvents);
 //service.get('/camaras', servicesController.camaras)
 
 module.exports = service;

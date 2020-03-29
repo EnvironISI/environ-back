@@ -5,9 +5,9 @@ var { adminFb } = require('../config/firebaseConfig.js');
 var { moloni } = require('../config/moloniConfig.js');
 
 var exports = module.exports = {};
-
+var company_id = 126979;
 exports.products = function (req, res, err) {
-    moloni.products('getAll', { company_id: 126979 }, function (error, result) {
+    moloni.products('getAll', { company_id: company_id }, function (error, result) {
         res.send(result);
     })
 }
@@ -27,7 +27,7 @@ exports.createEvent = function (req, res, err) {
             var nrPart = req.sanitize('nrPart').escape();
             var summary = req.sanitize('summary').escape();
             var municipio = req.sanitize('municipio').escape();
-
+            var reference = municipio.trim() + Math.floor((Math.random() * 100000000000) + 1).toString();
            /* try {
                 userRecords.users.forEach((user) => {
                     if (!user.customClaims.camara == municipio) {
@@ -35,15 +35,15 @@ exports.createEvent = function (req, res, err) {
                         res.end();
                     }
                 })
-            } catch (error) { console.log(error) }
-*/
+            } catch (error) { console.log(error) }*/
+
             adminFb.auth().getUser(decodedClaims.uid).then(user => {
                 var params = {
-                    company_id: 126979,
+                    company_id: company_id,
                     category_id: 2151197,
                     type: 2,
                     name: name,
-                    reference: name,
+                    reference: reference,
                     summary: summary,
                     price: 0.0,
                     unit_id: 1076333,
@@ -120,7 +120,7 @@ exports.adminAccept = function (req, res, err) {
             if (accept == true) { decision = 'Aceite' } else { decision = 'Rejeitado' }
             moloni.products('getOne', { company_id: 126979, product_id: eventId }, function (error, result) {
                 var params = {
-                    company_id: 126979,
+                    company_id: company_id,
                     product_id: eventId,
                     category_id: 2151197,
                     type: 2,
@@ -202,7 +202,7 @@ exports.camaraAccept = function (req, res, err) {
             if (accept == true) { decision = 'Aceite' } else { decision = 'Rejeitado' }
             moloni.products('getOne', { company_id: 126979, product_id: eventId }, function (error, result) {
                 var params = {
-                    company_id: 126979,
+                    company_id: company_id,
                     product_id: eventId,
                     category_id: 2151197,
                     type: 2,
@@ -279,7 +279,7 @@ exports.delete = function (req, res, err) {
 
     adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
         if (decodedClaims.admin || decodedClaims.empresa) {
-            moloni.products('delete', { company_id: 126979, product_id: eventId }, function (error, result) {
+            moloni.products('delete', { company_id: company_id, product_id: eventId }, function (error, result) {
                 if (error) {
                     res.status(400).send({ error: error });
                     res.end();
@@ -311,6 +311,49 @@ exports.packageCreate = function (req, res, err){
         res.end();
     })
 
+}
+
+exports.camaraEvents = function(req, res, err){
+    var sessionCookie = req.cookies.session || '';
+
+    adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
+        if(decodedClaims.camara){
+            adminFb.auth().getUser(decodedClaims.uid).then(user => {
+                var params = {
+                    company_id: company_id,
+                    search: {
+                        properties: [
+                            {
+                                property_id: 11640,
+                                value: user.displayName
+                            }
+                        ]
+                    }
+                }
+                moloni.products('getBySearch', params, function(error, result){
+                    if(error){
+                        console.log(error);
+                        res.status(400).send(error);
+                        res.end();
+                    }else{
+                        res.send(200).send(result)
+                        res.end();
+                    }
+                })
+            }).catch(error => {
+                console.log(error)
+                res.status(500).send(error);
+                res.end();
+            })
+        }
+        else{
+            res.redirect('/denied');
+            res.end();
+        }
+    }).catch(error => {
+        res.redirect('/denied');
+        res.end();
+    })
 }
 
 /*exports.camaras = function (req, res, err) {

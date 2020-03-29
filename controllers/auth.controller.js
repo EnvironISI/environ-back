@@ -129,7 +129,8 @@ exports.register = function (req, res, err) {
             email: email,
             password: password,
             phoneNumber: phone,
-            displayName: name
+            displayName: name,
+            photoURL: 'https://f0.pngfuel.com/png/981/645/default-profile-picture-png-clip-art.png'
         }).then(function (result) {
             adminFb.auth().createCustomToken(result.uid).then(token => {
                 firebase.auth().signInWithCustomToken(token).then(result => {
