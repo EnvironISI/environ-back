@@ -319,26 +319,19 @@ exports.camaraEvents = function(req, res, err){
     adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
         if(decodedClaims.camara){
             adminFb.auth().getUser(decodedClaims.uid).then(user => {
-                var params = {
-                    company_id: company_id,
-                    search: {
-                        properties: [
-                            {
-                                property_id: 11640,
-                                value: user.displayName
-                            }
-                        ]
-                    },
-                    qty: 1,
-                    offset: 0
-                }
-                moloni.products('countBySearch', params, function(error, result){
+                moloni.products('getAll', {company_id: company_id}, function(error, result){
                     if(error){
                         console.log(error);
                         res.status(400).send(error);
                         res.end();
                     }else{
-                        res.status(200).send(result)
+                        let obj = [];
+                        result.forEach(product => {
+                            if(product.properties[8].value === user.displayName){
+                                obj.push(product);
+                            }
+                        });
+                        res.status(200).send(obj);
                         res.end();
                     }
                 })
