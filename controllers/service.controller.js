@@ -322,7 +322,7 @@ exports.camaraEvents = function(req, res, err){
                 var params = {
                     company_id: company_id,
                     search: {
-                        reference: municipio
+                        reference: 'Limpeza de praia TESTE'
                     }
                 }
                 moloni.products('getBySearch', params, function(error, result){
