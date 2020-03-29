@@ -336,7 +336,7 @@ exports.camaraEvents = function(req, res, err){
                         res.status(400).send(error);
                         res.end();
                     }else{
-                        res.send(200).send(result)
+                        res.status(200).send(result)
                         res.end();
                     }
                 })
