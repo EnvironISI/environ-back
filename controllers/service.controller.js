@@ -27,7 +27,8 @@ exports.createEvent = function (req, res, err) {
             var nrPart = req.sanitize('nrPart').escape();
             var summary = req.sanitize('summary').escape();
             var municipio = req.sanitize('municipio').escape();
-            var reference = municipio.trim() + Math.floor((Math.random() * 100000000000) + 1).toString();
+            var eventType = req.sanitize('eventType').sanitize();
+            //var reference = municipio.trim() + Math.floor((Math.random() * 100000000000) + 1).toString();
            /* try {
                 userRecords.users.forEach((user) => {
                     if (!user.customClaims.camara == municipio) {
@@ -43,7 +44,7 @@ exports.createEvent = function (req, res, err) {
                     category_id: 2151197,
                     type: 2,
                     name: name,
-                    reference: reference,
+                    reference: name,
                     summary: summary,
                     price: 0.0,
                     unit_id: 1076333,
@@ -86,6 +87,10 @@ exports.createEvent = function (req, res, err) {
                         {
                             property_id: 11640,
                             value: municipio
+                        },
+                        {
+                            property_id: 11847,
+                            value: eventType
                         }
                     ],
                 }
