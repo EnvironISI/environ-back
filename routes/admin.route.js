@@ -3,35 +3,29 @@ const adminController = require('../controllers/admin.controller');
 const jsonMessagesPath = __dirname + "/../assets/jsonMessages/";
 const jsonMessages = require(jsonMessagesPath + "login");
 
-var {adminFb} = require('../config/firebaseConfig.js');
+var { adminFb } = require('../config/firebaseConfig.js');
 
 //Admin Routes
 
-admin.put('/set/:uid', isAdmin, adminController.setAdmin);
+admin.put('/set', isAdmin, adminController.setAdmin);
 admin.get('/users', isAdmin, adminController.getUsers);
-admin.delete('/delete/user/:uid', isAdmin, adminController.delete);
-admin.put('/accept/user/:uid', isAdmin, adminController.acceptUser)
-admin.put('/enable/user/:uid', isAdmin, adminController.enableUser);
+admin.delete('/delete/user', isAdmin, adminController.delete);
+admin.put('/accept/user', isAdmin, adminController.acceptUser)
+admin.put('/enable/user', isAdmin, adminController.enableUser);
 
-function isAdmin(req, res, next){
-    var sessionCookie = req.cookies.session;
+function isAdmin(req, res, next) {
+    var sessionCookie = req.cookies.session || '';
 
-    try{
-        adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
-            if(!decodedClaims.admin){
-                res.redirect('/denied');
-            }
-            else{
-                next();
-            }
-        }).catch(error => {
-            console.log(error)
-            res.status(500).send({error: error});
-        })
-    }catch(error){
-        console.log(error)
+    adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
+        if (!decodedClaims.admin) {
+            res.redirect('/denied');
+        }
+        else {
+            next();
+        }
+    }).catch(error => {
         res.redirect('/denied');
-    }
+    })
 }
 
 module.exports = admin;

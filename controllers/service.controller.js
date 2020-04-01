@@ -3,6 +3,7 @@ const jsonMessages = require(jsonMessagesPath + "services");
 
 var { adminFb } = require('../config/firebaseConfig.js');
 var { moloni } = require('../config/moloniConfig.js');
+var { hubspot } = require('../config/hubspotConfig');
 
 var exports = module.exports = {};
 var company_id = 126979;

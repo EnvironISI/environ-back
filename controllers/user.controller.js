@@ -3,6 +3,7 @@ const jsonMessages = require(jsonMessagesPath + "login");
 
 var request = require('request');
 var { adminFb, firebase } = require('../config/firebaseConfig.js');
+var { hubspot } = require('../config/hubspotConfig');
 
 var exports = module.exports = {};
 
@@ -17,46 +18,34 @@ exports.edit = function (req, res, err) {
 
     var sessionCookie = req.cookies.session || '';
 
-    adminFb.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */).then((decodedClaims) => {
+    adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
         adminFb.database().ref('/users/' + decodedClaims.uid).once('value').then(snapshot => {
             adminFb.auth().getUser(decodedClaims.uid).then(user => {
                 if (photo_url == null) photo_url = user.photoURL
                 if (phone == null) phone = user.phoneNumber
                 var userInfo = snapshot.val();
-
-                var options = {
-                    method: 'PUT',
-                    url: `https://api.hubapi.com/companies/v2/companies/${userInfo.hubspot_id}`,
-                    qs: { hapikey: 'e2c3af5b-f5fa-4cb8-a190-0409f322b8f8' },
-                    headers: { 'Content-Type': 'application/json' },
-                    body: {
-                        properties:
-                            [{ name: 'name', value: name },
-                            { name: 'city', value: city },
-                            { name: 'country', value: country },
-                            { name: 'nif', value: nif },
-                            { name: 'phone', value: phone }]
-                    },
-                    json: true
-                };
-                try {
-                    request(options, function (error, response, body) {
-                        if (error) res.status(500).send({ error: error });
-                        // Store hash in database
-                        adminFb.auth().updateUser(decodedClaims.uid, {
-                            displayName: name,
-                            photoURL: photo_url
-                        }).then(() => {
-                            res.status(200).send({ data: "Empresa " + name + " foi alterada" });
-                        }).catch(error => {
-                            console.log(error);
-                            res.status(500).send({ error: error })
-                        })
+                var params = {
+                    properties:
+                        [{ name: 'name', value: name },
+                        { name: 'city', value: city },
+                        { name: 'country', value: country },
+                        { name: 'nif', value: nif },
+                        { name: 'phone', value: phone }]
+                }
+                hubspot.companies.update(userInfo.hubspot_id, params).then(() => {
+                    adminFb.auth().updateUser(decodedClaims.uid, {
+                        displayName: name,
+                        photoURL: photo_url
+                    }).then(() => {
+                        res.status(200).send({ data: "Empresa " + name + " foi alterada" });
+                    }).catch(error => {
+                        console.log(error);
+                        res.status(500).send({ error: error })
                     })
-                } catch (error) {
+                }).catch(error => {
                     console.log(error);
                     res.status(500).send({ error: error })
-                }
+                })
             }).catch(error => {
                 console.log(error);
                 res.status(500).send({ error: error })
@@ -65,9 +54,6 @@ exports.edit = function (req, res, err) {
             console.log(error);
             res.status(500).send({ error: error })
         })
-    }).catch(error => {
-        console.log(error);
-        res.redirect('/denied');
     })
 }
 exports.recoverPassword = function (req, res, err) {

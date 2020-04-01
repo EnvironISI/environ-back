@@ -9,7 +9,6 @@ const expressSanitizer = require('express-sanitizer');
 const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
 const fileUpload = require('express-fileupload');
-var {firebase} = require('./config/firebaseConfig');
 
 app.use(bodyParser.json(), bodyParser.urlencoded({ extended: true }));
 app.use(expressSanitizer());
