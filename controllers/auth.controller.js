@@ -24,7 +24,6 @@ exports.user = function (req, res, err) {
                     if (body.properties.country !== undefined) country = body.properties.country.value;
                     if (body.properties.city !== undefined) city = body.properties.city.value;
                     if (body.properties.industry !== undefined) setor = body.properties.industry.value;
-                    if (error) res.status(500).send({ error: error });
                     if (user.customClaims.empresa) role = 'empresa';
                     else if (user.customClaims.admin) role = 'admin';
                     else if (user.customClaims.camara) role = 'camara';
