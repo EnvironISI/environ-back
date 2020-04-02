@@ -7,9 +7,16 @@ var { hubspot } = require('../config/hubspotConfig');
 
 var exports = module.exports = {};
 var company_id = 126979;
+
 exports.products = function (req, res, err) {
     moloni.products('getAll', { company_id: company_id }, function (error, result) {
-        res.send(result);
+        if(error) {
+            res.status(500).send(error); 
+            res.end();
+        }else{
+            res.status(200).send(result);
+            res.end();
+        }
     })
 }
 
