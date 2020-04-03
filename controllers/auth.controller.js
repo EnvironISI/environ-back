@@ -143,7 +143,7 @@ exports.register = function (req, res, err) {
                         { name: 'nif', value: nif },
                         { name: 'responsible', value: responsible }]
                 }
-                hubspot.companies.create(params).then(() => {
+                hubspot.companies.create(params).then((body) => {
                     adminFb.database().ref('/users/' + result.uid).set({ hubspot_id: body.companyId, email: email }).then(() => {
                         if (type == "empresa") {
                             adminFb.auth().setCustomUserClaims(result.uid, { empresa: true }).then(() => {

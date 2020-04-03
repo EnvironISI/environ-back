@@ -129,13 +129,10 @@ exports.adminAccept = function (req, res, err) {
     var eventId = req.sanitize('eventId').escape();
     var accept = req.sanitize('accept').escape();
 
-    console.log(req.body)
-
     adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
         if (decodedClaims.admin) {
-            if (accept == true) { decision = 'Pendente' } else { decision = 'Rejeitado' }
+            if (accept === 'true') { decision = 'Pendente' } else { decision = 'Rejeitado' }
             moloni.products('getOne', { company_id: company_id, product_id: eventId }, function (error, result) {
-                console.log(result);
                 var params = {
                     company_id: company_id,
                     product_id: eventId,
