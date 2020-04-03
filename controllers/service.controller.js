@@ -15,7 +15,7 @@ exports.products = function (req, res, err) {
             res.status(500).send(error); 
             res.end();
         }else{
-            res.status(200).send(result);
+            res.status(200).send(JSON.stringify(result));
             res.end();
         }
     })
