@@ -36,7 +36,7 @@ exports.createEvent = function (req, res, err) {
             var nrPart = req.sanitize('nrPart').escape();
             var summary = req.sanitize('summary').escape();
             var municipio = req.sanitize('municipio').escape();
-            var eventType = req.sanitize('eventType').sanitize();
+            var eventType = req.sanitize('eventType').escape();
             //var reference = municipio.trim() + Math.floor((Math.random() * 100000000000) + 1).toString();
            /* try {
                 userRecords.users.forEach((user) => {
