@@ -15,7 +15,6 @@ exports.products = function (req, res, err) {
             res.status(500).send(error); 
             res.end();
         }else{
-            console.log(result)
             res.status(200).send(result);
             res.end();
         }
@@ -132,8 +131,9 @@ exports.adminAccept = function (req, res, err) {
 
     adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
         if (decodedClaims.admin) {
-            if (accept == true) { decision = 'Aceite' } else { decision = 'Rejeitado' }
-            moloni.products('getOne', { company_id: 126979, product_id: eventId }, function (error, result) {
+            if (accept == true) { decision = 'Pendente' } else { decision = 'Rejeitado' }
+            moloni.products('getOne', { company_id: company_id, product_id: eventId }, function (error, result) {
+                console.log(result);
                 var params = {
                     company_id: company_id,
                     product_id: eventId,
@@ -142,7 +142,7 @@ exports.adminAccept = function (req, res, err) {
                     price: 0.0,
                     unit_id: 1076333,
                     has_stock: 1,
-                    exemption_reason: "",
+                    exemption_reason: "M99",
                     stock: 1000,
                     properties: [
                         {
@@ -151,34 +151,38 @@ exports.adminAccept = function (req, res, err) {
                         },
                         {
                             property_id: 11549,
-                            value: result.properties[2].value
+                            value: result.properties[1].value
                         },
                         {
                             property_id: 11623,
-                            value: result.properties[3].value
+                            value: result.properties[2].value
                         },
                         {
                             property_id: 11625,
-                            value: result.properties[4].value
+                            value: result.properties[3].value
                         },
                         {
                             property_id: 11627,
-                            value: result.properties[5].value
+                            value: result.properties[4].value
                         },
                         {
                             property_id: 11632,
-                            value: result.properties[6].value
+                            value: result.properties[5].value
                         },
                         {
                             property_id: 11633,
-                            value: result.properties[7].value
+                            value: result.properties[6].value
                         },
                         {
                             property_id: 11634,
-                            value: result.properties[8].value
+                            value: result.properties[7].value
                         },
                         {
                             property_id: 11640,
+                            value: result.properties[8].value
+                        },
+                        {
+                            property_id: 11847,
                             value: result.properties[9].value
                         }
                     ],
@@ -215,7 +219,7 @@ exports.camaraAccept = function (req, res, err) {
     adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
         if (decodedClaims.admin || decodedClaims.camara) {
             if (accept == true) { decision = 'Aceite' } else { decision = 'Rejeitado' }
-            moloni.products('getOne', { company_id: 126979, product_id: eventId }, function (error, result) {
+            moloni.products('getOne', { company_id: company_id, product_id: eventId }, function (error, result) {
                 var params = {
                     company_id: company_id,
                     product_id: eventId,
@@ -224,7 +228,7 @@ exports.camaraAccept = function (req, res, err) {
                     price: 0.0,
                     unit_id: 1076333,
                     has_stock: 1,
-                    exemption_reason: "",
+                    exemption_reason: "M99",
                     stock: 1000,
                     properties: [
                         {
@@ -233,34 +237,38 @@ exports.camaraAccept = function (req, res, err) {
                         },
                         {
                             property_id: 11549,
-                            value: result.properties[2].value
+                            value: result.properties[1].value
                         },
                         {
                             property_id: 11623,
-                            value: result.properties[3].value
+                            value: result.properties[2].value
                         },
                         {
                             property_id: 11625,
-                            value: result.properties[4].value
+                            value: result.properties[3].value
                         },
                         {
                             property_id: 11627,
-                            value: result.properties[5].value
+                            value: result.properties[4].value
                         },
                         {
                             property_id: 11632,
-                            value: result.properties[6].value
+                            value: result.properties[5].value
                         },
                         {
                             property_id: 11633,
-                            value: result.properties[7].value
+                            value: result.properties[6].value
                         },
                         {
                             property_id: 11634,
-                            value: result.properties[8].value
+                            value: result.properties[7].value
                         },
                         {
                             property_id: 11640,
+                            value: result.properties[8].value
+                        },
+                        {
+                            property_id: 11847,
                             value: result.properties[9].value
                         }
                     ],
