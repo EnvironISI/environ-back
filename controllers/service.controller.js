@@ -129,6 +129,8 @@ exports.adminAccept = function (req, res, err) {
     var eventId = req.sanitize('eventId').escape();
     var accept = req.sanitize('accept').escape();
 
+    console.log(req.body)
+
     adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
         if (decodedClaims.admin) {
             if (accept == true) { decision = 'Pendente' } else { decision = 'Rejeitado' }
@@ -195,7 +197,7 @@ exports.adminAccept = function (req, res, err) {
                         res.status(200).send(result2);
                     }
                 })
-                
+
                 if (error) res.status(400).send({ error: error });
             })
         }
