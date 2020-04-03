@@ -195,6 +195,7 @@ exports.adminAccept = function (req, res, err) {
                         res.status(200).send(result2);
                     }
                 })
+                
                 if (error) res.status(400).send({ error: error });
             })
         }
