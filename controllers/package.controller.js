@@ -199,18 +199,18 @@ exports.create = function (req, res, err) {
                         json: true
                     }, function (err, result, body) {
                         if (body) {
-                            res.status(200).send(body);
+                            res.status(200).send(JSON.parse(err));
                             res.end();
                         } else {
                             console.log(err);
-                            res.status(500).send(err);
+                            res.status(500).send(JSON.parse(err));
                             res.end();
                         }
                     })
                 }
                 else {
                     console.log("Could not obtain acess token.");
-                    res.status(500).send(err);
+                    res.status(500).send(JSON.parse(err));
                     res.end();
                 }
             })
@@ -307,7 +307,7 @@ exports.edit = function (req, res, err) {
                                 res.end();
                             } else {
                                 console.log(err);
-                                res.status(500).send(err);
+                                res.status(500).send(JSON.parse(err));
                                 res.end();
                             }
                         })
@@ -329,7 +329,7 @@ exports.edit = function (req, res, err) {
                                 res.end();
                             } else {
                                 console.log(err);
-                                res.status(500).send(err);
+                                res.status(500).send(JSON.parse(err));
                                 res.end();
                             }
                         })
