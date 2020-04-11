@@ -199,7 +199,7 @@ exports.create = function (req, res, err) {
                         json: true
                     }, function (err, result, body) {
                         if (body) {
-                            res.status(200).send(JSON.parse(err));
+                            res.status(200).send(JSON.parse(body));
                             res.end();
                         } else {
                             console.log(err);
