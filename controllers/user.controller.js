@@ -36,7 +36,7 @@ exports.edit = function (req, res, err) {
                         displayName: name,
                         photoURL: photo_url
                     }).then(() => {
-                        res.status(200).send(JSON.stringify("Empresa " + name + " foi alterada"));
+                        res.status(200).send({msg: "Empresa " + name + " foi alterada"});
                     }).catch(error => {
                         console.log(error);
                         res.status(500).send({ error: error })
