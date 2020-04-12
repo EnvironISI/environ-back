@@ -64,7 +64,7 @@ exports.recoverPassword = function (req, res, err) {
     var email = req.body.email;
     firebase.auth().sendPasswordResetEmail(email).then(() => {
         // Email sent.
-        res.status(200).send("Email sent successfully");
+        res.status(200).send({msg: "Email sent successfully"});
     }).catch(error => {
         console.log(error);
         res.status(500).send({ error: error });
@@ -78,7 +78,7 @@ exports.changeEmail = function (req, res, err) {
         adminFb.auth().createCustomToken(decodedClaims.uid).then(token => {
             firebase.auth().signInWithCustomToken(token).then(result => {
                 result.user.updateEmail(email).then(() => {
-                    res.status(200).send("Email alterado com sucesso" );
+                    res.status(200).send({msg: "Email alterado com sucesso"});
                 }).catch(error => {
                     console.log(error);
                     res.status(500).send({ error: error })
@@ -103,7 +103,7 @@ exports.changePhone = function (req, res, err) {
         adminFb.auth().createCustomToken(decodedClaims.uid).then(token => {
             firebase.auth().signInWithCustomToken(token).then(result => {
                 result.user.updatePhoneNumber(phone).then(() => {
-                    res.status(200).send("Número de telemóvel alterado com sucesso");
+                    res.status(200).send({msg: "Número de telemóvel alterado com sucesso"});
                 }).catch(error => {
                     console.log(error);
                     res.status(500).send({ error: error })
@@ -127,7 +127,7 @@ exports.deleteMe = function (req, res, err) {
         adminFb.auth().updateUser(decodedClaims.uid, {
             disabled: true
         }).then(() => {
-            res.status(200).send('Account disabled Successfully');
+            res.status(200).send({msg: 'Account disabled Successfully'});
         }).catch(error => {
             console.log(error);
             res.status(500).send(error);
