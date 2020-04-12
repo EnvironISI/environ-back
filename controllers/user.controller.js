@@ -14,25 +14,22 @@ exports.edit = function (req, res, err) {
     var city = req.sanitize('city').escape();
     var country = req.sanitize('country').escape();
     var nif = req.sanitize('nif').escape();
-    var phone = req.body.phone;
     var photo_url = req.body.photo_url;
     let params;
-
     adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
         adminFb.database().ref('/users/' + decodedClaims.uid).once('value').then(snapshot => {
             adminFb.auth().getUser(decodedClaims.uid).then(user => {
-                if(name != null ) params.properties.push({ name: 'name', value: name });
-                if(city != null ) params.properties.push({ name: 'city', value: city });
-                if(country != null ) params.properties.push({ name: 'country', value: country });
-                if(nif != null ) params.properties.push({ name: 'nif', value: nif });
-                if(phone != null ) params.properties.push({ name: 'phone', value: phone });
+                if(name != null) {
+                    params.properties.push({ name: 'name', value: name })
+                }else{
+                    name = user.displayName;
+                };
+                if(city != null) params.properties.push({ name: 'city', value: city });
+                if(country != null) params.properties.push({ name: 'country', value: country });
+                if(nif != null) params.properties.push({ name: 'nif', value: nif });
                 if (photo_url == null) photo_url = user.photoURL
                 var userInfo = snapshot.val();
-
-                console.log(params)
-                res.send('ok')
-                
-               /* hubspot.companies.update(userInfo.hubspot_id, params).then(() => {
+                hubspot.companies.update(userInfo.hubspot_id, params).then(() => {
                     adminFb.auth().updateUser(decodedClaims.uid, {
                         displayName: name,
                         photoURL: photo_url
@@ -45,7 +42,7 @@ exports.edit = function (req, res, err) {
                 }).catch(error => {
                     console.log(error);
                     res.status(500).send({ error: error })
-                })*/
+                })
             }).catch(error => {
                 console.log(error);
                 res.status(500).send({ error: error })
