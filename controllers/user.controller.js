@@ -21,14 +21,14 @@ exports.edit = function (req, res, err) {
     adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
         adminFb.database().ref('/users/' + decodedClaims.uid).once('value').then(snapshot => {
             adminFb.auth().getUser(decodedClaims.uid).then(user => {
-                if(name != null) {
+                if (name != null) {
                     params.properties.push({ name: 'name', value: name })
-                }else{
+                } else {
                     name = user.displayName;
                 };
-                if(city != null) params.properties.push({ name: 'city', value: city });
-                if(country != null) params.properties.push({ name: 'country', value: country });
-                if(nif != null) params.properties.push({ name: 'nif', value: nif });
+                if (city != null) params.properties.push({ name: 'city', value: city });
+                if (country != null) params.properties.push({ name: 'country', value: country });
+                if (nif != null) params.properties.push({ name: 'nif', value: nif });
                 if (photo_url == null) photo_url = user.photoURL
                 var userInfo = snapshot.val();
                 hubspot.companies.update(userInfo.hubspot_id, params).then(() => {
@@ -36,7 +36,7 @@ exports.edit = function (req, res, err) {
                         displayName: name,
                         photoURL: photo_url
                     }).then(() => {
-                        res.status(200).send({msg: "Empresa " + name + " foi alterada com sucesso!"});
+                        res.status(200).send({ msg: "Empresa " + name + " foi alterada com sucesso!" });
                         res.end();
                     }).catch(error => {
                         console.log(error);
@@ -64,7 +64,7 @@ exports.recoverPassword = function (req, res, err) {
     var email = req.body.email;
     firebase.auth().sendPasswordResetEmail(email).then(() => {
         // Email sent.
-        res.status(200).send({msg: "Email sent successfully"});
+        res.status(200).send({ msg: "Email enviado com sucesso!" });
     }).catch(error => {
         console.log(error);
         res.status(500).send({ error: error });
@@ -78,7 +78,7 @@ exports.changeEmail = function (req, res, err) {
         adminFb.auth().createCustomToken(decodedClaims.uid).then(token => {
             firebase.auth().signInWithCustomToken(token).then(result => {
                 result.user.updateEmail(email).then(() => {
-                    res.status(200).send({msg: "Email alterado com sucesso"});
+                    res.status(200).send({ msg: "Email alterado com sucesso!" });
                 }).catch(error => {
                     console.log(error);
                     res.status(500).send({ error: error })
@@ -103,7 +103,7 @@ exports.changePhone = function (req, res, err) {
         adminFb.auth().createCustomToken(decodedClaims.uid).then(token => {
             firebase.auth().signInWithCustomToken(token).then(result => {
                 result.user.updatePhoneNumber(phone).then(() => {
-                    res.status(200).send({msg: "Número de telemóvel alterado com sucesso"});
+                    res.status(200).send({ msg: "Número de telemóvel alterado com sucesso!" });
                 }).catch(error => {
                     console.log(error);
                     res.status(500).send({ error: error })
@@ -127,10 +127,10 @@ exports.deleteMe = function (req, res, err) {
         adminFb.auth().updateUser(decodedClaims.uid, {
             disabled: true
         }).then(() => {
-            res.status(200).send({msg: 'Account disabled Successfully'});
+            res.status(200).send({ msg: 'Conta desativada com sucesso!' });
         }).catch(error => {
             console.log(error);
-            res.status(500).send(error);
+            res.status(500).send({ error: error });
         })
     }).catch(() => {
         res.redirect('denied');
