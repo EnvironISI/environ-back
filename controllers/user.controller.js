@@ -9,30 +9,30 @@ var exports = module.exports = {};
 
 //User
 exports.edit = function (req, res, err) {
+    var sessionCookie = req.cookies.session || '';
     var name = req.sanitize('name').escape();
     var city = req.sanitize('city').escape();
     var country = req.sanitize('country').escape();
     var nif = req.sanitize('nif').escape();
     var phone = req.body.phone;
     var photo_url = req.body.photo_url;
-
-    var sessionCookie = req.cookies.session || '';
+    let params;
 
     adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
         adminFb.database().ref('/users/' + decodedClaims.uid).once('value').then(snapshot => {
             adminFb.auth().getUser(decodedClaims.uid).then(user => {
+                if(name != null ) params.properties.push({ name: 'name', value: name });
+                if(city != null ) params.properties.push({ name: 'city', value: city });
+                if(country != null ) params.properties.push({ name: 'country', value: country });
+                if(nif != null ) params.properties.push({ name: 'nif', value: nif });
+                if(phone != null ) params.properties.push({ name: 'phone', value: phone });
                 if (photo_url == null) photo_url = user.photoURL
-                if (phone == null) phone = user.phoneNumber
                 var userInfo = snapshot.val();
-                var params = {
-                    properties:
-                        [{ name: 'name', value: name },
-                        { name: 'city', value: city },
-                        { name: 'country', value: country },
-                        { name: 'nif', value: nif },
-                        { name: 'phone', value: phone }]
-                }
-                hubspot.companies.update(userInfo.hubspot_id, params).then(() => {
+
+                console.log(params)
+                res.send('ok')
+                
+               /* hubspot.companies.update(userInfo.hubspot_id, params).then(() => {
                     adminFb.auth().updateUser(decodedClaims.uid, {
                         displayName: name,
                         photoURL: photo_url
@@ -45,7 +45,7 @@ exports.edit = function (req, res, err) {
                 }).catch(error => {
                     console.log(error);
                     res.status(500).send({ error: error })
-                })
+                })*/
             }).catch(error => {
                 console.log(error);
                 res.status(500).send({ error: error })

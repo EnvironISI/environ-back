@@ -21,7 +21,7 @@ function isUser(req, res, next) {
         else {
             next();
         }
-    }).catch(error => {
+    }).catch(() => {
         res.redirect('/denied');
     })
 }
