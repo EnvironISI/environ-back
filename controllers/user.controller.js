@@ -74,7 +74,7 @@ exports.recoverPassword = function (req, res, err) {
 }
 exports.changeEmail = function (req, res, err) {
     var sessionCookie = req.cookies.session || '';
-    var email = req.body.email;
+    var email = req.sanitize('email').escape();
 
     console.log(email)
 
