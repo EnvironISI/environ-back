@@ -22,7 +22,7 @@ exports.edit = function (req, res, err) {
         adminFb.database().ref('/users/' + decodedClaims.uid).once('value').then(snapshot => {
             adminFb.auth().getUser(decodedClaims.uid).then(user => {
                 if (name != null) {
-                    params.properties.push({ name: 'name', value: name })
+                    params.properties.push({ name: 'name', value: name });
                 } else {
                     name = user.displayName;
                 };
@@ -40,35 +40,37 @@ exports.edit = function (req, res, err) {
                         res.end();
                     }).catch(error => {
                         console.log(error);
-                        res.status(500).send({ error: error })
+                        res.status(500).send({ error: error });
                         res.end();
-                    })
+                    });
                 }).catch(error => {
                     console.log(error);
-                    res.status(500).send({ error: error })
+                    res.status(500).send({ error: error });
                     res.end();
-                })
+                });
             }).catch(error => {
                 console.log(error);
-                res.status(500).send({ error: error })
+                res.status(500).send({ error: error });
                 res.end();
-            })
+            });
         }).catch(error => {
             console.log(error);
             res.status(500).send({ error: error })
             res.end();
-        })
-    })
+        });
+    });
 }
 exports.recoverPassword = function (req, res, err) {
     var email = req.body.email;
     firebase.auth().sendPasswordResetEmail(email).then(() => {
         // Email sent.
         res.status(200).send({ msg: "Email para recuperar a password enviado com sucesso!" });
+        res.end();
     }).catch(error => {
         console.log(error);
         res.status(500).send({ error: error });
-    })
+        res.end();
+    });
 }
 exports.changeEmail = function (req, res, err) {
     var sessionCookie = req.cookies.session || '';
@@ -79,21 +81,26 @@ exports.changeEmail = function (req, res, err) {
             firebase.auth().signInWithCustomToken(token).then(result => {
                 result.user.updateEmail(email).then(() => {
                     res.status(200).send({ msg: "Email alterado com sucesso!" });
+                    res.end();
                 }).catch(error => {
                     console.log(error);
-                    res.status(500).send({ error: error })
-                })
+                    res.status(500).send({ error: error });
+                    res.end();
+                });
             }).catch(error => {
                 console.log(error);
-                res.status(500).send({ error: error })
-            })
+                res.status(500).send({ error: error });
+                res.end();
+            });
         }).catch(error => {
             console.log(error);
-            res.status(500).send({ error: error })
-        })
+            res.status(500).send({ error: error });
+            res.end();
+        });
     }).catch(() => {
         res.redirect('/denied')
-    })
+        res.end();
+    });
 }
 exports.changePhone = function (req, res, err) {
     var sessionCookie = req.cookies.session || '';
@@ -104,21 +111,26 @@ exports.changePhone = function (req, res, err) {
             firebase.auth().signInWithCustomToken(token).then(result => {
                 result.user.updatePhoneNumber(phone).then(() => {
                     res.status(200).send({ msg: "Número de telemóvel alterado com sucesso!" });
+                    res.end();
                 }).catch(error => {
                     console.log(error);
-                    res.status(500).send({ error: error })
-                })
+                    res.status(500).send({ error: error });
+                    res.end();
+                });
             }).catch(error => {
                 console.log(error);
-                res.status(500).send({ error: error })
-            })
+                res.status(500).send({ error: error });
+                res.end();
+            });
         }).catch(error => {
             console.log(error);
-            res.status(500).send({ error: error })
-        })
+            res.status(500).send({ error: error });
+            res.end();
+        });
     }).catch(() => {
-        res.redirect('/denied')
-    })
+        res.redirect('/denied');
+        res.end();
+    });
 }
 exports.deleteMe = function (req, res, err) {
     var sessionCookie = req.cookies.session || '';
@@ -128,11 +140,14 @@ exports.deleteMe = function (req, res, err) {
             disabled: true
         }).then(() => {
             res.status(200).send({ msg: 'Conta desativada com sucesso!' });
+            res.end();
         }).catch(error => {
             console.log(error);
             res.status(500).send({ error: error });
-        })
+            res.end();
+        });
     }).catch(() => {
         res.redirect('denied');
-    })
+        res.end();
+    });
 }
