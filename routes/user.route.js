@@ -7,8 +7,8 @@ const { adminFb } = require('../config/firebaseConfig');
 
 user.put('/edit', isUser, userController.edit);
 user.post('/recoverPassword', userController.recoverPassword);
-user.post('/changeEmail', isUser, userController.changeEmail);
-user.post('/changePhone', isUser, userController.changePhone);
+user.put('/changeEmail', isUser, userController.changeEmail);
+user.put('/changePhone', isUser, userController.changePhone);
 user.delete('/delete/me', isUser, userController.deleteMe);
 
 function isUser(req, res, next) {
