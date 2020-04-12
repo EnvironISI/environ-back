@@ -80,8 +80,14 @@ exports.changeEmail = function (req, res, err) {
         adminFb.auth().createCustomToken(decodedClaims.uid).then(token => {
             firebase.auth().signInWithCustomToken(token).then(result => {
                 result.user.updateEmail(email).then(() => {
-                    res.status(200).send({ msg: "Email alterado com sucesso!" });
-                    res.end();
+                    result.user.sendEmailVerification(() => {
+                        res.status(200).send({ msg: "Email alterado com sucesso!" });
+                        res.end();
+                    }).catch((error) => {
+                        console.log(error);
+                        res.status(500).send({ error: error });
+                        res.end();
+                    });
                 }).catch(error => {
                     console.log(error);
                     res.status(500).send({ error: error });
