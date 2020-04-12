@@ -69,15 +69,17 @@ exports.all = function (req, res, err) {
                     if (body) {
                         let resp = [];
                         body.forEach(item => {
-                            let obj = {
-                                id: item.id,
-                                name: item.itemKey,
-                                description: item.description,
-                                summary: item.complementaryDescription,
-                                image: item.image,
-                                ativo: item.isActive
+                            if(!item.itemKey === 'PORTES'){
+                                let obj = {
+                                    id: item.id,
+                                    name: item.itemKey,
+                                    description: item.description,
+                                    summary: item.complementaryDescription,
+                                    image: item.image,
+                                    ativo: item.isActive
+                                }
+                                resp.push(obj);
                             }
-                            resp.push(obj);
                         })
                         res.status(200).send(resp);
                     } else {
