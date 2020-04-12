@@ -75,8 +75,6 @@ exports.recoverPassword = function (req, res, err) {
 exports.changeEmail = function (req, res, err) {
     var sessionCookie = req.cookies.session || '';
     var email = req.sanitize('email').escape();
-    console.log(req.body)
-    console.log(email)
 
     adminFb.auth().verifySessionCookie(sessionCookie, true).then((decodedClaims) => {
         adminFb.auth().createCustomToken(decodedClaims.uid).then(token => {
