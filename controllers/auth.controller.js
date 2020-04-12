@@ -182,8 +182,6 @@ exports.requestEmailVerification = function (req, res, err) {
         adminFb.auth().createCustomToken(user.uid).then(token => {
             firebase.auth().signInWithCustomToken(token).then(result => {
                 result.user.sendEmailVerification().then(() => {
-                    res.status(200).send({ msg: "Verifique o seu email!" });
-                    res.end();
                 }).catch(error => {
                     console.log(error);
                     res.status(500).send({ error: error });
