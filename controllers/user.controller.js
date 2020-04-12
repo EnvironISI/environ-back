@@ -64,7 +64,7 @@ exports.recoverPassword = function (req, res, err) {
     var email = req.body.email;
     firebase.auth().sendPasswordResetEmail(email).then(() => {
         // Email sent.
-        res.status(200).send({ msg: "Email enviado com sucesso!" });
+        res.status(200).send({ msg: "Email para recuperar a password enviado com sucesso!" });
     }).catch(error => {
         console.log(error);
         res.status(500).send({ error: error });
