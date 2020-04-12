@@ -154,6 +154,27 @@ exports.getByID = function (req, res, err) {
         res.end();
     })
 }
+exports.getByCamara = function (req, res, err){
+    var sessionCookie = req.cookies.session || '';
+    adminFb.auth().verifySessionCookie(sessionCookie, true).then((decodedClaims) => {
+        if(decodedClaims.camara){
+            adminFb.auth().getUser(decodedClaims.uid).then(user => {
+                re
+            }).catch(err => {
+                console.log(err);
+                res.status(500).send(err);
+                res.end();
+            })
+        }
+        else{
+            res.redirect('denied');
+            res.end();
+        }
+    }).catch(() => {
+        res.redirect('denied');
+        res.end();
+    })
+}
 exports.create = function (req, res, err) {
     var sessionCookie = req.cookies.session || '';
 

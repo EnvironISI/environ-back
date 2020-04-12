@@ -54,9 +54,8 @@ exports.user = function (req, res, err) {
             console.log(error);
             res.status(500).send({ error: error })
         })
-    }).catch((error) => {
+    }).catch(() => {
         // Session cookie is unavailable or invalid. Force user to login.
-        console.log(error)
         res.redirect('/denied');
     });
 }
@@ -100,7 +99,6 @@ exports.logout = function (req, res, err) {
     }).then(() => {
         res.status(200).send({ data: 'Logout Successfully' });
     }).catch(error => {
-        console.log(error);
         res.redirect('/denied');
     })
 }
