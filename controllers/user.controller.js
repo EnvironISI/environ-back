@@ -81,7 +81,7 @@ exports.changeEmail = function (req, res, err) {
             firebase.auth().signInWithCustomToken(token).then(result => {
                 result.user.updateEmail(email).then(() => {
                     result.user.sendEmailVerification(() => {
-                        res.status(200).send({ msg: "Email alterado com sucesso!" });
+                        res.status(200).send({ msg: "Email alterado com sucesso! Para ativar a conta, verifique o seu email" });
                         res.end();
                     }).catch((error) => {
                         console.log(error);
