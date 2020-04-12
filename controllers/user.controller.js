@@ -76,6 +76,8 @@ exports.changeEmail = function (req, res, err) {
     var sessionCookie = req.cookies.session || '';
     var email = req.body.email;
 
+    console.log(email)
+
     adminFb.auth().verifySessionCookie(sessionCookie, true).then((decodedClaims) => {
         adminFb.auth().createCustomToken(decodedClaims.uid).then(token => {
             firebase.auth().signInWithCustomToken(token).then(result => {
