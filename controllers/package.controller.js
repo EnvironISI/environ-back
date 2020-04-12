@@ -69,7 +69,7 @@ exports.all = function (req, res, err) {
                     if (body) {
                         let resp = [];
                         body.forEach(item => {
-                            if(!item.itemKey == 'PORTES'){
+                            if(item.itemKey !== 'PORTES'){
                                 let obj = {
                                     id: item.id,
                                     name: item.itemKey,
