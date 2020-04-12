@@ -15,7 +15,9 @@ exports.edit = function (req, res, err) {
     var country = req.sanitize('country').escape();
     var nif = req.sanitize('nif').escape();
     var photo_url = req.body.photo_url;
-    let params;
+    let params = {
+        properties = []
+    };
     adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
         adminFb.database().ref('/users/' + decodedClaims.uid).once('value').then(snapshot => {
             adminFb.auth().getUser(decodedClaims.uid).then(user => {
