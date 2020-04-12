@@ -37,21 +37,26 @@ exports.edit = function (req, res, err) {
                         photoURL: photo_url
                     }).then(() => {
                         res.status(200).send({msg: "Empresa " + name + " foi alterada com sucesso!"});
+                        res.end();
                     }).catch(error => {
                         console.log(error);
                         res.status(500).send({ error: error })
+                        res.end();
                     })
                 }).catch(error => {
                     console.log(error);
                     res.status(500).send({ error: error })
+                    res.end();
                 })
             }).catch(error => {
                 console.log(error);
                 res.status(500).send({ error: error })
+                res.end();
             })
         }).catch(error => {
             console.log(error);
             res.status(500).send({ error: error })
+            res.end();
         })
     })
 }

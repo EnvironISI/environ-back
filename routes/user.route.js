@@ -6,7 +6,7 @@ const jsonMessages = require(jsonMessagesPath + "login");
 const { adminFb } = require('../config/firebaseConfig');
 
 user.put('/edit', isUser, userController.edit);
-user.post('/recoverPassword', isUser, userController.recoverPassword);
+user.post('/recoverPassword', userController.recoverPassword);
 user.post('/changeEmail', isUser, userController.changeEmail);
 user.post('/changePhone', isUser, userController.changePhone);
 user.delete('/delete/me', isUser, userController.deleteMe);
