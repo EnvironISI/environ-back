@@ -135,7 +135,7 @@ exports.enableUser = function (req, res, err) {
         adminFb.auth().updateUser(user.uid, {
             disabled: false
         }).then(() => {
-            res.status(200).send({msg: "Account enabled Successfully"});
+            res.status(200).send({ msg: "Account enabled Successfully" });
             res.end();
         }).catch(error => {
             console.log(error);
@@ -148,23 +148,14 @@ exports.enableUser = function (req, res, err) {
     })
 }
 exports.deleteEvent = function (req, res, err) {
-    var sessionCookie = req.cookies.session || '';
-
     var eventId = req.sanitize('eventId').escape();
 
-    adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
-        if (decodedClaims.admin || decodedClaims.empresa) {
-            moloni.products('delete', { company_id: company_id, product_id: eventId }, function (error, result) {
-                if (error) {
-                    res.status(400).send({ error: error });
-                    res.end();
-                }
-                res.status(200).send(result);
-            })
+    moloni.products('delete', { company_id: company_id, product_id: eventId }, function (error, result) {
+        if (error) {
+            res.status(400).send({ error: error });
+            res.end();
         }
-    }).catch(error => {
-        console.log(error);
-        res.redirect('/denied');
+        res.status(200).send(result);
         res.end();
     })
 }
