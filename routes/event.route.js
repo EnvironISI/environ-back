@@ -2,7 +2,7 @@ const event = require('express').Router();
 const eventsController = require('../controllers/event.controller');
 
 const jsonMessagesPath = __dirname + "/../assets/jsonMessages/";
-const jsonMessages = require(jsonMessagesPath + "event");
+const jsonMessages = require(jsonMessagesPath + "events");
 
 event.get('/all', eventsController.events)
 event.post('/request', eventsController.createEvent);
