@@ -1,8 +1,7 @@
 const jsonMessagesPath = __dirname + "/../assets/jsonMessages/";
 const jsonMessages = require(jsonMessagesPath + "login");
 
-var request = require('request');
-var { adminFb, firebase } = require('../config/firebaseConfig.js');
+var { adminFb } = require('../config/firebaseConfig.js');
 var { hubspot } = require('../config/hubspotConfig');
 
 var exports = module.exports = {};
@@ -154,7 +153,7 @@ exports.enableUser = function (req, res, err) {
         adminFb.auth().updateUser(user.uid, {
             disabled: false
         }).then(() => {
-            res.status(200).send("Account enabled Successfully");
+            res.status(200).send({msg: "Account enabled Successfully"});
             res.end();
         }).catch(error => {
             console.log(error);

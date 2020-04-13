@@ -23,7 +23,7 @@ function isAdmin(req, res, next) {
         else {
             next();
         }
-    }).catch(error => {
+    }).catch(() => {
         res.redirect('/denied');
     })
 }
