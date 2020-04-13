@@ -44,7 +44,7 @@ exports.delete = function (req, res, err) {
             hubspot.companies.delete(userInfo.hubspot_id).then(() => {
                 adminFb.database().ref("/users/" + user.uid).remove(function () {
                     adminFb.auth().deleteUser(user.uid).then(() => {
-                        res.status(200).send({ data: "Empresa removida com sucesso!" });
+                        res.status(200).send({ msg: "Empresa removida com sucesso!" });
                     }).catch(error => {
                         console.log(error);
                         res.status(500).send({ error: error })
@@ -127,25 +127,6 @@ exports.getUsers = function (req, res, err) {
         res.end();
     })
 }
-exports.acceptUser = function (req, res, err) {
-    var email = req.sanitize('email').escape();
-
-    adminFb.auth().getUserByEmail(email).then(user => {
-        adminFb.auth().updateUser(user.uid, {
-            emailVerified: true
-        }).then(result => {
-            res.status(200).send(result);
-            res.end();
-        }).catch(error => {
-            console.log(error);
-            res.status(500).send(error);
-        })
-    }).catch(error => {
-        console.log(error);
-        res.status(500).send(error);
-    })
-
-}
 exports.enableUser = function (req, res, err) {
     var email = req.sanitize('email').escape();
 
@@ -164,4 +145,25 @@ exports.enableUser = function (req, res, err) {
         console.log(error);
         res.status(500).send(error);
     })
+}
+
+// n Sei o que faz
+exports.acceptUser = function (req, res, err) {
+    var email = req.sanitize('email').escape();
+
+    adminFb.auth().getUserByEmail(email).then(user => {
+        adminFb.auth().updateUser(user.uid, {
+            emailVerified: true
+        }).then(result => {
+            res.status(200).send(result);
+            res.end();
+        }).catch(error => {
+            console.log(error);
+            res.status(500).send(error);
+        })
+    }).catch(error => {
+        console.log(error);
+        res.status(500).send(error);
+    })
+
 }
