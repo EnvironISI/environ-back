@@ -146,7 +146,7 @@ exports.adminAccept = function (req, res, err) {
                     properties: [
                         {
                             property_id: 11542,
-                            value: decision
+                            value: status
                         },
                         {
                             property_id: 11549,
