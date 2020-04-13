@@ -3,6 +3,7 @@ const jsonMessages = require(jsonMessagesPath + "login");
 
 var { adminFb } = require('../config/firebaseConfig.js');
 var { hubspot } = require('../config/hubspotConfig');
+var { moloni } = require('../config/moloniConfig');
 
 var exports = module.exports = {};
 
