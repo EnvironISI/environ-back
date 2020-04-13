@@ -110,7 +110,7 @@ exports.changeEmail = function (req, res, err) {
 }
 exports.changePhone = function (req, res, err) {
     var sessionCookie = req.cookies.session || '';
-    var credential = req.sanitize('credential').escape();
+    var credential = req.body.credential;
 
     console.log(credential);
 
