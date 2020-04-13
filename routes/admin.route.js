@@ -11,7 +11,7 @@ admin.put('/set', isAdmin, adminController.setAdmin);
 admin.get('/users', isAdmin, adminController.getUsers);
 admin.delete('/delete/user', isAdmin, adminController.delete);
 admin.put('/enable/user', isAdmin, adminController.enableUser);
-
+//n sei para que serve
 admin.put('/accept/user', isAdmin, adminController.acceptUser)
 
 function isAdmin(req, res, next) {

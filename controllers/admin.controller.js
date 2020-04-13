@@ -153,17 +153,19 @@ exports.acceptUser = function (req, res, err) {
 
     adminFb.auth().getUserByEmail(email).then(user => {
         adminFb.auth().updateUser(user.uid, {
-            emailVerified: true
-        }).then(result => {
-            res.status(200).send(result);
+            disabled: false
+        }).then(() => {
+            res.status(200).send({msg: 'Utilizador ' + email + ' ativado com sucesso'});
             res.end();
         }).catch(error => {
             console.log(error);
             res.status(500).send(error);
+            res.end();
         })
     }).catch(error => {
         console.log(error);
         res.status(500).send(error);
+        res.end();
     })
 
 }
