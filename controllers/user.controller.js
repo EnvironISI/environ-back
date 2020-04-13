@@ -110,14 +110,16 @@ exports.changeEmail = function (req, res, err) {
 }
 exports.changePhone = function (req, res, err) {
     var sessionCookie = req.cookies.session || '';
-    var credential = req.body.credential;
+    var verificationId = req.body.verificationId;
+    var verificationCode = req.body.verificationCode;
 
-    console.log(credential);
+    var phoneCredential = firebase.auth.PhoneAuthProvider.credential(verificationId,
+        verificationCode);
 
     adminFb.auth().verifySessionCookie(sessionCookie, true).then((decodedClaims) => {
         adminFb.auth().createCustomToken(decodedClaims.uid).then(token => {
             firebase.auth().signInWithCustomToken(token).then(result => {
-                result.user.updatePhoneNumber(credential).then(() => {
+                result.user.updatePhoneNumber(phoneCredential).then(() => {
                     res.status(200).send({ msg: "Número de telemóvel alterado com sucesso!" });
                     res.end();
                 }).catch(error => {
