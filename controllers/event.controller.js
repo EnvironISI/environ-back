@@ -218,7 +218,7 @@ exports.camaraAccept = function (req, res, err) {
 
     adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
         if (decodedClaims.admin || decodedClaims.camara) {
-            if (accept == true) { status = 'Aceite' } else { status = 'Rejeitado' }
+            if (accept === 'true') { status = 'Aceite' } else { status = 'Rejeitado' }
             moloni.products('getOne', { company_id: company_id, product_id: eventId }, function (error, result) {
                 var params = {
                     company_id: company_id,
