@@ -35,7 +35,7 @@ exports.setAdmin = function (req, res, err) {
         res.redirect('/denied');
     })
 }
-exports.delete = function (req, res, err) {
+exports.deleteUser = function (req, res, err) {
     var email = req.sanitize('email').escape();
 
     adminFb.auth().getUserByEmail(email).then(user => {
@@ -144,5 +144,26 @@ exports.enableUser = function (req, res, err) {
     }).catch(error => {
         console.log(error);
         res.status(500).send(error);
+    })
+}
+exports.deleteEvent = function (req, res, err) {
+    var sessionCookie = req.cookies.session || '';
+
+    var eventId = req.sanitize('eventId').escape();
+
+    adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
+        if (decodedClaims.admin || decodedClaims.empresa) {
+            moloni.products('delete', { company_id: company_id, product_id: eventId }, function (error, result) {
+                if (error) {
+                    res.status(400).send({ error: error });
+                    res.end();
+                }
+                res.status(200).send(result);
+            })
+        }
+    }).catch(error => {
+        console.log(error);
+        res.redirect('/denied');
+        res.end();
     })
 }

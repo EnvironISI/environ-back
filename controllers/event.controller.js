@@ -295,47 +295,6 @@ exports.camaraAccept = function (req, res, err) {
     })
 }
 
-exports.delete = function (req, res, err) {
-    var sessionCookie = req.cookies.session || '';
-
-    var eventId = req.sanitize('eventId').escape();
-
-    adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
-        if (decodedClaims.admin || decodedClaims.empresa) {
-            moloni.products('delete', { company_id: company_id, product_id: eventId }, function (error, result) {
-                if (error) {
-                    res.status(400).send({ error: error });
-                    res.end();
-                }
-                res.status(200).send(result);
-            })
-        }
-    }).catch(error => {
-        console.log(error);
-        res.redirect('/denied');
-        res.end();
-    })
-}
-
-exports.packageCreate = function (req, res, err){
-    var sessionCookie = req.cookies.session || '';
-
-    adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
-        if(decodedClaims.camara){
-
-        }else{
-            console.log(error);
-            res.redirect('/denied');
-            res.end();
-        }
-    }).catch(error => {
-        console.log(error);
-        res.redirect('/denied');
-        res.end();
-    })
-
-}
-
 exports.camaraEvents = function(req, res, err){
     var sessionCookie = req.cookies.session || '';
 

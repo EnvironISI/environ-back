@@ -8,8 +8,6 @@ event.get('/all', eventsController.events)
 event.post('/request', eventsController.createEvent);
 event.put('/admin/acception', eventsController.adminAccept);
 event.put('/camara/acception', eventsController.camaraAccept)
-event.delete('/delete', eventsController.delete)
-event.post('/package/create', eventsController.packageCreate);
 event.get('/camara', eventsController.camaraEvents);
 event.get('/user', eventsController.userEvents)
 //service.get('/camaras', servicesController.camaras)
