@@ -349,7 +349,7 @@ exports.camaraEvents = function(req, res, err){
                     }else{
                         let obj = [];
                         result.forEach(product => {
-                            if(product.properties[8].value === user.displayName){
+                            if(user.displayName.includes(product.properties[8].value)){
                                 obj.push(product);
                             }
                         });
