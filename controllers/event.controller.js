@@ -127,10 +127,11 @@ exports.adminAccept = function (req, res, err) {
 
     var eventId = req.sanitize('eventId').escape();
     var accept = req.sanitize('accept').escape();
+    let status;
 
     adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
         if (decodedClaims.admin) {
-            if (accept === 'true') { decision = 'Pendente' } else { decision = 'Rejeitado' }
+            if (accept === 'true') { status = 'Pendente' } else { status = 'Rejeitado' }
             moloni.products('getOne', { company_id: company_id, product_id: eventId }, function (error, result) {
                 var params = {
                     company_id: company_id,
@@ -213,11 +214,11 @@ exports.camaraAccept = function (req, res, err) {
 
     var eventId = req.sanitize('eventId').escape();
     var accept = req.sanitize('accept').escape();
-    var decision;
+    var status;
 
     adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
         if (decodedClaims.admin || decodedClaims.camara) {
-            if (accept == true) { decision = 'Aceite' } else { decision = 'Rejeitado' }
+            if (accept == true) { status = 'Aceite' } else { status = 'Rejeitado' }
             moloni.products('getOne', { company_id: company_id, product_id: eventId }, function (error, result) {
                 var params = {
                     company_id: company_id,
@@ -232,7 +233,7 @@ exports.camaraAccept = function (req, res, err) {
                     properties: [
                         {
                             property_id: 11542,
-                            value: decision
+                            value: status
                         },
                         {
                             property_id: 11549,
