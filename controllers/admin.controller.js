@@ -146,26 +146,3 @@ exports.enableUser = function (req, res, err) {
         res.status(500).send(error);
     })
 }
-
-// n Sei o que faz
-exports.acceptUser = function (req, res, err) {
-    var email = req.sanitize('email').escape();
-
-    adminFb.auth().getUserByEmail(email).then(user => {
-        adminFb.auth().updateUser(user.uid, {
-            disabled: false
-        }).then(() => {
-            res.status(200).send({msg: 'Utilizador ' + email + ' ativado com sucesso'});
-            res.end();
-        }).catch(error => {
-            console.log(error);
-            res.status(500).send(error);
-            res.end();
-        })
-    }).catch(error => {
-        console.log(error);
-        res.status(500).send(error);
-        res.end();
-    })
-
-}
