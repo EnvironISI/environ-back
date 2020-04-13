@@ -110,7 +110,9 @@ exports.changeEmail = function (req, res, err) {
 }
 exports.changePhone = function (req, res, err) {
     var sessionCookie = req.cookies.session || '';
-    var credential = req.body.credential;
+    var credential = req.sanitize('credential').escape();
+
+    console.log(credential);
 
     adminFb.auth().verifySessionCookie(sessionCookie, true).then((decodedClaims) => {
         adminFb.auth().createCustomToken(decodedClaims.uid).then(token => {
