@@ -7,6 +7,7 @@ var { moloni } = require('../config/moloniConfig');
 
 var exports = module.exports = {};
 
+
 //Admin
 exports.setAdmin = function (req, res, err) {
     var email = req.sanitize('email').escape();
@@ -150,7 +151,7 @@ exports.enableUser = function (req, res, err) {
 exports.deleteEvent = function (req, res, err) {
     var eventId = req.sanitize('eventId').escape();
 
-    moloni.products('delete', { company_id: company_id, product_id: eventId }, function (error, result) {
+    moloni.products('delete', { company_id: 126979, product_id: eventId }, function (error, result) {
         if (error) {
             res.status(400).send({ error: error });
             res.end();
