@@ -19,7 +19,6 @@ exports.events = function (req, res, err) {
         }
     })
 }
-
 exports.createEvent = function (req, res, err) {
     const sessionCookie = req.cookies.session || '';
 
@@ -121,7 +120,6 @@ exports.createEvent = function (req, res, err) {
         res.redirect("/login");
     })
 }
-
 exports.adminAccept = function (req, res, err) {
     var sessionCookie = req.cookies.session || '';
 
@@ -208,7 +206,6 @@ exports.adminAccept = function (req, res, err) {
         res.end();
     })
 }
-
 exports.camaraAccept = function (req, res, err) {
     var sessionCookie = req.cookies.session || '';
 
@@ -294,7 +291,6 @@ exports.camaraAccept = function (req, res, err) {
         res.end();
     })
 }
-
 exports.camaraEvents = function(req, res, err){
     var sessionCookie = req.cookies.session || '';
 
@@ -332,7 +328,6 @@ exports.camaraEvents = function(req, res, err){
         res.end();
     })
 }
-
 exports.userEvents = function(req, res, err){
     var sessionCookie = req.cookies.session || '';
 
@@ -370,29 +365,45 @@ exports.userEvents = function(req, res, err){
         res.end();
     })
 }
-
-/*exports.camaras = function (req, res, err) {
+exports.acceptedEvents = function(req, res, err){
     var sessionCookie = req.cookies.session || '';
 
     adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
-        var resp = [];
-        adminFb.auth().listUsers().then((userRecords) => {
-            try {
-                userRecords.users.forEach((user) => {
-                    if (user.customClaims.camara) {
-                        resp.push(user.displayName)
+        if(decodedClaims.empresa){
+            adminFb.auth().getUser(decodedClaims.uid).then(user => {
+                moloni.products('getAll', {company_id: company_id}, function(error, result){
+                    if(error){
+                        console.log(error);
+                        res.status(400).send(error);
+                        res.end();
+                    }else{
+                        let resp = [];
+                        result.forEach(product => {
+                            if(product.properties[0].value === 'Aceite'){
+                                let obj = {
+                                    name: product.name,
+                                    initDate: product.properties[5].value,
+                                    endDate: product.properties[6].value
+                                }
+                                resp.push(obj);
+                            }
+                        });
+                        res.status(200).send(resp);
+                        res.end();
                     }
                 })
-            } catch (error) { console.log(error) }
-            res.status(200).send(resp);
-            res.end()
-        }).catch(error => {
-            console.log(error);
-            res.status(500).send({ error: error });
+            }).catch(error => {
+                console.log(error)
+                res.status(500).send(error);
+                res.end();
+            })
+        }
+        else{
+            res.redirect('/denied');
             res.end();
-        })
+        }
     }).catch(error => {
-        console.log(error);
         res.redirect('/denied');
+        res.end();
     })
-}*/
+}

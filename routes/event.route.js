@@ -10,6 +10,6 @@ event.put('/admin/acception', eventsController.adminAccept);
 event.put('/camara/acception', eventsController.camaraAccept)
 event.get('/camara', eventsController.camaraEvents);
 event.get('/user', eventsController.userEvents)
-//service.get('/camaras', servicesController.camaras)
+event.get('/accepted/all', eventsController.acceptedEvents)
 
 module.exports = event;
