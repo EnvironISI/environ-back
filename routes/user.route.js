@@ -9,6 +9,7 @@ user.put('/edit', isUser, userController.edit);
 user.post('/recoverPassword', userController.recoverPassword);
 user.put('/changeEmail', isUser, userController.changeEmail);
 user.put('/changePhone', isUser, userController.changePhone);
+user.put('/changePassword', isUser, userController.changePassword);
 user.delete('/delete/me', isUser, userController.deleteMe);
 
 function isUser(req, res, next) {

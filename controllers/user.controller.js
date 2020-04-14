@@ -142,6 +142,24 @@ exports.changePhone = function (req, res, err) {
         res.end();
     });
 }
+exports.changePassword = function (req, res, err){
+    var sessionCookie = req.cookies.session || '';
+    var newPassword = req.sanitize('password').escape();
+    adminFb.auth().verifySessionCookie(sessionCookie, true).then((decodedClaims) => {
+        adminFb.auth().updateUser(decodedClaims.uid, {
+            password: newPassword
+        }).then(() => {
+            res.status(200).send({msg: "Password alterada com sucesso!"});
+            res.end();
+        }).catch(error => {
+            res.status(500).send({error: error});
+            res.end();
+        });
+    }).catch(() => {
+        res.redirect('/denied');
+        res.end();
+    });
+}
 exports.deleteMe = function (req, res, err) {
     var sessionCookie = req.cookies.session || '';
 
