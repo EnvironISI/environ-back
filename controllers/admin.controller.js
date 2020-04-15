@@ -133,16 +133,22 @@ exports.enableUser = function (req, res, err) {
     var email = req.sanitize('email').escape();
 
     adminFb.auth().getUserByEmail(email).then(user => {
-        adminFb.auth().updateUser(user.uid, {
-            disabled: false
-        }).then(() => {
-            res.status(200).send({ msg: "Account enabled Successfully" });
+        if(user.disabled == true){
+            adminFb.auth().updateUser(user.uid, {
+                disabled: false
+            }).then(() => {
+                res.status(200).send({ msg: "Account enabled Successfully" });
+                res.end();
+            }).catch(error => {
+                console.log(error);
+                res.status(500).send(error);
+                res.end();
+            })
+        }
+        else{
+            res.status(400).send({ error: "Account is already enabled"});
             res.end();
-        }).catch(error => {
-            console.log(error);
-            res.status(500).send(error);
-            res.end();
-        })
+        }
     }).catch(error => {
         console.log(error);
         res.status(500).send(error);

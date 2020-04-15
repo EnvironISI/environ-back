@@ -211,7 +211,7 @@ exports.camaraAccept = function (req, res, err) {
 
     var eventId = req.sanitize('eventId').escape();
     var accept = req.sanitize('accept').escape();
-    var status;
+    let status;
 
     adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
         if (decodedClaims.admin || decodedClaims.camara) {
@@ -229,7 +229,7 @@ exports.camaraAccept = function (req, res, err) {
                     stock: 1000,
                     properties: [
                         {
-                            property_id: 11542,
+                            property_id: 11543,
                             value: status
                         },
                         {
@@ -275,7 +275,10 @@ exports.camaraAccept = function (req, res, err) {
                         console.log(error)
                         res.status(400).send({ error: error });
                     } else {
-                        res.status(200).send(result2);
+                        if(status == 'Aceite'){
+                            res.redirect('/package/verify');
+                        }
+                        //res.status(200).send(result2);
                     }
                 })
                 if (error) res.status(400).send({ error: error });

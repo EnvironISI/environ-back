@@ -159,7 +159,6 @@ exports.getByCamara = function (req, res, err){
     adminFb.auth().verifySessionCookie(sessionCookie, true).then((decodedClaims) => {
         if(decodedClaims.camara){
             adminFb.auth().getUser(decodedClaims.uid).then(user => {
-                re
             }).catch(err => {
                 console.log(err);
                 res.status(500).send(err);

@@ -48,8 +48,8 @@ require('./routes/auth.route.js')(app);
 
 app.use('/admin', admin);
 app.use('/user', user);
-app.use('/package', package);
 app.use('/event', event);
+app.use('/package', package);
 app.use('/match', match);
 app.use('/', router);
 module.exports = app;

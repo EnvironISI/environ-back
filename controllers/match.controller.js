@@ -10,5 +10,9 @@ var { hubspot } = require('../config/hubspotConfig');
 var exports = module.exports = {};
 
 exports.getMatches = function(req, res, err){
+
+}
+
+exports.doMatch  = function(req, res, err){
     
 }
