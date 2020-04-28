@@ -8,7 +8,7 @@ var exports = module.exports = {};
 var company_id = 126979;
 
 exports.events = function (req, res, err) {
-    moloni.products('getAll', { company_id: company_id }, function (error, result) {
+    moloni.products('getAll', {company_id: company_id}, function (error, result) {
         if(error) {
             console.log(error)
             res.status(500).send(error); 

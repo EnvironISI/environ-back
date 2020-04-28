@@ -18,7 +18,7 @@ exports.getToken = function (req, res, err) {
             method: 'POST',
             auth: {
                 user: 'Environ', // TODO : put your application client id here
-                pass: '555b4688-d440-4b35-baab-da4a880ad8a0' // TODO : put your application client secret here
+                pass: 'ec6b1693-3175-45b6-9337-5c0d3d8f727f' // TODO : put your application client secret here
             },
             form: {
                 'grant_type': 'client_credentials',
@@ -49,7 +49,7 @@ exports.all = function (req, res, err) {
             method: 'POST',
             auth: {
                 user: 'Environ', // TODO : put your application client id here
-                pass: '555b4688-d440-4b35-baab-da4a880ad8a0' // TODO : put your application client secret here
+                pass: 'ec6b1693-3175-45b6-9337-5c0d3d8f727f' // TODO : put your application client secret here
             },
             form: {
                 'grant_type': 'client_credentials',
@@ -59,7 +59,7 @@ exports.all = function (req, res, err) {
             if (result) {
                 var json = JSON.parse(result.body);
                 request({
-                    url: 'https://my.jasminsoftware.com/api/233075/233075-0001/businesscore/items',
+                    url: 'https://my.jasminsoftware.com/api/235151/235151-0001/businesscore/items',
                     method: 'GET',
                     headers: {
                         Authorization: 'Bearer ' + json.access_token
@@ -67,6 +67,7 @@ exports.all = function (req, res, err) {
                     json: true
                 }, function (err, result, body) {
                     if (body) {
+                        console.log(body)
                         let resp = [];
                         body.forEach(item => {
                             if(item.itemKey !== 'PORTES'){
@@ -109,7 +110,7 @@ exports.getByID = function (req, res, err) {
             method: 'POST',
             auth: {
                 user: 'Environ', // TODO : put your application client id here
-                pass: '555b4688-d440-4b35-baab-da4a880ad8a0' // TODO : put your application client secret here
+                pass: 'ec6b1693-3175-45b6-9337-5c0d3d8f727f' // TODO : put your application client secret here
             },
             form: {
                 'grant_type': 'client_credentials',
@@ -119,7 +120,7 @@ exports.getByID = function (req, res, err) {
             if (result) {
                 var json = JSON.parse(result.body);
                 request({
-                    url: 'https://my.jasminsoftware.com/api/233075/233075-0001/businesscore/items/' + id,
+                    url: 'https://my.jasminsoftware.com/api/235151/235151-0001/businesscore/items/' + id,
                     method: 'GET',
                     headers: {
                         Authorization: 'Bearer ' + json.access_token
@@ -184,7 +185,7 @@ exports.create = function (req, res, err) {
                 method: 'POST',
                 auth: {
                     user: 'Environ', // TODO : put your application client id here
-                    pass: '555b4688-d440-4b35-baab-da4a880ad8a0' // TODO : put your application client secret here
+                    pass: 'ec6b1693-3175-45b6-9337-5c0d3d8f727f' // TODO : put your application client secret here
                 },
                 form: {
                     'grant_type': 'client_credentials',
@@ -204,7 +205,7 @@ exports.create = function (req, res, err) {
                     }
 
                     request({
-                        url: 'https://my.jasminsoftware.com/api/233075/233075-0001/businesscore/items',
+                        url: 'https://my.jasminsoftware.com/api/235151/235151-0001/businesscore/items',
                         method: 'POST',
                         headers: {
                             Authorization: 'Bearer ' + json.access_token
@@ -253,7 +254,7 @@ exports.edit = function (req, res, err) {
                 method: 'POST',
                 auth: {
                     user: 'Environ', // TODO : put your application client id here
-                    pass: '555b4688-d440-4b35-baab-da4a880ad8a0' // TODO : put your application client secret here
+                    pass: 'ec6b1693-3175-45b6-9337-5c0d3d8f727f' // TODO : put your application client secret here
                 },
                 form: {
                     'grant_type': 'client_credentials',
@@ -270,7 +271,7 @@ exports.edit = function (req, res, err) {
 
                     if(image !== undefined){
                         request({
-                            url: 'https://my.jasminsoftware.com/api/233075/233075-0001/businesscore/items/' + id + "/image",
+                            url: 'https://my.jasminsoftware.com/api/235151/235151-0001/businesscore/items/' + id + "/image",
                             method: 'PUT',
                             headers: {
                                 Authorization: 'Bearer ' + json.access_token
@@ -292,7 +293,7 @@ exports.edit = function (req, res, err) {
                     }
                     else if(description !== undefined){
                         request({
-                            url: 'https://my.jasminsoftware.com/api/233075/233075-0001/businesscore/items/' + id + "/description",
+                            url: 'https://my.jasminsoftware.com/api/235151/235151-0001/businesscore/items/' + id + "/description",
                             method: 'PUT',
                             headers: {
                                 Authorization: 'Bearer ' + json.access_token
@@ -314,7 +315,7 @@ exports.edit = function (req, res, err) {
                     }
                     else if(itemKey !== undefined){
                         request({
-                            url: 'https://my.jasminsoftware.com/api/233075/233075-0001/businesscore/items/' + id + "/itemKey",
+                            url: 'https://my.jasminsoftware.com/api/235151/235151-0001/businesscore/items/' + id + "/itemKey",
                             method: 'PUT',
                             headers: {
                                 Authorization: 'Bearer ' + json.access_token
@@ -336,7 +337,7 @@ exports.edit = function (req, res, err) {
                     }
                     else if(summary !== undefined){
                         request({
-                            url: 'https://my.jasminsoftware.com/api/233075/233075-0001/businesscore/items/' + id + "/complementaryDescription",
+                            url: 'https://my.jasminsoftware.com/api/235151/235151-0001/businesscore/items/' + id + "/complementaryDescription",
                             method: 'PUT',
                             headers: {
                                 Authorization: 'Bearer ' + json.access_token
@@ -384,7 +385,7 @@ exports.delete = function (req, res, err) {
                 method: 'POST',
                 auth: {
                     user: 'Environ', // TODO : put your application client id here
-                    pass: '555b4688-d440-4b35-baab-da4a880ad8a0' // TODO : put your application client secret here
+                    pass: 'ec6b1693-3175-45b6-9337-5c0d3d8f727f' // TODO : put your application client secret here
                 },
                 form: {
                     'grant_type': 'client_credentials',
@@ -394,7 +395,7 @@ exports.delete = function (req, res, err) {
                 if (result) {
                     var json = JSON.parse(result.body);
                     request({
-                        url: 'https://my.jasminsoftware.com/api/233075/233075-0001/businesscore/items/' + id,
+                        url: 'https://my.jasminsoftware.com/api/235151/235151-0001/businesscore/items/' + id,
                         method: 'DELETE',
                         headers: {
                             Authorization: 'Bearer ' + json.access_token
