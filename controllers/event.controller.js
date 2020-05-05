@@ -3,17 +3,18 @@ const jsonMessages = require(jsonMessagesPath + "events");
 
 var { adminFb } = require('../config/firebaseConfig.js');
 var { moloni } = require('../config/moloniConfig.js');
+var { visionClient } = require('../config/visionConfig.js');
 
 var exports = module.exports = {};
 var company_id = 126979;
 
 exports.events = function (req, res, err) {
-    moloni.products('getAll', {company_id: company_id}, function (error, result) {
-        if(error) {
+    moloni.products('getAll', { company_id: company_id }, function (error, result) {
+        if (error) {
             console.log(error)
-            res.status(500).send(error); 
+            res.status(500).send(error);
             res.end();
-        }else{
+        } else {
             res.status(200).send(result);
             res.end();
         }
@@ -36,14 +37,14 @@ exports.createEvent = function (req, res, err) {
             var municipio = req.sanitize('municipio').escape();
             var pacote = req.sanitize('package').escape();
             //var reference = municipio.trim() + Math.floor((Math.random() * 100000000000) + 1).toString();
-           /* try {
-                userRecords.users.forEach((user) => {
-                    if (!user.customClaims.camara == municipio) {
-                        res.status(400).send({ error: "O Municipio ainda não se encontra registado no sistema da Environ." })
-                        res.end();
-                    }
-                })
-            } catch (error) { console.log(error) }*/
+            /* try {
+                 userRecords.users.forEach((user) => {
+                     if (!user.customClaims.camara == municipio) {
+                         res.status(400).send({ error: "O Municipio ainda não se encontra registado no sistema da Environ." })
+                         res.end();
+                     }
+                 })
+             } catch (error) { console.log(error) }*/
 
             adminFb.auth().getUser(decodedClaims.uid).then(user => {
                 var params = {
@@ -275,7 +276,7 @@ exports.camaraAccept = function (req, res, err) {
                         console.log(error)
                         res.status(400).send({ error: error });
                     } else {
-                        if(status == 'Aceite'){
+                        if (status == 'Aceite') {
                             res.redirect('/package/verify');
                         }
                         //res.status(200).send(result2);
@@ -294,21 +295,21 @@ exports.camaraAccept = function (req, res, err) {
         res.end();
     })
 }
-exports.camaraEvents = function(req, res, err){
+exports.camaraEvents = function (req, res, err) {
     var sessionCookie = req.cookies.session || '';
 
     adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
-        if(decodedClaims.camara){
+        if (decodedClaims.camara) {
             adminFb.auth().getUser(decodedClaims.uid).then(user => {
-                moloni.products('getAll', {company_id: company_id}, function(error, result){
-                    if(error){
+                moloni.products('getAll', { company_id: company_id }, function (error, result) {
+                    if (error) {
                         console.log(error);
                         res.status(400).send(error);
                         res.end();
-                    }else{
+                    } else {
                         let obj = [];
                         result.forEach(product => {
-                            if(user.displayName.includes(product.properties[8].value)){
+                            if (user.displayName.includes(product.properties[8].value)) {
                                 obj.push(product);
                             }
                         });
@@ -322,7 +323,7 @@ exports.camaraEvents = function(req, res, err){
                 res.end();
             })
         }
-        else{
+        else {
             res.redirect('/denied');
             res.end();
         }
@@ -331,21 +332,21 @@ exports.camaraEvents = function(req, res, err){
         res.end();
     })
 }
-exports.userEvents = function(req, res, err){
+exports.userEvents = function (req, res, err) {
     var sessionCookie = req.cookies.session || '';
 
     adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
-        if(decodedClaims.empresa){
+        if (decodedClaims.empresa) {
             adminFb.auth().getUser(decodedClaims.uid).then(user => {
-                moloni.products('getAll', {company_id: company_id}, function(error, result){
-                    if(error){
+                moloni.products('getAll', { company_id: company_id }, function (error, result) {
+                    if (error) {
                         console.log(error);
                         res.status(400).send(error);
                         res.end();
-                    }else{
+                    } else {
                         let obj = [];
                         result.forEach(product => {
-                            if(product.properties[1].value === user.email){
+                            if (product.properties[1].value === user.email) {
                                 obj.push(product);
                             }
                         });
@@ -359,7 +360,7 @@ exports.userEvents = function(req, res, err){
                 res.end();
             })
         }
-        else{
+        else {
             res.redirect('/denied');
             res.end();
         }
@@ -368,21 +369,21 @@ exports.userEvents = function(req, res, err){
         res.end();
     })
 }
-exports.acceptedEvents = function(req, res, err){
+exports.acceptedEvents = function (req, res, err) {
     var sessionCookie = req.cookies.session || '';
 
     adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
-        if(decodedClaims.empresa){
+        if (decodedClaims.empresa) {
             adminFb.auth().getUser(decodedClaims.uid).then(user => {
-                moloni.products('getAll', {company_id: company_id}, function(error, result){
-                    if(error){
+                moloni.products('getAll', { company_id: company_id }, function (error, result) {
+                    if (error) {
                         console.log(error);
                         res.status(400).send(error);
                         res.end();
-                    }else{
+                    } else {
                         let resp = [];
                         result.forEach(product => {
-                            if(product.properties[0].value === 'Aceite'){
+                            if (product.properties[0].value === 'Aceite') {
                                 let obj = {
                                     name: product.name,
                                     initDate: product.properties[5].value,
@@ -401,12 +402,28 @@ exports.acceptedEvents = function(req, res, err){
                 res.end();
             })
         }
-        else{
+        else {
             res.redirect('/denied');
             res.end();
         }
     }).catch(error => {
         res.redirect('/denied');
         res.end();
+    })
+}
+exports.colab = function (req, res, err) {
+    var sessionCookie = req.cookies.session || '';
+    var url = req.sanitize('url').escape();
+    adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
+        if (decodedClaims.empresa) {
+            const [result] = await visionClient.faceDetection(url);
+            const faces = result.faceAnnotations;
+            console.log('Faces:');
+            res.status(200).send(faces.length);
+        } else {
+
+        }
+    }).catch(() => {
+
     })
 }

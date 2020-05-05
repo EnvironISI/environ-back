@@ -9,7 +9,8 @@ event.post('/request', eventsController.createEvent);
 event.put('/admin/acception', eventsController.adminAccept);
 event.put('/camara/acception', eventsController.camaraAccept)
 event.get('/camara', eventsController.camaraEvents);
-event.get('/user', eventsController.userEvents)
-event.get('/accepted', eventsController.acceptedEvents)
+event.get('/user', eventsController.userEvents);
+event.get('/accepted', eventsController.acceptedEvents);
+event.post('/colaboradores', eventsController.colab)
 
 module.exports = event;
