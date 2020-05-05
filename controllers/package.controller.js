@@ -17,8 +17,8 @@ exports.getToken = function (req, res, err) {
             url: 'https://identity.primaverabss.com/core/connect/token',
             method: 'POST',
             auth: {
-                user: 'Environ', // TODO : put your application client id here
-                pass: 'ec6b1693-3175-45b6-9337-5c0d3d8f727f' // TODO : put your application client secret here
+                user: 'ENVIRONISI', // TODO : put your application client id here
+                pass: 'c2d7e4bf-3d30-43fb-82d8-2f0e08f474dd' // TODO : put your application client secret here
             },
             form: {
                 'grant_type': 'client_credentials',
@@ -27,7 +27,6 @@ exports.getToken = function (req, res, err) {
         }, function (err, result) {
             if (result) {
                 var json = JSON.parse(result.body);
-                console.log(json.access_token);
                 res.send(json.access_token);
             }
             else {
@@ -48,8 +47,8 @@ exports.all = function (req, res, err) {
             url: 'https://identity.primaverabss.com/core/connect/token',
             method: 'POST',
             auth: {
-                user: 'Environ', // TODO : put your application client id here
-                pass: 'ec6b1693-3175-45b6-9337-5c0d3d8f727f' // TODO : put your application client secret here
+                user: 'ENVIRONISI', // TODO : put your application client id here
+                pass: 'c2d7e4bf-3d30-43fb-82d8-2f0e08f474dd' // TODO : put your application client secret here
             },
             form: {
                 'grant_type': 'client_credentials',
@@ -69,7 +68,7 @@ exports.all = function (req, res, err) {
                     if (body) {
                         console.log(body)
                         let resp = [];
-                        body.forEach(item => {
+                        /*body.forEach(item => {
                             if(item.itemKey !== 'PORTES'){
                                 let obj = {
                                     id: item.id,
@@ -81,8 +80,8 @@ exports.all = function (req, res, err) {
                                 }
                                 resp.push(obj);
                             }
-                        })
-                        res.status(200).send(resp);
+                        })*/
+                        res.status(200).send('hello');
                     } else {
                         console.log(err);
                         res.status(500).send(err);
@@ -109,8 +108,8 @@ exports.getByID = function (req, res, err) {
             url: 'https://identity.primaverabss.com/core/connect/token',
             method: 'POST',
             auth: {
-                user: 'Environ', // TODO : put your application client id here
-                pass: 'ec6b1693-3175-45b6-9337-5c0d3d8f727f' // TODO : put your application client secret here
+                user: 'ENVIRONISI', // TODO : put your application client id here
+                pass: 'c2d7e4bf-3d30-43fb-82d8-2f0e08f474dd' // TODO : put your application client secret here
             },
             form: {
                 'grant_type': 'client_credentials',
@@ -184,8 +183,8 @@ exports.create = function (req, res, err) {
                 url: 'https://identity.primaverabss.com/core/connect/token',
                 method: 'POST',
                 auth: {
-                    user: 'Environ', // TODO : put your application client id here
-                    pass: 'ec6b1693-3175-45b6-9337-5c0d3d8f727f' // TODO : put your application client secret here
+                    user: 'ENVIRONISI', // TODO : put your application client id here
+                    pass: 'c2d7e4bf-3d30-43fb-82d8-2f0e08f474dd' // TODO : put your application client secret here
                 },
                 form: {
                     'grant_type': 'client_credentials',
@@ -253,8 +252,8 @@ exports.edit = function (req, res, err) {
                 url: 'https://identity.primaverabss.com/core/connect/token',
                 method: 'POST',
                 auth: {
-                    user: 'Environ', // TODO : put your application client id here
-                    pass: 'ec6b1693-3175-45b6-9337-5c0d3d8f727f' // TODO : put your application client secret here
+                    user: 'ENVIRONISI', // TODO : put your application client id here
+                    pass: 'c2d7e4bf-3d30-43fb-82d8-2f0e08f474dd' // TODO : put your application client secret here
                 },
                 form: {
                     'grant_type': 'client_credentials',
@@ -384,8 +383,8 @@ exports.delete = function (req, res, err) {
                 url: 'https://identity.primaverabss.com/core/connect/token',
                 method: 'POST',
                 auth: {
-                    user: 'Environ', // TODO : put your application client id here
-                    pass: 'ec6b1693-3175-45b6-9337-5c0d3d8f727f' // TODO : put your application client secret here
+                    user: 'ENVIRONISI', // TODO : put your application client id here
+                    pass: 'c2d7e4bf-3d30-43fb-82d8-2f0e08f474dd' // TODO : put your application client secret here
                 },
                 form: {
                     'grant_type': 'client_credentials',
