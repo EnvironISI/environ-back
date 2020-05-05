@@ -6,7 +6,7 @@ const jsonMessages = require(jsonMessagesPath + "packages");
 
 package.get('/token', packageController.getToken);
 
-package.get('/all', packageController.all);
+package.get('/camara', packageController.all);
 package.get('/:id', packageController.getByID);
 package.post('/create', packageController.create);
 package.put('/edit/:id', packageController.edit);
