@@ -68,7 +68,7 @@ exports.all = function (req, res, err) {
                     if (body) {
                         let resp = [];
                         body.forEach(item => {
-                            if(item.itemKey !== 'PORTES'){
+                            if (item.itemKey !== 'PORTES') {
                                 let obj = {
                                     id: item.id,
                                     name: item.itemKey,
@@ -153,10 +153,10 @@ exports.getByID = function (req, res, err) {
         res.end();
     })
 }
-exports.getByCamara = function (req, res, err){
+/*exports.getByCamara = function (req, res, err) {
     var sessionCookie = req.cookies.session || '';
     adminFb.auth().verifySessionCookie(sessionCookie, true).then((decodedClaims) => {
-        if(decodedClaims.camara){
+        if (decodedClaims.camara) {
             adminFb.auth().getUser(decodedClaims.uid).then(user => {
                 request({
                     url: 'https://identity.primaverabss.com/core/connect/token',
@@ -173,14 +173,14 @@ exports.getByCamara = function (req, res, err){
                     if (result) {
                         var json = JSON.parse(result.body);
                         request({
-                            url: 'https://my.jasminsoftware.com/api/235151/235151-0001/businesscore/items/' + id,
+                            url: 'https://my.jasminsoftware.com/api/235151/235151-0001/businesscore/items/',
                             method: 'GET',
                             headers: {
                                 Authorization: 'Bearer ' + json.access_token
                             },
                             json: true
                         }, function (err, result, body) {
-
+                            
                         })
                     }
                 })
@@ -190,7 +190,7 @@ exports.getByCamara = function (req, res, err){
                 res.end();
             })
         }
-        else{
+        else {
             res.redirect('denied');
             res.end();
         }
@@ -198,7 +198,7 @@ exports.getByCamara = function (req, res, err){
         res.redirect('denied');
         res.end();
     })
-}
+}*/
 exports.create = function (req, res, err) {
     var sessionCookie = req.cookies.session || '';
 
@@ -224,7 +224,7 @@ exports.create = function (req, res, err) {
                     var image = req.sanitize('image').escape();
                     var summary = req.sanitize('summary').escape();
 
-                    if(image === undefined){
+                    if (image === undefined) {
                         image = 'https://w0.pngwave.com/png/169/167/package-delivery-mail-box-parcel-box-png-clip-art-thumbnail.png'
                     }
 
@@ -246,7 +246,7 @@ exports.create = function (req, res, err) {
                         json: true
                     }, function (err, result, body) {
                         if (body) {
-                            res.status(200).send({id: body});
+                            res.status(200).send({ id: body });
                             res.end();
                         } else {
                             console.log(err);
@@ -272,7 +272,7 @@ exports.edit = function (req, res, err) {
     var id = req.params.id;
 
     adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
-        if(decodedClaims.admin || decodedClaims.camara){
+        if (decodedClaims.admin || decodedClaims.camara) {
             request({
                 url: 'https://identity.primaverabss.com/core/connect/token',
                 method: 'POST',
@@ -293,7 +293,7 @@ exports.edit = function (req, res, err) {
                     var image = req.sanitize('image').escape();
                     var summary = req.sanitize('summary').escape();
 
-                    if(image !== undefined){
+                    if (image !== undefined) {
                         request({
                             url: 'https://my.jasminsoftware.com/api/235151/235151-0001/businesscore/items/' + id + "/image",
                             method: 'PUT',
@@ -315,7 +315,7 @@ exports.edit = function (req, res, err) {
                             }
                         })
                     }
-                    else if(description !== undefined){
+                    else if (description !== undefined) {
                         request({
                             url: 'https://my.jasminsoftware.com/api/235151/235151-0001/businesscore/items/' + id + "/description",
                             method: 'PUT',
@@ -337,7 +337,7 @@ exports.edit = function (req, res, err) {
                             }
                         })
                     }
-                    else if(itemKey !== undefined){
+                    else if (itemKey !== undefined) {
                         request({
                             url: 'https://my.jasminsoftware.com/api/235151/235151-0001/businesscore/items/' + id + "/itemKey",
                             method: 'PUT',
@@ -359,7 +359,7 @@ exports.edit = function (req, res, err) {
                             }
                         })
                     }
-                    else if(summary !== undefined){
+                    else if (summary !== undefined) {
                         request({
                             url: 'https://my.jasminsoftware.com/api/235151/235151-0001/businesscore/items/' + id + "/complementaryDescription",
                             method: 'PUT',
@@ -381,7 +381,7 @@ exports.edit = function (req, res, err) {
                             }
                         })
                     }
-                    else{
+                    else {
                         res.status(500).send('error');
                         res.end();
                     }
@@ -403,7 +403,7 @@ exports.delete = function (req, res, err) {
     var id = req.params.id;
 
     adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
-        if(decodedClaims.admin || decodedClaims.camara){
+        if (decodedClaims.admin || decodedClaims.camara) {
             request({
                 url: 'https://identity.primaverabss.com/core/connect/token',
                 method: 'POST',
