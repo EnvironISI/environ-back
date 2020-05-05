@@ -35,6 +35,7 @@ exports.createEvent = function (req, res, err) {
             var summary = req.sanitize('summary').escape();
             var municipio = req.sanitize('municipio').escape();
             var eventType = req.sanitize('eventType').escape();
+            var pacote = req.sanitize('package').escape();
             //var reference = municipio.trim() + Math.floor((Math.random() * 100000000000) + 1).toString();
            /* try {
                 userRecords.users.forEach((user) => {
@@ -98,6 +99,10 @@ exports.createEvent = function (req, res, err) {
                         {
                             property_id: 11847,
                             value: eventType
+                        },
+                        {
+                            property_id: 12774,
+                            value: pacote
                         }
                     ],
                 }
