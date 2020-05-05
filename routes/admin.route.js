@@ -1,5 +1,6 @@
 const admin = require('express').Router();
 const adminController = require('../controllers/admin.controller');
+const pdfController = require('../controllers/pdf.controller');
 const jsonMessagesPath = __dirname + "/../assets/jsonMessages/";
 const jsonMessages = require(jsonMessagesPath + "login");
 
@@ -12,6 +13,7 @@ admin.get('/users', isAdmin, adminController.getUsers);
 admin.delete('/delete/user', isAdmin, adminController.deleteUser);
 admin.put('/enable/user', isAdmin, adminController.enableUser);
 admin.delete('/delete/event', isAdmin, adminController.deleteEvent);
+admin.get('/download', isAdmin, pdfController.handlePdf);
 
 function isAdmin(req, res, next) {
     var sessionCookie = req.cookies.session || '';
