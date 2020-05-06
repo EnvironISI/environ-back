@@ -419,17 +419,11 @@ exports.colab = function (req, res, err) {
     var url_faces = req.body.url_faces;
     adminFb.auth().verifySessionCookie(sessionCookie, true).then(async decodedClaims => {
         if (decodedClaims.camara) {
-
-            const [result] = await client.faceDetection(url_faces);
-            const faces = result.faceAnnotations;
-            const length = faces.length;
-
             var options = {
                 url: url_faces,
                 method: "get",
                 encoding: null
             };
-
             request(options, async function (error, response, body) {
                 if (error) {
                     console.error('error:', error);
@@ -489,7 +483,7 @@ exports.colab = function (req, res, err) {
                         filename = encodeURIComponent(filename) + '.png';
                         res.setHeader('Content-disposition', 'attachment; filename="' + filename + '"');
                         res.setHeader('Content-type', 'application/png');
-                        res.status(200).send({faces: faces.length});
+                        res.write(rest);
                         res.end();
                     });
                 }
@@ -500,6 +494,25 @@ exports.colab = function (req, res, err) {
         }
     }).catch((error) => {
         console.log(error)
+        res.send(error);
+    })
+}
+exports.nrcolab = function(req, res, err){
+    var sessionCookie = req.cookies.session || '';
+    var url_faces = req.body.url_faces;
+    adminFb.auth().verifySessionCookie(sessionCookie, true).then(async decodedClaims => {
+        if (decodedClaims.camara) {
+            const [result] = await client.faceDetection(url_faces);
+            const faces = result.faceAnnotations;
+            const length = faces.length;
+            res.status(200).send({faces: length});
+            res.end();
+        } else {
+            console.log(error);
+            res.send(error);
+        }
+    }).catch((error) => {
+        console.log(error);
         res.send(error);
     })
 }
