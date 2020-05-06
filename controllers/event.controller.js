@@ -419,7 +419,7 @@ exports.colab = function (req, res, err) {
 
     adminFb.auth().verifySessionCookie(sessionCookie, true).then(async decodedClaims => {
         if (decodedClaims.camara) {
-            
+
             var options = {
                 url: url_faces,
                 method: "get",
@@ -432,6 +432,9 @@ exports.colab = function (req, res, err) {
                     console.log('Response: StatusCode:', response && response.statusCode);
                     console.log('Response: Body: Length: %d. Is buffer: %s', body.length, (body instanceof Buffer));
                     fs.writeFileSync('test.jpg', body);
+
+                    const [result] = await client.faceDetection(url_faces);
+                    const faces = result.faceAnnotations;
 
                     const outputFile = 'output.png';
                     const { promisify } = require('util');
