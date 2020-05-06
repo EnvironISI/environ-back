@@ -1,15 +1,10 @@
-var template = `<!DOCTYPE html>
-<html>
-    <head>
-        <link href="https://environ-back.herokuapp.com/pdf/authorization/img/favicon.png" rel="shortcut icon"/>
-        <meta charset="utf-8"/>
-        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0" name="viewport"/>
-       <style type="text/css">
+
+
 .invoicetemplate {
   width               : 100%;
-  min-width           : 793px;
+  min-width           : 610px;
   height              : 100vh;
-  min-height          : 1122px;
+  min-height          : 790px;
   position            : relative;
   overflow            : hidden;
   margin              : 0px;
@@ -35,45 +30,45 @@ div {
 }
 .invoicetemplate .group {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 1047px;
-  height              : 51px;
-  width               : 128px;
+  top                 : 737px;
+  height              : 35px;
+  width               : 88px;
   position            : absolute;
   margin              : 0;
-  left                : 333px;
+  left                : 257px;
   transform           : rotate(0deg);
   opacity             : 1.0;
 }
 .invoicetemplate .group .infinity {
   background-color    : rgba(255,255,255,0.0);
   top                 : 1px;
-  height              : 49px;
-  width               : 45px;
+  height              : 35px;
+  width               : 31px;
   position            : absolute;
   margin              : 0;
-  left                : 2px;
+  left                : 0px;
   transform           : rotate(0deg);
   opacity             : 1.0;
 }
 .invoicetemplate .group .gradient {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 17px;
-  height              : 19px;
-  width               : 72px;
+  top                 : 13px;
+  height              : 13px;
+  width               : 50px;
   position            : absolute;
   margin              : 0;
-  left                : 56px;
+  left                : 38px;
   transform           : rotate(0deg);
   opacity             : 1.0;
 }
 .invoicetemplate .environfrontheroku {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 1066px;
+  top                 : 748px;
   height              : auto;
-  width               : 255px;
+  width               : 197px;
   position            : absolute;
   margin              : 0;
-  left                : 561px;
+  left                : 432px;
   transform           : rotate(0deg);
   opacity             : 1.0;
   font-family         : "-apple-system", Helvetica, Arial, serif;
@@ -85,22 +80,11 @@ div {
   letter-spacing      : -0.15px;
   line-height         : 14.0px;
 }
-.invoicetemplate .rectangle {
-  background-color    : rgba(255,255,255,0.0);
-  top                 : 0px;
-  height              : 406px;
-  width               : 795px;
-  position            : absolute;
-  margin              : 0;
-  left                : 0px;
-  transform           : rotate(0deg);
-  opacity             : 1.0;
-}
 .invoicetemplate .c342maramunicipalde {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 951px;
+  top                 : 673px;
   height              : auto;
-  width               : 795px;
+  width               : 612px;
   position            : absolute;
   margin              : 0;
   left                : -1px;
@@ -109,77 +93,88 @@ div {
   font-family         : "-apple-system", Helvetica, Arial, serif;
   font-weight         : 400;
   font-style          : normal;
-  font-size           : 18.0px;
+  font-size           : 16.0px;
   color               : rgba(47, 47, 47, 1.0);
   text-align          : center;
   letter-spacing      : -0.15px;
-  line-height         : 21.0px;
+  line-height         : 19.0px;
 }
 .invoicetemplate .ac342maramunicipald {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 572px;
+  top                 : 394px;
   height              : auto;
-  width               : 695px;
+  width               : 540px;
   position            : absolute;
   margin              : 0;
-  left                : 49px;
+  left                : 31px;
   transform           : rotate(0deg);
   opacity             : 1.0;
   font-family         : "-apple-system", Helvetica, Arial, serif;
   font-weight         : 400;
   font-style          : normal;
-  font-size           : 21.0px;
+  font-size           : 16.0px;
   color               : rgba(47, 47, 47, 1.0);
   text-align          : center;
   letter-spacing      : -0.15px;
-  line-height         : 25.0px;
+  line-height         : 19.0px;
 }
 .invoicetemplate .autoriza307303o {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 462px;
+  top                 : 304px;
   height              : auto;
-  width               : 446px;
+  width               : 282px;
   position            : absolute;
   margin              : 0;
-  left                : 282px;
+  left                : 191px;
   transform           : rotate(0deg);
   opacity             : 1.0;
   font-family         : "-apple-system", Helvetica, Arial, serif;
   font-weight         : 700;
   font-style          : normal;
-  font-size           : 36.0px;
+  font-size           : 31.0px;
   color               : rgba(66, 66, 66, 1.0);
   text-align          : left;
   letter-spacing      : -0.2px;
-  line-height         : 43.0px;
+  line-height         : 37.0px;
+}
+.invoicetemplate .rectangle {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : -1px;
+  height              : 265px;
+  width               : 611px;
+  position            : absolute;
+  margin              : 0;
+  left                : -1px;
+  transform           : rotate(0deg);
+  opacity             : 1.0;
 }
 .invoicetemplate .groupcopy {
   background-color    : rgba(255,255,255,0.0);
-  top                 : -112px;
-  height              : 253px;
-  width               : 212px;
+  top                 : -90px;
+  height              : 170px;
+  width               : 162px;
   position            : absolute;
   margin              : 0;
-  left                : 688px;
+  left                : 523px;
   transform           : rotate(0deg);
   opacity             : 0.2;
 }
 .invoicetemplate .groupcopy .combinedshape {
   background-color    : rgba(255,255,255,0.0);
   top                 : 0px;
-  height              : 239px;
-  width               : 184px;
+  height              : 160px;
+  width               : 140px;
   position            : absolute;
   margin              : 0;
-  left                : 27px;
+  left                : 21px;
   transform           : rotate(0deg);
   opacity             : 1.0;
 }
 .invoicetemplate .groupcopy .shape {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 19px;
-  height              : 234px;
-  width               : 194px;
+  top                 : 13px;
+  height              : 157px;
+  width               : 147px;
   position            : absolute;
   margin              : 0;
   left                : 0px;
@@ -188,31 +183,31 @@ div {
 }
 .invoicetemplate .groupcopy2 {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 209px;
-  height              : 253px;
-  width               : 232px;
+  top                 : 126px;
+  height              : 170px;
+  width               : 177px;
   position            : absolute;
   margin              : 0;
-  left                : -93px;
+  left                : -73px;
   transform           : rotate(0deg);
   opacity             : 0.2;
 }
 .invoicetemplate .groupcopy2 .combinedshape {
   background-color    : rgba(255,255,255,0.0);
   top                 : 0px;
-  height              : 238px;
-  width               : 93px;
+  height              : 159px;
+  width               : 71px;
   position            : absolute;
   margin              : 0;
-  left                : 138px;
+  left                : 105px;
   transform           : rotate(0deg);
   opacity             : 1.0;
 }
 .invoicetemplate .groupcopy2 .shape {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 20px;
-  height              : 233px;
-  width               : 212px;
+  top                 : 14px;
+  height              : 156px;
+  width               : 162px;
   position            : absolute;
   margin              : 0;
   left                : 0px;
@@ -221,20 +216,20 @@ div {
 }
 .invoicetemplate .group3 {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 277px;
-  height              : 59px;
-  width               : 209px;
+  top                 : 145px;
+  height              : 38px;
+  width               : 160px;
   position            : absolute;
   margin              : 0;
-  left                : 306px;
+  left                : 446px;
   transform           : rotate(0deg);
   opacity             : 1.0;
 }
 .invoicetemplate .group3 .a4thmay2017 {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 37px;
+  top                 : 21px;
   height              : auto;
-  width               : 210px;
+  width               : 161px;
   position            : absolute;
   margin              : 0;
   left                : 0px;
@@ -251,9 +246,9 @@ div {
 }
 .invoicetemplate .group3 .data {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 4px;
+  top                 : 1px;
   height              : auto;
-  width               : 82px;
+  width               : 64px;
   position            : absolute;
   margin              : 0;
   left                : 0px;
@@ -270,20 +265,20 @@ div {
 }
 .invoicetemplate .group4copy {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 162px;
-  height              : 95px;
-  width               : 437px;
+  top                 : 145px;
+  height              : 66px;
+  width               : 244px;
   position            : absolute;
   margin              : 0;
-  left                : 306px;
+  left                : 234px;
   transform           : rotate(0deg);
   opacity             : 1.0;
 }
 .invoicetemplate .group4copy .centraltechnologies {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 38px;
+  top                 : 19px;
   height              : auto;
-  width               : 436px;
+  width               : 246px;
   position            : absolute;
   margin              : 0;
   left                : 0px;
@@ -300,9 +295,9 @@ div {
 }
 .invoicetemplate .group4copy .para {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 4px;
+  top                 : 1px;
   height              : auto;
-  width               : 172px;
+  width               : 98px;
   position            : absolute;
   margin              : 0;
   left                : 0px;
@@ -319,20 +314,20 @@ div {
 }
 .invoicetemplate .group3copy {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 164px;
-  height              : 51px;
-  width               : 376px;
+  top                 : 146px;
+  height              : 35px;
+  width               : 287px;
   position            : absolute;
   margin              : 0;
-  left                : 168px;
+  left                : 115px;
   transform           : rotate(0deg);
   opacity             : 1.0;
 }
 .invoicetemplate .group3copy .clod0001 {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 32px;
+  top                 : 18px;
   height              : auto;
-  width               : 144px;
+  width               : 112px;
   position            : absolute;
   margin              : 0;
   left                : 0px;
@@ -349,9 +344,9 @@ div {
 }
 .invoicetemplate .group3copy .eventono {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 3px;
+  top                 : 1px;
   height              : auto;
-  width               : 376px;
+  width               : 289px;
   position            : absolute;
   margin              : 0;
   left                : 0px;
@@ -368,31 +363,31 @@ div {
 }
 .invoicetemplate .logo {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 48px;
-  height              : 71px;
-  width               : 224px;
+  top                 : 41px;
+  height              : 58px;
+  width               : 177px;
   position            : absolute;
   margin              : 0;
-  left                : 434px;
+  left                : 346px;
   transform           : rotate(0deg);
   opacity             : 1.0;
 }
 .invoicetemplate .logo .white {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 17px;
-  height              : 32px;
-  width               : 149px;
+  top                 : 15px;
+  height              : 25px;
+  width               : 119px;
   position            : absolute;
   margin              : 0;
-  left                : 75px;
+  left                : 58px;
   transform           : rotate(0deg);
   opacity             : 1.0;
 }
 .invoicetemplate .logo .sign {
   background-color    : rgba(255,255,255,0.0);
   top                 : 0px;
-  height              : 71px;
-  width               : 64px;
+  height              : 57px;
+  width               : 51px;
   position            : absolute;
   margin              : 0;
   left                : 0px;
@@ -401,12 +396,12 @@ div {
 }
 .invoicetemplate .c302maramunicipalde {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 57px;
+  top                 : 50px;
   height              : auto;
-  width               : 341px;
+  width               : 260px;
   position            : absolute;
   margin              : 0;
-  left                : 35px;
+  left                : 38px;
   transform           : rotate(0deg);
   opacity             : 1.0;
   font-family         : "-apple-system", Helvetica, Arial, serif;
@@ -534,161 +529,3 @@ div {
   word-break          : break-all;
   word-break          : break-word;
 }
-        </style>
-        <meta content="AnimaApp.com - Design to code, Automated." name="author"/>
-    </head>
-    <body style="width: 1024px; height: 100%; margin: 0; background: rgba(255, 255, 255, 1.0);">
-        <input id="anPageName" name="page" type="hidden" value="invoicetemplate"/>
-        <div class="invoicetemplate anima-word-break ">
-            <div style="width: 793px; height: 100%; position:relative; margin:auto;">
-                <div class="group">
-                    <img alt="OLA" src="https://environ-back.herokuapp.com/pdf/authorization/img/invoicetemplate-infinity@2x.png" class="infinity"/>
-                    <img alt="Image" anima-src="https://environ-back.herokuapp.com/pdf/authorization/img/invoicetemplate-gradient@2x.png" class="gradient" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="/>
-                </div>
-                <div class="environfrontheroku">
-                    environ-front.herokuapp.com
-                </div>
-                <img alt="Image" anima-src="https://environ-back.herokuapp.com/pdf/authorization/img/invoicetemplate-rectangle.png" class="rectangle" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="/>
-                <div class="c342maramunicipalde">
-                    Câmara Municipal de {{data.name}} (local), ____ de _____ de_____
-                </div>
-                <div class="ac342maramunicipald">
-                    A Câmara Municipal de _______ vem por este meio emitir uma declaração que valida na realização de uma ________ (tipo de evento, exemplo reflorestação) a realizar-se no dia __ de ____ de ____, na_____________ (exemplo praia de Ofir). Mais acrescentamos que este evento cumpre com todos os requisitos legais para que ocorra conforme o espectável, deste modo, as seguintes entidades competentes estarão requisitadas para o efeito: _________ (pack de entidades escolhido), é ainda de referir que a organização deste evento contou com a participação da empresa “environ.”, que se fará representar no evento ao cargo da pessoa, Francisco Barros da Cunha.<br /><br />Sem mais acrescentar, votos de muito sucesso,
-                </div>
-                <div class="autoriza307303o">
-                    AUTORIZAÇÃO
-                </div>
-                <div class="groupcopy">
-                    <img alt="Image" anima-src="https://environ-back.herokuapp.com/pdf/authorization/img/invoicetemplate-combined-shape@2x.png" class="combinedshape" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="/>
-                    <img alt="Image" anima-src="https://environ-back.herokuapp.com/pdf/authorization/img/invoicetemplate-shape@2x.png" class="shape" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="/>
-                </div>
-                <div class="groupcopy2">
-                    <img alt="Image" anima-src="https://environ-back.herokuapp.com/pdf/authorization/img/invoicetemplate-combined-shape-1@2x.png" class="combinedshape" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="/>
-                    <img alt="Image" anima-src="https://environ-back.herokuapp.com/pdf/authorization/img/invoicetemplate-shape-1@2x.png" class="shape" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="/>
-                </div>
-                <div class="group3">
-                    <div class="a4thmay2017">
-                        4th May 2017
-                    </div>
-                    <div class="data">
-                        DATA
-                    </div>
-                </div>
-                <div class="group4copy">
-                    <div class="centraltechnologies">
-                        Central Technologies,<br />7155 Lindsey Roads, 38 Hoeger Freeway,<br />Treutel Plains, New York
-                    </div>
-                    <div class="para">
-                        PARA
-                    </div>
-                </div>
-                <div class="group3copy">
-                    <div class="clod0001">
-                        CLOD0001
-                    </div>
-                    <div class="eventono">
-                        EVENTO NO.
-                    </div>
-                </div>
-                <div class="logo">
-                    <img alt="Image" anima-src="https://environ-back.herokuapp.com/pdf/authorization/img/invoicetemplate-white@2x.png" class="white" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="/>
-                    <img alt="Image" anima-src="https://environ-back.herokuapp.com/pdf/authorization/img/invoicetemplate-sign@2x.png" class="sign" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="/>
-                </div>
-                <div class="c302maramunicipalde">
-                    CÂMARA MUNICIPAL<br />DE ESPOSENDE
-                </div>
-            </div>
-        </div>
-        <!-- Scripts -->
-        <script>
-            anima_isHidden = function(e) {
-                if (!(e instanceof HTMLElement)) return !1;
-                if (getComputedStyle(e).display == "none") return !0; else if (e.parentNode && anima_isHidden(e.parentNode)) return !0;
-                return !1;
-            };
-            anima_loadAsyncSrcForTag = function(tag) {
-                var elements = document.getElementsByTagName(tag);
-                var toLoad = [];
-                for (var i = 0; i < elements.length; i++) {
-                    var e = elements[i];
-                    var src = e.getAttribute("src");
-                    var loaded = (src != undefined && src.length > 0 && src != 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==');
-                    if (loaded) continue;
-                    var asyncSrc = e.getAttribute("anima-src");
-                    if (asyncSrc == undefined || asyncSrc.length == 0) continue;
-                    if (anima_isHidden(e)) continue;
-                    toLoad.push(e);
-                }
-                toLoad.sort(function(a, b) {
-                    return anima_getTop(a) - anima_getTop(b);
-                });
-                for (var i = 0; i < toLoad.length; i++) {
-                    var e = toLoad[i];
-                    var asyncSrc = e.getAttribute("anima-src");
-                    e.setAttribute("src", asyncSrc);
-                }
-            };
-            anima_pauseHiddenVideos = function(tag) {
-                var elements = document.getElementsByTagName("video");
-                for (var i = 0; i < elements.length; i++) {
-                    var e = elements[i];
-                    var isPlaying = !!(e.currentTime > 0 && !e.paused && !e.ended && e.readyState > 2);
-                    var isHidden = anima_isHidden(e);
-                    if (!isPlaying && !isHidden && e.getAttribute("autoplay") == "autoplay") {
-                        e.play();
-                    } else if (isPlaying && isHidden) {
-                        e.pause();
-                    }
-                }
-            };
-            anima_loadAsyncSrc = function(tag) {
-                anima_loadAsyncSrcForTag("img");
-                anima_loadAsyncSrcForTag("iframe");
-                anima_loadAsyncSrcForTag("video");
-                anima_pauseHiddenVideos();
-            };
-            var anima_getTop = function(e) {
-                var top = 0;
-                do {
-                    top += e.offsetTop || 0;
-                    e = e.offsetParent;
-                } while (e);
-                return top;
-            };
-            anima_loadAsyncSrc();
-            anima_old_onResize = window.onresize;
-            anima_new_onResize = undefined;
-            anima_updateOnResize = function() {
-                if (anima_new_onResize == undefined || window.onresize != anima_new_onResize) {
-                    anima_new_onResize = function(x) {
-                        if (anima_old_onResize != undefined) anima_old_onResize(x);
-                        anima_loadAsyncSrc();
-                    };
-                    window.onresize = anima_new_onResize;
-                    setTimeout(function() {
-                        anima_updateOnResize();
-                    }, 3000);
-                }
-            };
-            anima_updateOnResize();
-            setTimeout(function() {
-                anima_loadAsyncSrc();
-            }, 200);
-        </script>
-        <!-- End of Scripts -->
-    </body>
-</html>`
-
-var templateDataObject = {
-  data: {
-    name: 'BRAGAGAGGAAGAGA'
-  }
-};
-
-
-var template = {
-    templateStructure: template,
-    templateData: templateDataObject
-  };
-  
-module.exports = template;

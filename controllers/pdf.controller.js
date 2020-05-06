@@ -1,6 +1,6 @@
 const mustache = require("mustache");
 const htmlPdf = require("html-pdf");
-const authDocument = require("../templates/authorization/auth");
+const authDocument = require("../template/auth");
 
 /*const fs = require("fs");
 const path = require("path");
