@@ -486,10 +486,10 @@ exports.colab = function (req, res, err) {
 
                     canvas.toBuffer(function(err, rest){
                         var filename = 'output';
-                        filename = encodeURIComponent(filename) + '.png'
-                        res.setHeader('Content-disposition', 'attachment; filename="' + filename + '"')
-                        res.setHeader('Content-type', 'application/png')
-                        res.write(rest);
+                        filename = encodeURIComponent(filename) + '.png';
+                        res.setHeader('Content-disposition', 'attachment; filename="' + filename + '"');
+                        res.setHeader('Content-type', 'application/png');
+                        res.status(200).send({faces: faces.length});
                         res.end();
                     });
                 }
