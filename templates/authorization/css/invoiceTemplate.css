@@ -2,9 +2,9 @@
 
 .invoicetemplate {
   width               : 100%;
-  min-width           : 595px;
+  min-width           : 793px;
   height              : 100vh;
-  min-height          : 842px;
+  min-height          : 1122px;
   position            : relative;
   overflow            : hidden;
   margin              : 0px;
@@ -30,61 +30,61 @@ div {
 }
 .invoicetemplate .group {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 786px;
-  height              : 38px;
-  width               : 96px;
+  top                 : 1047px;
+  height              : 51px;
+  width               : 128px;
   position            : absolute;
   margin              : 0;
-  left                : 250px;
+  left                : 333px;
   transform           : rotate(0deg);
   opacity             : 1.0;
 }
 .invoicetemplate .group .infinity {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 0px;
-  height              : 37px;
-  width               : 34px;
+  top                 : 1px;
+  height              : 49px;
+  width               : 45px;
   position            : absolute;
   margin              : 0;
-  left                : 1px;
+  left                : 2px;
   transform           : rotate(0deg);
   opacity             : 1.0;
 }
 .invoicetemplate .group .gradient {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 12px;
-  height              : 14px;
-  width               : 54px;
+  top                 : 17px;
+  height              : 19px;
+  width               : 72px;
   position            : absolute;
   margin              : 0;
-  left                : 42px;
+  left                : 56px;
   transform           : rotate(0deg);
   opacity             : 1.0;
 }
 .invoicetemplate .environfrontheroku {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 798px;
+  top                 : 1066px;
   height              : auto;
-  width               : 192px;
+  width               : 255px;
   position            : absolute;
   margin              : 0;
-  left                : 421px;
+  left                : 561px;
   transform           : rotate(0deg);
   opacity             : 1.0;
   font-family         : "-apple-system", Helvetica, Arial, serif;
   font-weight         : 400;
   font-style          : normal;
-  font-size           : 9.0px;
+  font-size           : 12.0px;
   color               : rgba(80, 80, 80, 1.0);
   text-align          : left;
   letter-spacing      : -0.15px;
-  line-height         : 11.0px;
+  line-height         : 14.0px;
 }
 .invoicetemplate .rectangle {
   background-color    : rgba(255,255,255,0.0);
   top                 : 0px;
-  height              : 305px;
-  width               : 597px;
+  height              : 406px;
+  width               : 795px;
   position            : absolute;
   margin              : 0;
   left                : 0px;
@@ -93,9 +93,9 @@ div {
 }
 .invoicetemplate .c342maramunicipalde {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 710px;
+  top                 : 951px;
   height              : auto;
-  width               : 597px;
+  width               : 795px;
   position            : absolute;
   margin              : 0;
   left                : -1px;
@@ -112,31 +112,31 @@ div {
 }
 .invoicetemplate .ac342maramunicipald {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 406px;
+  top                 : 572px;
   height              : auto;
-  width               : 522px;
+  width               : 695px;
   position            : absolute;
   margin              : 0;
-  left                : 37px;
+  left                : 49px;
   transform           : rotate(0deg);
   opacity             : 1.0;
   font-family         : "-apple-system", Helvetica, Arial, serif;
   font-weight         : 400;
   font-style          : normal;
-  font-size           : 18.0px;
+  font-size           : 21.0px;
   color               : rgba(47, 47, 47, 1.0);
   text-align          : center;
   letter-spacing      : -0.15px;
-  line-height         : 21.0px;
+  line-height         : 25.0px;
 }
 .invoicetemplate .autoriza307303o {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 335px;
+  top                 : 462px;
   height              : auto;
-  width               : 335px;
+  width               : 446px;
   position            : absolute;
   margin              : 0;
-  left                : 180px;
+  left                : 282px;
   transform           : rotate(0deg);
   opacity             : 1.0;
   font-family         : "-apple-system", Helvetica, Arial, serif;
@@ -150,31 +150,31 @@ div {
 }
 .invoicetemplate .groupcopy {
   background-color    : rgba(255,255,255,0.0);
-  top                 : -84px;
-  height              : 190px;
-  width               : 159px;
+  top                 : -112px;
+  height              : 253px;
+  width               : 212px;
   position            : absolute;
   margin              : 0;
-  left                : 516px;
+  left                : 688px;
   transform           : rotate(0deg);
   opacity             : 0.2;
 }
 .invoicetemplate .groupcopy .combinedshape {
   background-color    : rgba(255,255,255,0.0);
   top                 : 0px;
-  height              : 179px;
-  width               : 138px;
+  height              : 239px;
+  width               : 184px;
   position            : absolute;
   margin              : 0;
-  left                : 20px;
+  left                : 27px;
   transform           : rotate(0deg);
   opacity             : 1.0;
 }
 .invoicetemplate .groupcopy .shape {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 14px;
-  height              : 176px;
-  width               : 146px;
+  top                 : 19px;
+  height              : 234px;
+  width               : 194px;
   position            : absolute;
   margin              : 0;
   left                : 0px;
@@ -183,31 +183,31 @@ div {
 }
 .invoicetemplate .groupcopy2 {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 157px;
-  height              : 190px;
-  width               : 174px;
+  top                 : 209px;
+  height              : 253px;
+  width               : 232px;
   position            : absolute;
   margin              : 0;
-  left                : -70px;
+  left                : -93px;
   transform           : rotate(0deg);
   opacity             : 0.2;
 }
 .invoicetemplate .groupcopy2 .combinedshape {
   background-color    : rgba(255,255,255,0.0);
   top                 : 0px;
-  height              : 178px;
-  width               : 70px;
+  height              : 238px;
+  width               : 93px;
   position            : absolute;
   margin              : 0;
-  left                : 103px;
+  left                : 138px;
   transform           : rotate(0deg);
   opacity             : 1.0;
 }
 .invoicetemplate .groupcopy2 .shape {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 15px;
-  height              : 175px;
-  width               : 159px;
+  top                 : 20px;
+  height              : 233px;
+  width               : 212px;
   position            : absolute;
   margin              : 0;
   left                : 0px;
@@ -216,20 +216,20 @@ div {
 }
 .invoicetemplate .group3 {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 224px;
-  height              : 44px;
-  width               : 157px;
+  top                 : 277px;
+  height              : 59px;
+  width               : 209px;
   position            : absolute;
   margin              : 0;
-  left                : 238px;
+  left                : 306px;
   transform           : rotate(0deg);
   opacity             : 1.0;
 }
 .invoicetemplate .group3 .a4thmay2017 {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 26px;
+  top                 : 37px;
   height              : auto;
-  width               : 158px;
+  width               : 210px;
   position            : absolute;
   margin              : 0;
   left                : 0px;
@@ -246,9 +246,9 @@ div {
 }
 .invoicetemplate .group3 .data {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 0px;
+  top                 : 4px;
   height              : auto;
-  width               : 62px;
+  width               : 82px;
   position            : absolute;
   margin              : 0;
   left                : 0px;
@@ -265,20 +265,20 @@ div {
 }
 .invoicetemplate .group4copy {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 123px;
-  height              : 71px;
-  width               : 328px;
+  top                 : 162px;
+  height              : 95px;
+  width               : 437px;
   position            : absolute;
   margin              : 0;
-  left                : 238px;
+  left                : 306px;
   transform           : rotate(0deg);
   opacity             : 1.0;
 }
 .invoicetemplate .group4copy .centraltechnologies {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 23px;
+  top                 : 38px;
   height              : auto;
-  width               : 327px;
+  width               : 436px;
   position            : absolute;
   margin              : 0;
   left                : 0px;
@@ -295,9 +295,9 @@ div {
 }
 .invoicetemplate .group4copy .para {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 1px;
+  top                 : 4px;
   height              : auto;
-  width               : 129px;
+  width               : 172px;
   position            : absolute;
   margin              : 0;
   left                : 0px;
@@ -314,20 +314,20 @@ div {
 }
 .invoicetemplate .group3copy {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 123px;
-  height              : 38px;
-  width               : 282px;
+  top                 : 164px;
+  height              : 51px;
+  width               : 376px;
   position            : absolute;
   margin              : 0;
-  left                : 126px;
+  left                : 168px;
   transform           : rotate(0deg);
   opacity             : 1.0;
 }
 .invoicetemplate .group3copy .clod0001 {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 22px;
+  top                 : 32px;
   height              : auto;
-  width               : 108px;
+  width               : 144px;
   position            : absolute;
   margin              : 0;
   left                : 0px;
@@ -344,9 +344,9 @@ div {
 }
 .invoicetemplate .group3copy .eventono {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 0px;
+  top                 : 3px;
   height              : auto;
-  width               : 282px;
+  width               : 376px;
   position            : absolute;
   margin              : 0;
   left                : 0px;
@@ -363,31 +363,31 @@ div {
 }
 .invoicetemplate .logo {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 36px;
-  height              : 53px;
-  width               : 168px;
+  top                 : 48px;
+  height              : 71px;
+  width               : 224px;
   position            : absolute;
   margin              : 0;
-  left                : 326px;
+  left                : 434px;
   transform           : rotate(0deg);
   opacity             : 1.0;
 }
 .invoicetemplate .logo .white {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 13px;
-  height              : 24px;
-  width               : 112px;
+  top                 : 17px;
+  height              : 32px;
+  width               : 149px;
   position            : absolute;
   margin              : 0;
-  left                : 56px;
+  left                : 75px;
   transform           : rotate(0deg);
   opacity             : 1.0;
 }
 .invoicetemplate .logo .sign {
   background-color    : rgba(255,255,255,0.0);
   top                 : 0px;
-  height              : 53px;
-  width               : 48px;
+  height              : 71px;
+  width               : 64px;
   position            : absolute;
   margin              : 0;
   left                : 0px;
@@ -396,12 +396,12 @@ div {
 }
 .invoicetemplate .c302maramunicipalde {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 36px;
+  top                 : 57px;
   height              : auto;
-  width               : 256px;
+  width               : 341px;
   position            : absolute;
   margin              : 0;
-  left                : 26px;
+  left                : 35px;
   transform           : rotate(0deg);
   opacity             : 1.0;
   font-family         : "-apple-system", Helvetica, Arial, serif;

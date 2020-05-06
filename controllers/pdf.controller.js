@@ -8,7 +8,6 @@ var exports = module.exports = {};
 exports.handlePdf = function (req, res, err) {
     //const content = mustache.render(authDocument.templateStructure, authDocument.templateData);
     const content = fs.readFileSync(require.resolve('../templates/authorization/auth.html'), 'utf8')
-
     var options = { format: 'Letter' };
     htmlPdf.create(content, options).toBuffer(function(err, rest) {
         var filename = 'testfile-test';
