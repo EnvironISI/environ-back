@@ -12,4 +12,5 @@ event.get('/camara', eventsController.camaraEvents);
 event.get('/user', eventsController.userEvents);
 event.get('/accepted', eventsController.acceptedEvents);
 event.post('/colaboradores', eventsController.colab)
+event.get('/nrcolaboradores', eventsController.nrcolab);
 module.exports = event;

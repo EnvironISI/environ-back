@@ -414,11 +414,12 @@ exports.acceptedEvents = function (req, res, err) {
     })
 }
 exports.colab = function (req, res, err) {
-
     var sessionCookie = req.cookies.session || '';
     var url_faces = req.body.url_faces;
+
     adminFb.auth().verifySessionCookie(sessionCookie, true).then(async decodedClaims => {
         if (decodedClaims.camara) {
+            
             var options = {
                 url: url_faces,
                 method: "get",
