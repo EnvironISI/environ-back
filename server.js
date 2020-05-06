@@ -13,6 +13,7 @@ app.use(cors({
 app.use(logger('dev'));
 app.use('/assets', express.static('assets'));
 app.use('/views', express.static('views'));
+app.use('/pdf', express.static('templates'))
 app.listen(port, function(err) {
   if (!err) {
     console.log('Your app is listening on ' + host + ' and port ' + port);
