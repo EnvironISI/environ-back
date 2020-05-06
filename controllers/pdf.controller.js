@@ -1,11 +1,11 @@
 const mustache = require("mustache");
 const htmlPdf = require("html-pdf");
-const commercialInvoices = require("../templates/commercialInvoice");
+const authDocument = require("../templates/authorization/auth_document");
 
 var exports = module.exports = {};
 
 exports.handlePdf = function (req, res, err) {
-    const content = mustache.render(commercialInvoices.templateStructure, commercialInvoices.templateData);
+    const content = mustache.render(authDocument.templateStructure, authDocument.templateData);
     var options = { format: 'Letter' };
     htmlPdf.create(content, options).toBuffer(function(err, rest) {
         var filename = 'testfile-test';
