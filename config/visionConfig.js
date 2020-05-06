@@ -1,8 +1,8 @@
 var vision = require("@google-cloud/vision");
 const client = new vision.ImageAnnotatorClient({
-    keyFilename: './auth/keys.json'
+    keyFilename: './config/keys.json'
 });
 
 module.exports = {
-    visionClient: client
+    client: client
 }

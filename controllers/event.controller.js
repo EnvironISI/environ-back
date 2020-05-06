@@ -1,9 +1,11 @@
 const jsonMessagesPath = __dirname + "/../assets/jsonMessages/";
 const jsonMessages = require(jsonMessagesPath + "events");
+const fs = require('fs');
+const request = require('request');
 
 var { adminFb } = require('../config/firebaseConfig.js');
 var { moloni } = require('../config/moloniConfig.js');
-var { visionClient } = require('../config/visionConfig.js');
+var { client } = require('../config/visionConfig.js');
 
 var exports = module.exports = {};
 var company_id = 126979;
@@ -412,18 +414,92 @@ exports.acceptedEvents = function (req, res, err) {
     })
 }
 exports.colab = function (req, res, err) {
+
     var sessionCookie = req.cookies.session || '';
-    var url = req.sanitize('url').escape();
-    adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
-        if (decodedClaims.empresa) {
-            const [result] = await visionClient.faceDetection(url);
+    var url_faces = req.body.url_faces;
+    adminFb.auth().verifySessionCookie(sessionCookie, true).then(async decodedClaims => {
+        if (decodedClaims.camara) {
+
+            const [result] = await client.faceDetection(url_faces);
             const faces = result.faceAnnotations;
-            console.log('Faces:');
-            res.status(200).send(faces.length);
+            const length = faces.length;
+
+            var options = {
+                url: url_faces,
+                method: "get",
+                encoding: null
+            };
+
+            request(options, async function (error, response, body) {
+                if (error) {
+                    console.error('error:', error);
+                } else {
+                    console.log('Response: StatusCode:', response && response.statusCode);
+                    console.log('Response: Body: Length: %d. Is buffer: %s', body.length, (body instanceof Buffer));
+                    fs.writeFileSync('test.jpg', body);
+
+                    const outputFile = 'output.png';
+                    const { promisify } = require('util');
+                    const Canvas = require('canvas');
+                    const readFile = promisify(fs.readFile);
+                    const image = await readFile('test.jpg');
+                    const Image = Canvas.Image;
+
+                    // Open the original image into a canvas
+                    const img = new Image();
+                    img.src = image;
+                    const canvas = new Canvas.Canvas(img.width, img.height);
+                    const context = canvas.getContext('2d');
+                    context.drawImage(img, 0, 0, img.width, img.height);
+
+                    // Now draw boxes around all the faces
+                    context.strokeStyle = 'rgba(0,255,0,0.8)';
+                    context.lineWidth = '5';
+
+                    faces.forEach(face => {
+                        context.beginPath();
+                        let origX = 0;
+                        let origY = 0;
+                        face.boundingPoly.vertices.forEach((bounds, i) => {
+                            if (i === 0) {
+                                origX = bounds.x;
+                                origY = bounds.y;
+                            }
+                            context.lineTo(bounds.x, bounds.y);
+                        });
+                        context.lineTo(origX, origY);
+                        context.stroke();
+                        context
+                    });
+
+                    // Write the result to a file
+                    console.log(`Processando resultado para ${outputFile}`);
+                    const writeStream = fs.createWriteStream(outputFile);
+                    const pngStream = canvas.pngStream();
+
+                    await new Promise((resolve, reject) => {
+                        pngStream
+                            .on('data', chunk => writeStream.write(chunk))
+                            .on('error', reject)
+                            .on('end', resolve);
+                    });
+
+                    canvas.toBuffer(function(err, rest){
+                        var filename = 'output';
+                        filename = encodeURIComponent(filename) + '.png'
+                        res.setHeader('Content-disposition', 'attachment; filename="' + filename + '"')
+                        res.setHeader('Content-type', 'application/png')
+                        res.write(rest);
+                        res.end();
+                    });
+                }
+            });
         } else {
-
+            console.log(error)
+            res.send(error);
         }
-    }).catch(() => {
-
+    }).catch((error) => {
+        console.log(error)
+        res.send(error);
     })
 }
