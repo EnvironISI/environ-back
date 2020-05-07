@@ -71,7 +71,8 @@ div {
   left                : 432px;
   transform           : rotate(0deg);
   opacity             : 1.0;
-  font-family         : "-apple-system", Helvetica, Arial, serif;
+  font-family         : SF UI Display;
+  src                 : url("./SF-UI-Display-Regular.otf") format("opentype");
   font-weight         : 400;
   font-style          : normal;
   font-size           : 12.0px;
@@ -90,7 +91,8 @@ div {
   left                : -1px;
   transform           : rotate(0deg);
   opacity             : 1.0;
-  font-family         : "-apple-system", Helvetica, Arial, serif;
+  font-family         : SF UI Display;
+  src                 : url("./SF-UI-Display-Regular.otf") format("opentype");
   font-weight         : 400;
   font-style          : normal;
   font-size           : 16.0px;
@@ -109,7 +111,8 @@ div {
   left                : 31px;
   transform           : rotate(0deg);
   opacity             : 1.0;
-  font-family         : "-apple-system", Helvetica, Arial, serif;
+  font-family         : SF UI Display;
+  src                 : url("./SF-UI-Display-Regular.otf") format("opentype");
   font-weight         : 400;
   font-style          : normal;
   font-size           : 16.0px;
@@ -128,7 +131,9 @@ div {
   left                : 191px;
   transform           : rotate(0deg);
   opacity             : 1.0;
-  font-family         : "-apple-system", Helvetica, Arial, serif;
+  font-family         : SF UI Display;
+  font-weight         : bold;
+  src                 : url("./SF-UI-Display-Bold.otf") format("opentype");
   font-weight         : 700;
   font-style          : normal;
   font-size           : 31.0px;
@@ -235,7 +240,8 @@ div {
   left                : 0px;
   transform           : rotate(0deg);
   opacity             : 1.0;
-  font-family         : "-apple-system", Helvetica, Arial, serif;
+  font-family         : SF UI Display;
+  src                 : url("./SF-UI-Display-Regular.otf") format("opentype");
   font-weight         : 400;
   font-style          : normal;
   font-size           : 14.0px;
@@ -254,7 +260,8 @@ div {
   left                : 0px;
   transform           : rotate(0deg);
   opacity             : 0.8;
-  font-family         : "-apple-system", Helvetica, Arial, serif;
+  font-family         : SF UI Display;
+  src                 : url("./SF-UI-Display-Regular.otf") format("opentype");
   font-weight         : 400;
   font-style          : normal;
   font-size           : 14.0px;
@@ -284,7 +291,8 @@ div {
   left                : 0px;
   transform           : rotate(0deg);
   opacity             : 1.0;
-  font-family         : "-apple-system", Helvetica, Arial, serif;
+  font-family         : SF UI Display;
+  src                 : url("./SF-UI-Display-Regular.otf") format("opentype");
   font-weight         : 400;
   font-style          : normal;
   font-size           : 14.0px;
@@ -303,7 +311,8 @@ div {
   left                : 0px;
   transform           : rotate(0deg);
   opacity             : 0.8;
-  font-family         : "-apple-system", Helvetica, Arial, serif;
+  font-family         : SF UI Display;
+  src                 : url("./SF-UI-Display-Regular.otf") format("opentype");
   font-weight         : 400;
   font-style          : normal;
   font-size           : 14.0px;
@@ -333,7 +342,8 @@ div {
   left                : 0px;
   transform           : rotate(0deg);
   opacity             : 1.0;
-  font-family         : "-apple-system", Helvetica, Arial, serif;
+  font-family         : SF UI Display;
+  src                 : url("./SF-UI-Display-Regular.otf") format("opentype");
   font-weight         : 400;
   font-style          : normal;
   font-size           : 14.0px;
@@ -352,7 +362,8 @@ div {
   left                : 0px;
   transform           : rotate(0deg);
   opacity             : 0.8;
-  font-family         : "-apple-system", Helvetica, Arial, serif;
+  font-family         : SF UI Display;
+  src                 : url("./SF-UI-Display-Regular.otf") format("opentype");
   font-weight         : 400;
   font-style          : normal;
   font-size           : 14.0px;
@@ -404,7 +415,8 @@ div {
   left                : 38px;
   transform           : rotate(0deg);
   opacity             : 1.0;
-  font-family         : "-apple-system", Helvetica, Arial, serif;
+  font-family         : SF UI Display;
+  src                 : url("./SF-UI-Display-Regular.otf") format("opentype");
   font-weight         : 400;
   font-style          : normal;
   font-size           : 21.0px;

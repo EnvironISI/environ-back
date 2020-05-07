@@ -6,6 +6,7 @@ var template = `
         <link href="https://environ-back.herokuapp.com/pdf/img/favicon.png" rel="shortcut icon"/>
         <meta charset="utf-8"/>
         <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0" name="viewport"/>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
         <link href="https://environ-back.herokuapp.com/pdf/css/auth.css" rel="stylesheet" type="text/css"/>
         <meta content="AnimaApp.com - Design to code, Automated." name="author"/>
     </head>
