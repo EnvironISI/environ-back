@@ -631,12 +631,14 @@ exports.handlePdf = function (req, res, err) {
                                 }
                             });
 
+                            var municipio = eventResult.properties[8].value;
+
                             var templateData = {
                                 data: {
                                     nrEvent: eventId,
                                     empresa: eventResult.properties[1].value,
                                     dataNow: diaNow + "/" + mesNow + "/" + anoNow,
-                                    municipio: eventResult.properties[8].value,
+                                    municipio: municipio,
                                     tipoEvento: tipoEvento,
                                     diai: diai,
                                     mesi: mesi,
