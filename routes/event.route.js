@@ -13,6 +13,6 @@ event.get('/user', eventsController.userEvents);
 event.get('/accepted', eventsController.acceptedEvents);
 event.post('/colaboradores', eventsController.colab)
 event.post('/nrcolaboradores', eventsController.nrcolab);
-event.get('/download', eventsController.handlePdf);
+event.post('/download', eventsController.handlePdf);
 
 module.exports = event;

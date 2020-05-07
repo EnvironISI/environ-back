@@ -485,7 +485,7 @@ exports.colab = function (req, res, err) {
                             .on('end', resolve);
                     });
 
-                    canvas.toBuffer(function(err, rest){
+                    canvas.toBuffer(function (err, rest) {
                         var filename = 'output';
                         filename = encodeURIComponent(filename) + '.png';
                         res.setHeader('Content-disposition', 'attachment; filename="' + filename + '"');
@@ -504,7 +504,7 @@ exports.colab = function (req, res, err) {
         res.send(error);
     })
 }
-exports.nrcolab = function(req, res, err){
+exports.nrcolab = function (req, res, err) {
     var sessionCookie = req.cookies.session || '';
     var url_faces = req.body.url_faces;
     adminFb.auth().verifySessionCookie(sessionCookie, true).then(async decodedClaims => {
@@ -512,7 +512,7 @@ exports.nrcolab = function(req, res, err){
             const [result] = await client.faceDetection(url_faces);
             const faces = result.faceAnnotations;
             const length = faces.length;
-            res.status(200).send({faces: length});
+            res.status(200).send({ faces: length });
             res.end();
         } else {
             console.log(error);
@@ -523,25 +523,69 @@ exports.nrcolab = function(req, res, err){
         res.send(error);
     })
 }
-
 exports.handlePdf = function (req, res, err) {
 
-    //const nrEvent = req.sanitize('nrEvent').escape();
+    const eventId = req.sanitize('eventId').escape();
 
-    var templateData = {
-        data: {
-            nrEvent: '69696969'
+    var data = new Date(),
+        dia  = data.getDate().toString(),
+        diaF = (dia.length == 1) ? '0'+dia : dia,
+        mes  = (data.getMonth()+1).toString(), //+1 pois no getMonth Janeiro começa com zero.
+        mesF = (mes.length == 1) ? '0'+mes : mes,
+        anoF = data.getFullYear();
+
+    adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
+        if (decodedClaims.empresa || decodedClaims.camara) {
+
+            moloni.products('getOne', { company_id: company_id, product_id: eventId }, function (error, result) {
+
+                var datainicial = result.properties[5].value.replace("&#x2F;", "/")
+                var res = datainicial.split("/");
+                var diai = res[0],
+                    mesi = res[1],
+                    anoi = res[2];
+
+                var templateData = {
+                    data: {
+                        nrEvent: eventId,
+                        empresa: result.properties[1].value,
+                        data: diaF+"/"+mesF+"/"+anoF,
+                        municipio: result.properties[8].value,
+                        tipoEvento: result.name,
+                        diai: diai,
+                        mesi: mesi,
+                        anoi: anoi,
+                        local: result.properties[7].value,
+                        pack: 'PSP, OLA, NICE',
+                        dia: diaF,
+                        mes: mesF,
+                        ano: anoF
+                    }
+                };
+
+                const content = mustache.render(authDocument.templateStructure, templateData);
+                var options = { format: 'Letter' };
+                htmlPdf.create(content, options).toBuffer(function (err, rest) {
+                    var filename = 'testfile-test';
+                    filename = encodeURIComponent(filename) + '.pdf'
+                    res.setHeader('Content-disposition', 'attachment; filename="' + filename + '"')
+                    res.setHeader('Content-type', 'application/pdf')
+                    res.write(rest);
+                    res.end();
+                });
+
+                if (error) res.status(400).send({ error: error });
+            })
+
+
+            
+        } else {
+            res.redirect('/denied');
+            res.end();
         }
-    };
-
-    const content = mustache.render(authDocument.templateStructure, templateData);
-    var options = { format: 'Letter' };
-    htmlPdf.create(content, options).toBuffer(function(err, rest) {
-        var filename = 'testfile-test';
-        filename = encodeURIComponent(filename) + '.pdf'
-        res.setHeader('Content-disposition', 'attachment; filename="' + filename + '"')
-        res.setHeader('Content-type', 'application/pdf')
-        res.write(rest);
+    }).catch(error => {
+        console.log(error);
+        res.redirect('/denied');
         res.end();
-    });
+    })
 }

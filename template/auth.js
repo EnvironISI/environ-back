@@ -22,10 +22,10 @@ var template = `
                     environ-front.herokuapp.com
                 </div>
                 <div class="c342maramunicipalde">
-                    Câmara Municipal de {{data.name}} (local), ____ de _____ de_____
+                    Câmara Municipal de {{data.municipio}} (local), {{data.dia}} de {{data.mes}} de {{data.ano}}
                 </div>
                 <div class="ac342maramunicipald">
-                    A Câmara Municipal de _______ vem por este meio emitir uma declaração que valida na realização de uma ________ (tipo de evento, exemplo reflorestação) a realizar-se no dia __ de ____ de ____, na_____________ (exemplo praia de Ofir). Mais acrescentamos que este evento cumpre com todos os requisitos legais para que ocorra conforme o espectável, deste modo, as seguintes entidades competentes estarão requisitadas para o efeito: _________ (pack de entidades escolhido), é ainda de referir que a organização deste evento contou com a participação da empresa “environ.”, que se fará representar no evento ao cargo da pessoa, Francisco Barros da Cunha.<br /><br />Sem mais acrescentar, votos de muito sucesso,
+                    A Câmara Municipal de {{data.municipio}} vem por este meio emitir uma declaração que valida na realização de uma {{data.tipoEvento}} (tipo de evento, exemplo reflorestação) a realizar-se no dia {{data.diai}} de {{data.mesi}} de {{data.anoi}}, na {{data.local}} (exemplo praia de Ofir). Mais acrescentamos que este evento cumpre com todos os requisitos legais para que ocorra conforme o espectável, deste modo, as seguintes entidades competentes estarão requisitadas para o efeito: {{data.pack}} (pack de entidades escolhido), é ainda de referir que a organização deste evento contou com a participação da empresa “environ.”, que se fará representar no evento ao cargo da pessoa, Francisco Barros da Cunha.<br /><br />Sem mais acrescentar, votos de muito sucesso,
                 </div>
                 <div class="autoriza307303o">
                     AUTORIZAÇÃO
@@ -40,19 +40,19 @@ var template = `
                     <img alt="Image" anima-src="https://environ-back.herokuapp.com/pdf/img/invoicetemplate-shape-1@2x.png" class="shape" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="/>
                 </div>
                 <div class="group3">
-                    <div class="a4thmay2017">
-                        4th May 2017
-                    </div>
                     <div class="data">
                         DATA
                     </div>
+                    <div class="a4thmay2017">
+                        {{data.data}}
+                    </div>
                 </div>
                 <div class="group4copy">
-                    <div class="centraltechnologies">
-                        Central Technologies,<br />7155 Lindsey Roads, 38 Hoeger Freeway,<br />Treutel Plains, New York
-                    </div>
                     <div class="para">
                         PARA
+                    </div>
+                    <div class="centraltechnologies">
+                        {{data.empresa}}
                     </div>
                 </div>
                 <div class="group3copy">
