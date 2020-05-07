@@ -524,7 +524,7 @@ exports.nrcolab = function (req, res, err) {
     })
 }
 exports.handlePdf = function (req, res, err) {
-
+    var sessionCookie = req.cookies.session || '';
     const eventId = req.sanitize('eventId').escape();
 
     var data = new Date(),
@@ -576,9 +576,6 @@ exports.handlePdf = function (req, res, err) {
 
                 if (error) res.status(400).send({ error: error });
             })
-
-
-            
         } else {
             res.redirect('/denied');
             res.end();
