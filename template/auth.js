@@ -68,7 +68,7 @@ var template = `
                     <img alt="Image" anima-src="https://environ-back.herokuapp.com/pdf/img/invoicetemplate-sign@2x.png" class="sign" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="/>
                 </div>
                 <div class="c302maramunicipalde">
-                    CÂMARA MUNICIPAL<br />DE ESPOSENDE
+                    CÂMARA MUNICIPAL<br />DE {{data.municipioUpperLetter}}
                 </div>
             </div>
         </div>

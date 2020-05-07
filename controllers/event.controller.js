@@ -649,7 +649,8 @@ exports.handlePdf = function (req, res, err) {
                                     diaNow: diaNow,
                                     mesNow: mesNow,
                                     anoNow: anoNow,
-                                    mesExtenso: mesExtenso
+                                    mesExtenso: mesExtenso,
+                                    municipioUpperLetter: municipio.toUpperCase()
                                 }
                             };
 
