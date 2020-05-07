@@ -540,10 +540,10 @@ exports.handlePdf = function (req, res, err) {
             moloni.products('getOne', { company_id: company_id, product_id: eventId }, function (error, result) {
 
                 var datainicial = result.properties[5].value.replace("&#x2F;", "/")
-                var res = datainicial.split("/");
-                var diai = res[0],
-                    mesi = res[1],
-                    anoi = res[2];
+                var part = datainicial.split("/");
+                var diai = part[0],
+                    mesi = part[1],
+                    anoi = part[2];
 
                 var templateData = {
                     data: {
