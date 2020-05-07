@@ -44,7 +44,7 @@ var template = `
                         DATA
                     </div>
                     <div class="a4thmay2017">
-                        {{data.data}}
+                        {{data.dataNow}}
                     </div>
                 </div>
                 <div class="group4copy">

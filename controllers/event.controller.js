@@ -572,11 +572,13 @@ exports.handlePdf = function (req, res, err) {
                 }
 
                 var datainicial = eventResult.properties[5].value.replace("&#x2F;", "/");
+                datainicial = datainicial.replace("&#x2F;", "/");
                 var parti = datainicial.split("/");
                 var diai = parti[0],
                     mesi = parti[1],
                     anoi = parti[2];
                 var datafinal = eventResult.properties[6].value.replace("&#x2F;", "/");
+                datafinal = datafinal.replace("&#x2F;", "/");
                 var partf = datafinal.split("/");
                 var diaf = partf[0],
                     mesf = partf[1],
@@ -636,7 +638,7 @@ exports.handlePdf = function (req, res, err) {
                                     dataNow: diaNow + "/" + mesNow + "/" + anoNow,
                                     municipio: eventResult.properties[8].value,
                                     tipoEvento: tipoEvento,
-                                    diai: diai,
+                                    diai: diai.replace,
                                     mesi: mesi,
                                     anoi: anoi,
                                     diaf: diaf,
