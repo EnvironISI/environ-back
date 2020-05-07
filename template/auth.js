@@ -22,10 +22,10 @@ var template = `
                     environ-front.herokuapp.com
                 </div>
                 <div class="c342maramunicipalde">
-                    Câmara Municipal de {{data.municipio}} (local), {{data.dia}} de {{data.mes}} de {{data.ano}}
+                    Câmara Municipal de {{data.municipio}}, {{data.diaNow}} de {{data.mesExtenso}} de {{data.anoNow}}
                 </div>
                 <div class="ac342maramunicipald">
-                    A Câmara Municipal de {{data.municipio}} vem por este meio emitir uma declaração que valida na realização de uma {{data.tipoEvento}} (tipo de evento, exemplo reflorestação) a realizar-se no dia {{data.diai}} de {{data.mesi}} de {{data.anoi}}, na {{data.local}} (exemplo praia de Ofir). Mais acrescentamos que este evento cumpre com todos os requisitos legais para que ocorra conforme o espectável, deste modo, as seguintes entidades competentes estarão requisitadas para o efeito: {{data.pack}} (pack de entidades escolhido), é ainda de referir que a organização deste evento contou com a participação da empresa “environ.”, que se fará representar no evento ao cargo da pessoa, Francisco Barros da Cunha.<br /><br />Sem mais acrescentar, votos de muito sucesso,
+                    A Câmara Municipal de {{data.municipio}} vem por este meio emitir uma declaração que valida na realização de uma {{data.tipoEvento}} a realizar-se no dia {{data.diai}}/{{data.mesi}}/{{data.anoi}} até {{data.diaf}}/{{data.mesf}}/{{data.anof}}, na {{data.local}}. Mais acrescentamos que este evento cumpre com todos os requisitos legais para que ocorra conforme o espectável, deste modo, as seguintes entidades competentes estarão requisitadas para o efeito: {{data.pack}}, é ainda de referir que a organização deste evento contou com a participação da empresa “environ.”, que se fará representar no evento ao cargo da pessoa, Francisco Barros da Cunha.<br /><br />Sem mais acrescentar, votos de muito sucesso,
                 </div>
                 <div class="autoriza307303o">
                     AUTORIZAÇÃO

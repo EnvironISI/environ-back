@@ -68,6 +68,7 @@ exports.all = function (req, res, err) {
                     if (body) {
                         let resp = [];
                         body.forEach(item => {
+                            console.log(item)
                             if (item.itemKey !== 'PORTES') {
                                 let obj = {
                                     id: item.id,
@@ -94,7 +95,7 @@ exports.all = function (req, res, err) {
                 res.end();
             }
         });
-    }).catch(() => {
+    }).catch((error) => {
         res.redirect('/denied');
         res.end();
     })
@@ -153,52 +154,6 @@ exports.getByID = function (req, res, err) {
         res.end();
     })
 }
-/*exports.getByCamara = function (req, res, err) {
-    var sessionCookie = req.cookies.session || '';
-    adminFb.auth().verifySessionCookie(sessionCookie, true).then((decodedClaims) => {
-        if (decodedClaims.camara) {
-            adminFb.auth().getUser(decodedClaims.uid).then(user => {
-                request({
-                    url: 'https://identity.primaverabss.com/core/connect/token',
-                    method: 'POST',
-                    auth: {
-                        user: 'ENVIRONISI', // TODO : put your application client id here
-                        pass: 'c2d7e4bf-3d30-43fb-82d8-2f0e08f474dd' // TODO : put your application client secret here
-                    },
-                    form: {
-                        'grant_type': 'client_credentials',
-                        'scope': 'application',
-                    }
-                }, function (err, result) {
-                    if (result) {
-                        var json = JSON.parse(result.body);
-                        request({
-                            url: 'https://my.jasminsoftware.com/api/235151/235151-0001/businesscore/items/',
-                            method: 'GET',
-                            headers: {
-                                Authorization: 'Bearer ' + json.access_token
-                            },
-                            json: true
-                        }, function (err, result, body) {
-                            
-                        })
-                    }
-                })
-            }).catch(err => {
-                console.log(err);
-                res.status(500).send(err);
-                res.end();
-            })
-        }
-        else {
-            res.redirect('denied');
-            res.end();
-        }
-    }).catch(() => {
-        res.redirect('denied');
-        res.end();
-    })
-}*/
 exports.create = function (req, res, err) {
     var sessionCookie = req.cookies.session || '';
 

@@ -307,9 +307,8 @@ exports.camaraAccept = function (req, res, err) {
                         res.status(400).send({ error: error });
                     } else {
                         if (status == 'Aceite') {
-                            res.redirect('/package/verify');
+                            res.status(200).send(result2);
                         }
-                        //res.status(200).send(result2);
                     }
                 })
                 if (error) res.status(400).send({ error: error });
@@ -552,52 +551,119 @@ exports.handlePdf = function (req, res, err) {
     var sessionCookie = req.cookies.session || '';
     const eventId = req.sanitize('eventId').escape();
 
-    var data = new Date(),
-        dia  = data.getDate().toString(),
-        diaF = (dia.length == 1) ? '0'+dia : dia,
-        mes  = (data.getMonth()+1).toString(), //+1 pois no getMonth Janeiro começa com zero.
-        mesF = (mes.length == 1) ? '0'+mes : mes,
-        anoF = data.getFullYear();
-
     adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
         if (decodedClaims.empresa || decodedClaims.camara) {
 
-            moloni.products('getOne', { company_id: company_id, product_id: eventId }, function (error, result) {
+            moloni.products('getOne', { company_id: company_id, product_id: eventId }, function (error, eventResult) {
 
-                var datainicial = result.properties[5].value.replace("&#x2F;", "/")
-                var part = datainicial.split("/");
-                var diai = part[0],
-                    mesi = part[1],
-                    anoi = part[2];
+                var data = new Date(),
+                    dia = data.getDate().toString(),
+                    diaNow = (dia.length == 1) ? '0' + dia : dia,
+                    mes = (data.getMonth() + 1).toString(), //+1 pois no getMonth Janeiro começa com zero.
+                    mesNow = (mes.length == 1) ? '0' + mes : mes,
+                    anoNow = data.getFullYear(),
+                    mesExtenso = mesNow;
 
-                var templateData = {
-                    data: {
-                        nrEvent: eventId,
-                        empresa: result.properties[1].value,
-                        data: diaF+"/"+mesF+"/"+anoF,
-                        municipio: result.properties[8].value,
-                        tipoEvento: result.name,
-                        diai: diai,
-                        mesi: mesi,
-                        anoi: anoi,
-                        local: result.properties[7].value,
-                        pack: 'PSP, OLA, NICE',
-                        dia: diaF,
-                        mes: mesF,
-                        ano: anoF
+                for (var i = 1; i < 13; i++) {
+                    var nome = ['Janeiro', 'Feveiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+                    if (mesExtenso.includes(i.toString())) {
+                        mesExtenso = nome[i - 1];
                     }
-                };
+                }
 
-                const content = mustache.render(authDocument.templateStructure, templateData);
-                var options = { format: 'Letter' };
-                htmlPdf.create(content, options).toBuffer(function (err, rest) {
-                    var filename = 'testfile-test';
-                    filename = encodeURIComponent(filename) + '.pdf'
-                    res.setHeader('Content-disposition', 'attachment; filename="' + filename + '"')
-                    res.setHeader('Content-type', 'application/pdf')
-                    res.write(rest);
-                    res.end();
-                });
+                var datainicial = eventResult.properties[5].value.replace("&#x2F;", "/");
+                var parti = datainicial.split("/");
+                var diai = parti[0],
+                    mesi = parti[1],
+                    anoi = parti[2];
+                var datafinal = eventResult.properties[6].value.replace("&#x2F;", "/");
+                var partf = datafinal.split("/");
+                var diaf = partf[0],
+                    mesf = partf[1],
+                    anof = partf[2];
+
+                request({
+                    url: 'https://identity.primaverabss.com/core/connect/token',
+                    method: 'POST',
+                    auth: {
+                        user: 'ENVIRONISI', // TODO : put your application client id here
+                        pass: 'c2d7e4bf-3d30-43fb-82d8-2f0e08f474dd' // TODO : put your application client secret here
+                    },
+                    form: {
+                        'grant_type': 'client_credentials',
+                        'scope': 'application',
+                    }
+                }, function (err, jsonKey) {
+                    if (jsonKey) {
+
+                        var json = JSON.parse(jsonKey.body);
+
+                        request({
+                            url: 'https://my.jasminsoftware.com/api/235151/235151-0001/businesscore/items/' + eventResult.properties[9].value,
+                            method: 'GET',
+                            headers: {
+                                Authorization: 'Bearer ' + json.access_token
+                            },
+                            json: true
+                        }, function (err, packageResult, body) {
+
+                            var packsAut = [];
+                            var packsPart = [];
+                            let tipoEvento;
+
+                            var description = body.complementaryDescription;
+                            var args = description.split(" | ");
+
+                            args.forEach(element => {
+                                if(element.includes("EntidadesAutorização")){
+                                    var rep = element.replace("EntidadesAutorização: ", "");
+                                    packsAut.push(rep);
+                                }
+                                if(element.includes("EntidadesParticipação")){
+                                    var rep = element.replace("EntidadesParticipação: ", "");
+                                    packsPart.push(rep);
+                                }
+                                if(element.includes("TipoEvento")){
+                                    var rep = element.replace("TipoEvento: ", "");
+                                    tipoEvento = rep;
+                                }
+                            });
+
+                            var templateData = {
+                                data: {
+                                    nrEvent: eventId,
+                                    empresa: eventResult.properties[1].value,
+                                    dataNow: diaNow + "/" + mesNow + "/" + anoNow,
+                                    municipio: eventResult.properties[8].value,
+                                    tipoEvento: tipoEvento,
+                                    diai: diai,
+                                    mesi: mesi,
+                                    anoi: anoi,
+                                    diaf: diaf,
+                                    mesf: mesf,
+                                    anof: anof,
+                                    local: eventResult.properties[7].value,
+                                    pack: packsAut + ", " + packsPart,
+                                    diaNow: diaNow,
+                                    mesNow: mesNow,
+                                    anoNow: anoNow,
+                                    mesExtenso: mesExtenso
+                                }
+                            };
+
+                            const content = mustache.render(authDocument.templateStructure, templateData);
+                             var options = { format: 'Letter' };
+                             htmlPdf.create(content, options).toBuffer(function (err, rest) {
+                                 var filename = 'testfile-test';
+                                 filename = encodeURIComponent(eventResult.name) + '.pdf'
+                                 res.setHeader('Content-disposition', 'attachment; filename="' + filename + '"')
+                                 res.setHeader('Content-type', 'application/pdf')
+                                 res.write(rest);
+                                 res.end();
+                             });
+                        })
+                    }
+                })
 
                 if (error) res.status(400).send({ error: error });
             })
