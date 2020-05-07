@@ -1,5 +1,13 @@
 
-
+@font-face {
+                          font-family: "SFCompactText-Regular";
+                          src: url('../fonts/SFCompactText-Regular.otf') format("opentype");
+                        }
+                        @font-face {
+                          font-family: "SFCompactText-Medium";
+                          src: url('../fonts/SFCompactText-Medium.otf') format("opentype");
+                        }
+                        
 .invoicetemplate {
   width               : 100%;
   min-width           : 610px;
@@ -68,78 +76,61 @@ div {
   width               : 197px;
   position            : absolute;
   margin              : 0;
-  left                : 432px;
+  left                : 381px;
   transform           : rotate(0deg);
   opacity             : 1.0;
-  font-family         : SF UI Display;
-  src                 : url("./SF-UI-Display-Regular.otf") format("opentype");
-  font-weight         : 400;
-  font-style          : normal;
+  font-family         : "SFCompactText-Regular", Helvetica, Arial, serif;
   font-size           : 12.0px;
   color               : rgba(80, 80, 80, 1.0);
   text-align          : left;
-  letter-spacing      : -0.15px;
   line-height         : 14.0px;
 }
 .invoicetemplate .c342maramunicipalde {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 673px;
+  top                 : 662px;
   height              : auto;
   width               : 612px;
   position            : absolute;
   margin              : 0;
-  left                : -1px;
+  left                : -8px;
   transform           : rotate(0deg);
   opacity             : 1.0;
-  font-family         : SF UI Display;
-  src                 : url("./SF-UI-Display-Regular.otf") format("opentype");
-  font-weight         : 400;
-  font-style          : normal;
+  font-family         : "SFCompactText-Regular", Helvetica, Arial, serif;
   font-size           : 16.0px;
   color               : rgba(47, 47, 47, 1.0);
   text-align          : center;
-  letter-spacing      : -0.15px;
   line-height         : 19.0px;
 }
 .invoicetemplate .ac342maramunicipald {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 394px;
+  top                 : 395px;
   height              : auto;
   width               : 540px;
   position            : absolute;
   margin              : 0;
-  left                : 31px;
+  left                : 36px;
   transform           : rotate(0deg);
   opacity             : 1.0;
-  font-family         : SF UI Display;
-  src                 : url("./SF-UI-Display-Regular.otf") format("opentype");
-  font-weight         : 400;
-  font-style          : normal;
-  font-size           : 16.0px;
+  font-family         : "SFCompactText-Regular", Helvetica, Arial, serif;
+  font-size           : 15.0px;
   color               : rgba(47, 47, 47, 1.0);
-  text-align          : center;
-  letter-spacing      : -0.15px;
-  line-height         : 19.0px;
+  text-align          : justify;
+  line-height         : 18.0px;
 }
 .invoicetemplate .autoriza307303o {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 304px;
+  top                 : 312px;
   height              : auto;
-  width               : 282px;
+  width               : 292px;
   position            : absolute;
   margin              : 0;
-  left                : 191px;
+  left                : 199px;
   transform           : rotate(0deg);
   opacity             : 1.0;
-  font-family         : SF UI Display;
-  font-weight         : bold;
-  src                 : url("./SF-UI-Display-Bold.otf") format("opentype");
-  font-weight         : 700;
-  font-style          : normal;
+  font-family         : "SFCompactText-Medium", Helvetica, Arial, serif;
   font-size           : 31.0px;
   color               : rgba(66, 66, 66, 1.0);
   text-align          : left;
-  letter-spacing      : -0.2px;
   line-height         : 37.0px;
 }
 .invoicetemplate .rectangle {
@@ -240,14 +231,10 @@ div {
   left                : 0px;
   transform           : rotate(0deg);
   opacity             : 1.0;
-  font-family         : SF UI Display;
-  src                 : url("./SF-UI-Display-Regular.otf") format("opentype");
-  font-weight         : 400;
-  font-style          : normal;
+  font-family         : "SFCompactText-Regular", Helvetica, Arial, serif;
   font-size           : 14.0px;
   color               : rgba(255, 255, 255, 1.0);
   text-align          : left;
-  letter-spacing      : -0.15px;
   line-height         : 16.0px;
 }
 .invoicetemplate .group3 .data {
@@ -260,14 +247,10 @@ div {
   left                : 0px;
   transform           : rotate(0deg);
   opacity             : 0.8;
-  font-family         : SF UI Display;
-  src                 : url("./SF-UI-Display-Regular.otf") format("opentype");
-  font-weight         : 400;
-  font-style          : normal;
+  font-family         : "SFCompactText-Regular", Helvetica, Arial, serif;
   font-size           : 14.0px;
   color               : rgba(255, 255, 255, 1.0);
   text-align          : left;
-  letter-spacing      : -0.15px;
   line-height         : 16.0px;
 }
 .invoicetemplate .group4copy {
@@ -291,14 +274,10 @@ div {
   left                : 0px;
   transform           : rotate(0deg);
   opacity             : 1.0;
-  font-family         : SF UI Display;
-  src                 : url("./SF-UI-Display-Regular.otf") format("opentype");
-  font-weight         : 400;
-  font-style          : normal;
+  font-family         : "SFCompactText-Regular", Helvetica, Arial, serif;
   font-size           : 14.0px;
   color               : rgba(255, 255, 255, 1.0);
   text-align          : left;
-  letter-spacing      : -0.15px;
   line-height         : 16.0px;
 }
 .invoicetemplate .group4copy .para {
@@ -311,14 +290,10 @@ div {
   left                : 0px;
   transform           : rotate(0deg);
   opacity             : 0.8;
-  font-family         : SF UI Display;
-  src                 : url("./SF-UI-Display-Regular.otf") format("opentype");
-  font-weight         : 400;
-  font-style          : normal;
+  font-family         : "SFCompactText-Regular", Helvetica, Arial, serif;
   font-size           : 14.0px;
   color               : rgba(255, 255, 255, 1.0);
   text-align          : left;
-  letter-spacing      : -0.15px;
   line-height         : 16.0px;
 }
 .invoicetemplate .group3copy {
@@ -342,14 +317,10 @@ div {
   left                : 0px;
   transform           : rotate(0deg);
   opacity             : 1.0;
-  font-family         : SF UI Display;
-  src                 : url("./SF-UI-Display-Regular.otf") format("opentype");
-  font-weight         : 400;
-  font-style          : normal;
+  font-family         : "SFCompactText-Regular", Helvetica, Arial, serif;
   font-size           : 14.0px;
   color               : rgba(255, 255, 255, 1.0);
   text-align          : left;
-  letter-spacing      : -0.15px;
   line-height         : 16.0px;
 }
 .invoicetemplate .group3copy .eventono {
@@ -362,14 +333,10 @@ div {
   left                : 0px;
   transform           : rotate(0deg);
   opacity             : 0.8;
-  font-family         : SF UI Display;
-  src                 : url("./SF-UI-Display-Regular.otf") format("opentype");
-  font-weight         : 400;
-  font-style          : normal;
+  font-family         : "SFCompactText-Regular", Helvetica, Arial, serif;
   font-size           : 14.0px;
   color               : rgba(255, 255, 255, 1.0);
   text-align          : left;
-  letter-spacing      : -0.15px;
   line-height         : 16.0px;
 }
 .invoicetemplate .logo {
@@ -407,22 +374,18 @@ div {
 }
 .invoicetemplate .c302maramunicipalde {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 50px;
+  top                 : 41px;
   height              : auto;
   width               : 260px;
   position            : absolute;
   margin              : 0;
-  left                : 38px;
+  left                : 47px;
   transform           : rotate(0deg);
   opacity             : 1.0;
-  font-family         : SF UI Display;
-  src                 : url("./SF-UI-Display-Regular.otf") format("opentype");
-  font-weight         : 400;
-  font-style          : normal;
+  font-family         : "SFCompactText-Medium", Helvetica, Arial, serif;
   font-size           : 21.0px;
   color               : rgba(255, 255, 255, 1.0);
   text-align          : left;
-  letter-spacing      : -0.15px;
   line-height         : 25.0px;
 }
 /* .anima-animate-appear prefix for appear animations */
