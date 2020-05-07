@@ -58,7 +58,7 @@ exports.createEvent = function (req, res, err) {
                     category_id: 2151197,
                     type: 2,
                     name: name,
-                    reference: reference,
+                    reference: name,
                     summary: summary,
                     price: 0.0,
                     unit_id: 1076333,
