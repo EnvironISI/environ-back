@@ -638,7 +638,7 @@ exports.handlePdf = function (req, res, err) {
                                     dataNow: diaNow + "/" + mesNow + "/" + anoNow,
                                     municipio: eventResult.properties[8].value,
                                     tipoEvento: tipoEvento,
-                                    diai: diai.replace,
+                                    diai: diai,
                                     mesi: mesi,
                                     anoi: anoi,
                                     diaf: diaf,
