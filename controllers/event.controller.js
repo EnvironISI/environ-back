@@ -107,7 +107,7 @@ exports.createEvent = function (req, res, err) {
                             value: pacote
                         },
                         {
-                            product_id: 12850,
+                            property_id: 12850,
                             value: duration
                         }
                     ],
@@ -235,6 +235,10 @@ exports.camaraAccept = function (req, res, err) {
     adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
         if (decodedClaims.admin || decodedClaims.camara) {
             if (accept === 'true') { status = 'Aceite' } else { status = 'Rejeitado' }
+
+            var initDate = req.sanitize('initDate').escape();
+            var endDate = req.sanitize('endDate').escape();
+
             moloni.products('getOne', { company_id: company_id, product_id: eventId }, function (error, result) {
                 var params = {
                     company_id: company_id,
@@ -269,11 +273,11 @@ exports.camaraAccept = function (req, res, err) {
                         },
                         {
                             property_id: 11632,
-                            value: result.properties[5].value
+                            value: initDate
                         },
                         {
                             property_id: 11633,
-                            value: result.properties[6].value
+                            value: endDate
                         },
                         {
                             property_id: 11634,
