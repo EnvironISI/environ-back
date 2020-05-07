@@ -56,11 +56,11 @@ var template = `
                     </div>
                 </div>
                 <div class="group3copy">
-                    <div class="clod0001">
-                        CLOD0001
-                    </div>
                     <div class="eventono">
                         EVENTO NO.
+                    </div>
+                    <div class="clod0001">
+                        {{data.nrEvent}}
                     </div>
                 </div>
                 <div class="logo">
@@ -152,15 +152,10 @@ var template = `
     </body>
 </html>
 `
-var templateDataObject = {
-    data: {
-        name: "BRAGAAAAA"
-    }
-};
+
 
 var template = {
     templateStructure: template,
-    templateData: templateDataObject
   };
   
   module.exports = template;
