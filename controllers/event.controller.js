@@ -41,7 +41,8 @@ exports.createEvent = function (req, res, err) {
             var summary = req.sanitize('summary').escape();
             var municipio = req.sanitize('municipio').escape();
             var pacote = req.sanitize('package').escape();
-            //var reference = municipio.trim() + Math.floor((Math.random() * 100000000000) + 1).toString();
+            var duration = req.sanitize("duration").escape();
+            var reference = municipio.trim().substring(0, 3); + Math.floor((Math.random() * 100000) + 1).toString();
             /* try {
                  userRecords.users.forEach((user) => {
                      if (!user.customClaims.camara == municipio) {
@@ -57,7 +58,7 @@ exports.createEvent = function (req, res, err) {
                     category_id: 2151197,
                     type: 2,
                     name: name,
-                    reference: name,
+                    reference: reference,
                     summary: summary,
                     price: 0.0,
                     unit_id: 1076333,
@@ -104,6 +105,10 @@ exports.createEvent = function (req, res, err) {
                         {
                             property_id: 12774,
                             value: pacote
+                        },
+                        {
+                            product_id: 12850,
+                            value: duration
                         }
                     ],
                 }
@@ -184,9 +189,17 @@ exports.adminAccept = function (req, res, err) {
                             property_id: 11640,
                             value: result.properties[8].value
                         },
-                        {
+                        /*{
                             property_id: 11847,
                             value: result.properties[9].value
+                        },*/
+                        {
+                            property_id: 12774,
+                            value: result.properties[9].value
+                        },
+                        {
+                            product_id: 12850,
+                            value: result.properties[10].value
                         }
                     ],
                 }
@@ -270,9 +283,17 @@ exports.camaraAccept = function (req, res, err) {
                             property_id: 11640,
                             value: result.properties[8].value
                         },
-                        {
+                        /*{
                             property_id: 11847,
                             value: result.properties[9].value
+                        },*/
+                        {
+                            property_id: 12774,
+                            value: result.properties[9].value
+                        },
+                        {
+                            product_id: 12850,
+                            value: result.properties[10].value
                         }
                     ],
                 }
