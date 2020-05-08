@@ -42,84 +42,116 @@ exports.createEvent = function (req, res, err) {
             var municipio = req.sanitize('municipio').escape();
             var pacote = req.sanitize('package').escape();
             var duration = req.sanitize("duration").escape();
-            var reference = municipio.trim().substring(0, 3); + Math.floor((Math.random() * 100000) + 1).toString();
-            /* try {
-                 userRecords.users.forEach((user) => {
-                     if (!user.customClaims.camara == municipio) {
-                         res.status(400).send({ error: "O Municipio ainda não se encontra registado no sistema da Environ." })
-                         res.end();
-                     }
-                 })
-             } catch (error) { console.log(error) }*/
+            let tipoEvento;
 
-            adminFb.auth().getUser(decodedClaims.uid).then(user => {
-                var params = {
-                    company_id: company_id,
-                    category_id: 2151197,
-                    type: 2,
-                    name: name,
-                    reference: name,
-                    summary: summary,
-                    price: 0.0,
-                    unit_id: 1076333,
-                    has_stock: 1,
-                    exemption_reason: "M99",
-                    stock: 1,
-                    properties: [
-                        {
-                            property_id: 11543,
-                            value: "Suspenso"
-                        },
-                        {
-                            property_id: 11549,
-                            value: user.email
-                        },
-                        {
-                            property_id: 11623,
-                            value: lat
-                        },
-                        {
-                            property_id: 11625,
-                            value: long
-                        },
-                        {
-                            property_id: 11627,
-                            value: nrPart
-                        },
-                        {
-                            property_id: 11632,
-                            value: initTime
-                        },
-                        {
-                            property_id: 11633,
-                            value: endTime
-                        },
-                        {
-                            property_id: 11634,
-                            value: address
-                        },
-                        {
-                            property_id: 11640,
-                            value: municipio
-                        },
-                        {
-                            property_id: 12774,
-                            value: pacote
-                        },
-                        {
-                            property_id: 12850,
-                            value: duration
-                        }
-                    ],
+            request({
+                url: 'https://identity.primaverabss.com/core/connect/token',
+                method: 'POST',
+                auth: {
+                    user: 'ENVIRONISI', // TODO : put your application client id here
+                    pass: 'c2d7e4bf-3d30-43fb-82d8-2f0e08f474dd' // TODO : put your application client secret here
+                },
+                form: {
+                    'grant_type': 'client_credentials',
+                    'scope': 'application',
                 }
-                moloni.products('insert', params, function (error, result) {
-                    if (error) {
-                        console.log(error)
-                        res.status(400).send({ error: error });
-                    } else {
-                        res.status(200).send(result);
-                    }
-                })
+            }, function (err, result) {
+                if (result) {
+                    var json = JSON.parse(result.body);
+                    request({
+                        url: 'https://my.jasminsoftware.com/api/235151/235151-0001/businesscore/items/' + pacote,
+                        method: 'GET',
+                        headers: {
+                            Authorization: 'Bearer ' + json.access_token
+                        },
+                        json: true
+                    }, function (err, result, body) {
+
+                        var description = body.complementaryDescription;
+                        var args = description.split(" | ");
+
+                        args.forEach(element => {
+                            if (element.includes("TipoEvento")) {
+                                var rep = element.replace("TipoEvento: ", "");
+                                tipoEvento = rep;
+                            }
+                        });
+
+                        adminFb.auth().getUser(decodedClaims.uid).then(user => {
+                            var params = {
+                                company_id: company_id,
+                                category_id: 2151197,
+                                type: 2,
+                                name: name,
+                                reference: name,
+                                summary: summary,
+                                price: 0.0,
+                                unit_id: 1076333,
+                                has_stock: 1,
+                                exemption_reason: "M99",
+                                stock: 1,
+                                properties: [
+                                    {
+                                        property_id: 11543,
+                                        value: "Suspenso"
+                                    },
+                                    {
+                                        property_id: 11549,
+                                        value: user.email
+                                    },
+                                    {
+                                        property_id: 11623,
+                                        value: lat
+                                    },
+                                    {
+                                        property_id: 11625,
+                                        value: long
+                                    },
+                                    {
+                                        property_id: 11627,
+                                        value: nrPart
+                                    },
+                                    {
+                                        property_id: 11632,
+                                        value: initTime
+                                    },
+                                    {
+                                        property_id: 11633,
+                                        value: endTime
+                                    },
+                                    {
+                                        property_id: 11634,
+                                        value: address
+                                    },
+                                    {
+                                        property_id: 11640,
+                                        value: municipio
+                                    },
+                                    {
+                                        property_id: 12774,
+                                        value: pacote
+                                    },
+                                    {
+                                        property_id: 12850,
+                                        value: duration
+                                    },
+                                    {
+                                        property_id: 12908,
+                                        value: tipoEvento
+                                    }
+                                ],
+                            }
+                            moloni.products('insert', params, function (error, result) {
+                                if (error) {
+                                    console.log(error)
+                                    res.status(400).send({ error: error });
+                                } else {
+                                    res.status(200).send(result);
+                                }
+                            })
+                        })
+                    })
+                }
             })
         }).catch(error => {
             console.log(error);
@@ -200,6 +232,10 @@ exports.adminAccept = function (req, res, err) {
                         {
                             property_id: 12850,
                             value: result.properties[10].value
+                        },
+                        {
+                            product_id: 12908,
+                            value: result.properties[11].value
                         }
                     ],
                 }
@@ -298,6 +334,10 @@ exports.camaraAccept = function (req, res, err) {
                         {
                             property_id: 12850,
                             value: result.properties[10].value
+                        },
+                        {
+                            product_id: 12908,
+                            value: result.properties[11].value
                         }
                     ],
                 }
@@ -617,15 +657,15 @@ exports.handlePdf = function (req, res, err) {
                             var args = description.split(" | ");
 
                             args.forEach(element => {
-                                if(element.includes("EntidadesAutorização")){
+                                if (element.includes("EntidadesAutorização")) {
                                     var rep = element.replace("EntidadesAutorização: ", "");
                                     packsAut.push(rep);
                                 }
-                                if(element.includes("EntidadesParticipação")){
+                                if (element.includes("EntidadesParticipação")) {
                                     var rep = element.replace("EntidadesParticipação: ", "");
                                     packsPart.push(rep);
                                 }
-                                if(element.includes("TipoEvento")){
+                                if (element.includes("TipoEvento")) {
                                     var rep = element.replace("TipoEvento: ", "");
                                     tipoEvento = rep;
                                 }
@@ -657,15 +697,15 @@ exports.handlePdf = function (req, res, err) {
                             };
 
                             const content = mustache.render(authDocument.templateStructure, templateData);
-                             var options = { format: 'Letter' };
-                             htmlPdf.create(content, options).toBuffer(function (err, rest) {
-                                 var filename = 'testfile-test';
-                                 filename = encodeURIComponent(eventResult.name) + '.pdf'
-                                 res.setHeader('Content-disposition', 'attachment; filename="' + filename + '"')
-                                 res.setHeader('Content-type', 'application/pdf')
-                                 res.write(rest);
-                                 res.end();
-                             });
+                            var options = { format: 'Letter' };
+                            htmlPdf.create(content, options).toBuffer(function (err, rest) {
+                                var filename = 'testfile-test';
+                                filename = encodeURIComponent(eventResult.name) + '.pdf'
+                                res.setHeader('Content-disposition', 'attachment; filename="' + filename + '"')
+                                res.setHeader('Content-type', 'application/pdf')
+                                res.write(rest);
+                                res.end();
+                            });
                         })
                     }
                 })
