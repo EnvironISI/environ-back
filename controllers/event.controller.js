@@ -234,7 +234,7 @@ exports.adminAccept = function (req, res, err) {
                             value: result.properties[10].value
                         },
                         {
-                            product_id: 12908,
+                            property_id: 12908,
                             value: result.properties[11].value
                         }
                     ],
@@ -336,7 +336,7 @@ exports.camaraAccept = function (req, res, err) {
                             value: result.properties[10].value
                         },
                         {
-                            product_id: 12908,
+                            property_id: 12908,
                             value: result.properties[11].value
                         }
                     ],
