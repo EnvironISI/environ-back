@@ -75,7 +75,7 @@ exports.getUsers = function (req, res, err) {
                     var userInfo = snapshot.val();
                     var obj;
                     var reqJson = hubspot.companies.getById(userInfo.hubspot_id).then(body => {
-                        let nif, country, city, setor, role;
+                        let nif, country, city, setor, role, createdate;
                         if (body.properties.nif !== undefined)
                             nif = body.properties.nif.value;
                         if (body.properties.country !== undefined)
@@ -84,6 +84,8 @@ exports.getUsers = function (req, res, err) {
                             city = body.properties.city.value;
                         if (body.properties.industry !== undefined)
                             setor = body.properties.industry.value;
+                        if(body.properties.createdate !== undefined)
+                            createdate = body.properties.createdate.value;
                         if (user.customClaims.empresa)
                             role = 'empresa';
                         else if (user.customClaims.admin)
@@ -102,7 +104,8 @@ exports.getUsers = function (req, res, err) {
                             city: city,
                             setor: setor,
                             emailVerified: emailVerified,
-                            disabled: disabled
+                            disabled: disabled,
+                            createdate: createdate
                         };
                         return obj;
                     }).catch(error => {
