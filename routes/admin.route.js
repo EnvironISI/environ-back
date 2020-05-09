@@ -12,6 +12,7 @@ admin.get('/users', isAdmin, adminController.getUsers);
 admin.delete('/delete/user', isAdmin, adminController.deleteUser);
 admin.put('/enable/user', isAdmin, adminController.enableUser);
 admin.delete('/delete/event', isAdmin, adminController.deleteEvent);
+admin.get('/user/mail', isAdmin, adminController.getUserByEmail);
 
 function isAdmin(req, res, next) {
     var sessionCookie = req.cookies.session || '';
