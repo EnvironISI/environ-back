@@ -74,7 +74,17 @@ exports.login = function (req, res, err) {
                     // Set cookie policy for session cookie.
                     const options = { expires: new Date(Date.now() + 60 * 60 * 24 * 5 * 1000), httpOnly: false, secure: false };
                     res.cookie('session', sessionCookie, options);
-                    res.send({ status: 'success' })
+                    adminFb.auth().verifySessionCookie(sessionCookie).then(decodedClaims => {
+                        var tipo;
+                        if(decodedClaims.admin){
+                            tipo = "admin"
+                        }else if(decodedClaims.camara){
+                            tipo = "camara";
+                        }else if(decodedClaims.empresa){
+                            tipo = "empresa";
+                        }
+                        res.send({ status: 'success', type: tipo })
+                    })
                 }, error => {
                     console.log(error);
                     res.redirect('/denied');
