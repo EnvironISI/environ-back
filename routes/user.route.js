@@ -11,6 +11,8 @@ user.put('/changeEmail', isUser, userController.changeEmail);
 user.put('/changePhone', isUser, userController.changePhone);
 user.put('/changePassword', isUser, userController.changePassword);
 user.delete('/delete/me', isUser, userController.deleteMe);
+user.get('/notifications', isUser, userController.getNotifications);
+user.put('/read/notification', isUser, userController.readNotification);
 
 function isUser(req, res, next) {
     var sessionCookie = req.cookies.session || '';

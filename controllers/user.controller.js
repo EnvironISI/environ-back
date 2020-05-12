@@ -179,3 +179,32 @@ exports.deleteMe = function (req, res, err) {
         res.end();
     });
 }
+exports.getNotifications = function(req, res, err){
+    const sessionCookie = req.cookies.session || '';
+
+    adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
+        var refUID = adminFb.database().ref('/notifications/' + decodedClaims.uid);
+        refUID.once('value').then(snapshot => {
+            if(!snapshot.hasChildren()){
+                res.status(200).send({msg: 'Não tem notificações'});
+            }
+            else{
+                var notifications = snapshot.val();
+                res.status(200).send({notifications: notifications});
+            }
+            
+        })
+    })
+}
+exports.readNotification = function(req, res, err){
+    const sessionCookie = req.cookies.session || '';
+    var notificationID = req.sanitize('notificationID').escape();
+
+    adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
+        var refUID = adminFb.database().ref('/notifications/' + decodedClaims.uid + "/" + notificationID);
+        refUID.once('value').then(snapshot => {
+            var notification = snapshot.val();
+            adminFb.database().ref('/notifications/' + decodedClaims.uid + "/" + notificationID).set({ status: 'read', from: notification.from, avatar: notification.avatar, msg: notification.msg });
+        })
+    })
+}
