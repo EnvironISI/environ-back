@@ -147,6 +147,7 @@ exports.createEvent = function (req, res, err) {
                                     res.status(400).send({ error: error });
                                 } else {
                                     const notiToken = req.sanitize('notiToken').escape();
+
                                     var message = {
                                         data: {
                                             avatar: user.photoURL,
@@ -155,8 +156,13 @@ exports.createEvent = function (req, res, err) {
                                         },
                                         token: notiToken
                                     }
+
+                                    console.log(message)
+
                                     adminFb.messaging().send(message).then(noti => {
                                         res.status(200).send(noti);
+                                    }).catch(error => {
+                                        console.log(error)
                                     })
                                 }
                             })
