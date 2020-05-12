@@ -213,3 +213,17 @@ exports.requestEmailVerification = function (req, res, err) {
         res.end();
     })
 }
+
+exports.saveNotiToken = function (req, res, err){
+    const sessionCookie = req.cookies.session || '';
+    const notiToken = req.sanitize('notiToken').escape();
+    adminFb.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */).then((decodedClaims) => {
+        adminFb.database().ref('/users/' + decodedClaims.uid).once('value').then(snapshot => {
+            var userInfo = snapshot.val();
+            adminFb.database().ref('/users/' + result.uid).set({ hubspot_id: userInfo.hubspot_id, email: userInfo.email, notiToken: notiToken}).then(() => {
+                res.status(200).send("Token de notificação salva");
+            })
+        })
+    })
+
+}
