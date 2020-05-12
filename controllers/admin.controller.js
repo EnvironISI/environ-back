@@ -116,7 +116,7 @@ exports.getUsers = function (req, res, err) {
                     resp.push(respJson);
                     if ((i + 1) == userRecords.users.length) {
                         res.status(200).send(resp);
-                        res.end()
+                        res.end();
                     }
                     i++;
                 }).catch(error => {

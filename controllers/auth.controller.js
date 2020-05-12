@@ -104,6 +104,14 @@ exports.logout = function (req, res, err) {
     // Verify the session cookie. In this case an additional check is added to detect
     // if the user's Firebase session was revoked, user deleted/disabled, etc.
     adminFb.auth().verifySessionCookie(sessionCookie).then((decodedClaims) => {
+        adminFb.auth().getUser(decodedClaims.uid).then(user => {
+            adminFb.database().ref('/users/' + decodedClaims.uid).once('value').then(snapshot => {
+                var userInfo = snapshot.val();
+                if(userInfo.notiToken){
+                    adminFb.database().ref('/users/' + decodedClaims.uid).set({ hubspot_id: userInfo.hubspot_id, email: userInfo.email});
+                }
+            })
+        })
         res.clearCookie('session');
         return adminFb.auth().revokeRefreshTokens(decodedClaims.sub);
     }).then(() => {

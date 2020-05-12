@@ -10,6 +10,8 @@ var { adminFb } = require('../config/firebaseConfig.js');
 var { moloni } = require('../config/moloniConfig.js');
 var { client } = require('../config/visionConfig.js');
 
+var sendNotifications = require('../config/sendNotifications.js')
+
 var exports = module.exports = {};
 var company_id = 126979;
 
@@ -146,24 +148,8 @@ exports.createEvent = function (req, res, err) {
                                     console.log(error)
                                     res.status(400).send({ error: error });
                                 } else {
-                                    const notiToken = req.sanitize('notiToken').escape();
-
-                                    var message = {
-                                        data: {
-                                            avatar: user.photoURL,
-                                            user: user.displayName,
-                                            msg: 'Criou Evento ' + name
-                                        },
-                                        token: notiToken
-                                    }
-
-                                    console.log(message)
-
-                                    adminFb.messaging().send(message).then(noti => {
-                                        res.status(200).send(noti);
-                                    }).catch(error => {
-                                        console.log(error)
-                                    })
+                                    sendNotifications.sendNotiAdmin(user, name);
+                                    res.status(200).send({msg: 'Evento criado com Sucesso'});
                                 }
                             })
                         })
