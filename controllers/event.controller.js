@@ -29,7 +29,7 @@ exports.createEvent = function (req, res, err) {
     const sessionCookie = req.cookies.session || '';
 
     adminFb.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */).then((decodedClaims) => {
-        adminFb.auth().listUsers().then((userRecords) => {
+        adminFb.auth().getUser(decodedClaims.uid).then(user => {
 
             var name = req.sanitize('name').escape();
             var lat = req.sanitize('latitude').escape();
@@ -146,7 +146,18 @@ exports.createEvent = function (req, res, err) {
                                     console.log(error)
                                     res.status(400).send({ error: error });
                                 } else {
-                                    res.status(200).send(result);
+                                    const notiToken = req.sanitize('notiToken').escape();
+                                    var message = {
+                                        data: {
+                                            avatar: user.photoURL,
+                                            user: user.displayName,
+                                            msg: 'Criou Evento ' + name
+                                        },
+                                        token: notiToken
+                                    }
+                                    adminFb.messaging().send(message).then(noti => {
+                                        res.status(200).send(noti);
+                                    })
                                 }
                             })
                         })
