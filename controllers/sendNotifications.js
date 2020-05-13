@@ -2,14 +2,13 @@ var { adminFb } = require('../config/firebaseConfig');
 
 var exports = module.exports = {};
 
-exports.sendNoti = function (creator, eventName, email) {
+exports.sendNoti = function (msg, creator, email) {
     adminFb.auth().getUserByEmail(email).then(user => {
         adminFb.database().ref('/users/' + user.uid).once('value').then(snapshot => {
             var userInfo = snapshot.val();
 
             var avatar = creator.photoURL;
             var from = creator.displayName;
-            var msg = 'Criou o evento ' + eventName + "!";
             var date = Date.now();
 
             var ref = adminFb.database().ref('/notifications/');
@@ -31,7 +30,7 @@ exports.sendNoti = function (creator, eventName, email) {
                 var message = {
                     notification: {
                         body: msg,
-                        title: from
+                        title: "Nova notificação de " + from
                     },
                     token: userInfo.notiToken
                 }

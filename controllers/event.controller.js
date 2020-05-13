@@ -148,17 +148,15 @@ exports.createEvent = function (req, res, err) {
                                     console.log(error)
                                     res.status(400).send({ error: error });
                                 } else {
-
                                     adminFb.auth().listUsers().then(userRecords => {
                                         userRecords.users.forEach(userRecord => {
                                             if(userRecord.customClaims.admin){
-                                                sendNotifications.sendNoti(user, name, userRecord.email);
+                                                var msg = 'Tem um novo evento para aceitar!';
+                                                sendNotifications.sendNoti(msg, user, userRecord.email);
                                             }
                                         })
                                     })
-
-                                    //sendNotifications.sendNoti(user, name);
-                                    res.status(200).send({msg: 'Evento criado com Sucesso'});
+                                    res.status(200).send({msg: result});
                                 }
                             })
                         })
