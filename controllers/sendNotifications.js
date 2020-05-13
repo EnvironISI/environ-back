@@ -2,7 +2,7 @@ var { adminFb } = require('../config/firebaseConfig');
 
 var exports = module.exports = {};
 
-exports.sendNoti = function (msg, creator, email) {
+exports.sendNoti = function (msg, creator, email, type) {
     adminFb.auth().getUserByEmail(email).then(user => {
         adminFb.database().ref('/users/' + user.uid).once('value').then(snapshot => {
             var userInfo = snapshot.val();
@@ -15,13 +15,13 @@ exports.sendNoti = function (msg, creator, email) {
 
             ref.child(user.uid).once("value").then(snapshot => {
                 if (!snapshot.hasChildren()) {
-                    adminFb.database().ref('/notifications/' + user.uid + "/0" ).set({ status: 'unread', from: from, avatar: avatar, msg: msg, date: date, notificationID: 0})
+                    adminFb.database().ref('/notifications/' + user.uid + "/0" ).set({ status: 'unread', from: from, avatar: avatar, msg: msg, date: date, notificationID: 0, type: type})
                 } else {
                     ref.child(user.uid).orderByKey().limitToLast(1).once("value").then(snapshot => {
                         const data = snapshot.val() || null;     
                         var number = parseInt(Object.keys(data)[0])
                         number++;
-                        adminFb.database().ref('/notifications/' + user.uid + "/" + number.toString()).set({ status: 'unread', from: from, avatar: avatar, msg: msg, date: date, notificationID: number })
+                        adminFb.database().ref('/notifications/' + user.uid + "/" + number.toString()).set({ status: 'unread', from: from, avatar: avatar, msg: msg, date: date, notificationID: number, type: type})
                     })
                 }
             })
