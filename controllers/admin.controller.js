@@ -46,7 +46,7 @@ exports.deleteUser = function (req, res, err) {
             hubspot.companies.delete(userInfo.hubspot_id).then(() => {
                 adminFb.database().ref("/users/" + user.uid).remove(function () {
                     adminFb.auth().deleteUser(user.uid).then(() => {
-                        res.status(200).send({ msg: "Empresa removida com sucesso!" });
+                        res.status(200).send({ msg: "Utilizador removido com sucesso!" });
                     }).catch(error => {
                         console.log(error);
                         res.status(500).send({ error: error })
@@ -159,14 +159,25 @@ exports.enableUser = function (req, res, err) {
 }
 exports.deleteEvent = function (req, res, err) {
     var eventId = req.sanitize('eventId').escape();
+    var sessionCookie = req.cookies.session || '';
 
-    moloni.products('delete', { company_id: 126979, product_id: eventId }, function (error, result) {
-        if (error) {
-            res.status(400).send({ error: error });
+    moloni.products('getOne', { company_id: 126979, product_id: eventId }, function (error, event) {
+        if (error) console.log(error);
+        moloni.products('delete', { company_id: 126979, product_id: eventId }, function (error, result) {
+            if (error) {
+                res.status(400).send({ error: error });
+                res.end();
+            }
+            adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
+                adminFb.auth().getUser(decodedClaims.uid).then(from => {
+                    var msg = 'O seu evento ' + event.name + " foi eliminado!";
+                    sendNotifications.sendNoti(msg, from, event.properties[1].value, "evento");
+                })
+            })
+
+            res.status(200).send(result);
             res.end();
-        }
-        res.status(200).send(result);
-        res.end();
+        })
     })
 }
 exports.getUserByEmail = function (req, res, err) {

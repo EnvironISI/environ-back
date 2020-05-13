@@ -76,11 +76,11 @@ exports.login = function (req, res, err) {
                     res.cookie('session', sessionCookie, options);
                     adminFb.auth().verifySessionCookie(sessionCookie).then(decodedClaims => {
                         var tipo;
-                        if(decodedClaims.admin){
+                        if (decodedClaims.admin) {
                             tipo = "admin"
-                        }else if(decodedClaims.camara){
+                        } else if (decodedClaims.camara) {
                             tipo = "camara";
-                        }else if(decodedClaims.empresa){
+                        } else if (decodedClaims.empresa) {
                             tipo = "empresa";
                         }
                         res.send({ status: 'success', type: tipo })
@@ -107,8 +107,8 @@ exports.logout = function (req, res, err) {
         adminFb.auth().getUser(decodedClaims.uid).then(user => {
             adminFb.database().ref('/users/' + decodedClaims.uid).once('value').then(snapshot => {
                 var userInfo = snapshot.val();
-                if(userInfo.notiToken){
-                    adminFb.database().ref('/users/' + decodedClaims.uid).set({ hubspot_id: userInfo.hubspot_id, email: userInfo.email});
+                if (userInfo.notiToken) {
+                    adminFb.database().ref('/users/' + decodedClaims.uid).set({ hubspot_id: userInfo.hubspot_id, email: userInfo.email });
                 }
             })
         })
@@ -163,7 +163,17 @@ exports.register = function (req, res, err) {
                     adminFb.database().ref('/users/' + result.uid).set({ hubspot_id: body.companyId, email: email }).then(() => {
                         if (type == "empresa") {
                             adminFb.auth().setCustomUserClaims(result.uid, { empresa: true }).then(() => {
-                                res.status(200).send({ data: "Companhia " + name + " foi criada com o ID: " + body.companyId });
+                                adminFb.auth().getUserByEmail(email).then(user => {
+                                    adminFb.auth().listUsers().then(userRecords => {
+                                        userRecords.users.forEach(userRecord => {
+                                            if (userRecord.customClaims.admin) {
+                                                var msg = 'A empresa ' + name + ' juntou-se à Environ. :)';
+                                                sendNotifications.sendNoti(msg, user, userRecord.email, "user");
+                                            }
+                                        })
+                                    })
+                                })
+                                res.status(200).send({ data: "Empresa " + name + " foi registada com o ID: " + body.companyId });
                             }).catch(error => {
                                 console.log(error)
                                 res.status(500).send({ error: error })
@@ -171,7 +181,17 @@ exports.register = function (req, res, err) {
                         }
                         else if (type == "camara") {
                             adminFb.auth().setCustomUserClaims(result.uid, { camara: true }).then(() => {
-                                res.status(200).send({ data: "Companhia " + name + " foi criada com o ID: " + body.companyId });
+                                adminFb.auth().getUserByEmail(email).then(user => {
+                                    adminFb.auth().listUsers().then(userRecords => {
+                                        userRecords.users.forEach(userRecord => {
+                                            if (userRecord.customClaims.admin) {
+                                                var msg = 'A ' + name + ' juntou-se à Environ. :)';
+                                                sendNotifications.sendNoti(msg, user, userRecord.email, "user");
+                                            }
+                                        })
+                                    })
+                                })
+                                res.status(200).send({ data: "Camara " + name + " foi registada com o ID: " + body.companyId });
                             }).catch(error => {
                                 console.log(error)
                                 res.status(500).send({ error: error })
@@ -199,8 +219,7 @@ exports.requestEmailVerification = function (req, res, err) {
     adminFb.auth().getUserByEmail(email).then(user => {
         adminFb.auth().createCustomToken(user.uid).then(token => {
             firebase.auth().signInWithCustomToken(token).then(result => {
-                result.user.sendEmailVerification().then(() => {
-                }).catch(error => {
+                result.user.sendEmailVerification().catch(error => {
                     console.log(error);
                     res.status(500).send({ error: error });
                     res.end();
@@ -221,14 +240,13 @@ exports.requestEmailVerification = function (req, res, err) {
         res.end();
     })
 }
-
-exports.saveNotiToken = function (req, res, err){
+exports.saveNotiToken = function (req, res, err) {
     const sessionCookie = req.cookies.session || '';
     const notiToken = req.sanitize('notiToken').escape();
     adminFb.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */).then((decodedClaims) => {
         adminFb.database().ref('/users/' + decodedClaims.uid).once('value').then(snapshot => {
             var userInfo = snapshot.val();
-            adminFb.database().ref('/users/' + decodedClaims.uid).set({ hubspot_id: userInfo.hubspot_id, email: userInfo.email, notiToken: notiToken}).then(() => {
+            adminFb.database().ref('/users/' + decodedClaims.uid).set({ hubspot_id: userInfo.hubspot_id, email: userInfo.email, notiToken: notiToken }).then(() => {
                 res.status(200).send("Token de notificação salva");
             })
         })
