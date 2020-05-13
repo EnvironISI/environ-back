@@ -75,17 +75,15 @@ exports.login = function (req, res, err) {
                     const options = { expires: new Date(Date.now() + 60 * 60 * 24 * 5 * 1000), httpOnly: false, secure: false };
                     res.cookie('session', sessionCookie, options);
                     adminFb.auth().verifySessionCookie(sessionCookie).then(decodedClaims => {
-                        adminFb.auth().getUser(decodedClaims.uid).then(user => {
-                            var tipo;
-                            if (decodedClaims.admin) {
-                                tipo = "admin"
-                            } else if (decodedClaims.camara) {
-                                tipo = "camara";
-                            } else if (decodedClaims.empresa) {
-                                tipo = "empresa";
-                            }
-                            res.send({ status: 'success', type: tipo, user: user})
-                        })
+                        var tipo;
+                        if (decodedClaims.admin) {
+                            tipo = "admin"
+                        } else if (decodedClaims.camara) {
+                            tipo = "camara";
+                        } else if (decodedClaims.empresa) {
+                            tipo = "empresa";
+                        }
+                        res.send({status: 'success'})
                     })
                 }, error => {
                     console.log(error);
