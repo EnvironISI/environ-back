@@ -150,13 +150,13 @@ exports.createEvent = function (req, res, err) {
                                 } else {
                                     adminFb.auth().listUsers().then(userRecords => {
                                         userRecords.users.forEach(userRecord => {
-                                            if(userRecord.customClaims.admin){
+                                            if (userRecord.customClaims.admin) {
                                                 var msg = 'Tem um novo evento para aceitar!';
                                                 sendNotifications.sendNoti(msg, user, userRecord.email, "evento");
                                             }
                                         })
                                     })
-                                    res.status(200).send({msg: result});
+                                    res.status(200).send({ msg: result });
                                 }
                             })
                         })
@@ -181,90 +181,100 @@ exports.adminAccept = function (req, res, err) {
     let status;
 
     adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
-        if (decodedClaims.admin) {
-            if (accept === 'true') { status = 'Pendente' } else { status = 'Rejeitado' }
-            moloni.products('getOne', { company_id: company_id, product_id: eventId }, function (error, result) {
-                var params = {
-                    company_id: company_id,
-                    product_id: eventId,
-                    category_id: 2151197,
-                    type: 2,
-                    price: 0.0,
-                    unit_id: 1076333,
-                    has_stock: 1,
-                    exemption_reason: "M99",
-                    stock: 1000,
-                    properties: [
-                        {
-                            property_id: 11542,
-                            value: status
-                        },
-                        {
-                            property_id: 11549,
-                            value: result.properties[1].value
-                        },
-                        {
-                            property_id: 11623,
-                            value: result.properties[2].value
-                        },
-                        {
-                            property_id: 11625,
-                            value: result.properties[3].value
-                        },
-                        {
-                            property_id: 11627,
-                            value: result.properties[4].value
-                        },
-                        {
-                            property_id: 11632,
-                            value: result.properties[5].value
-                        },
-                        {
-                            property_id: 11633,
-                            value: result.properties[6].value
-                        },
-                        {
-                            property_id: 11634,
-                            value: result.properties[7].value
-                        },
-                        {
-                            property_id: 11640,
-                            value: result.properties[8].value
-                        },
-                        /*{
-                            property_id: 11847,
-                            value: result.properties[9].value
-                        },*/
-                        {
-                            property_id: 12774,
-                            value: result.properties[9].value
-                        },
-                        {
-                            property_id: 12850,
-                            value: result.properties[10].value
-                        },
-                        {
-                            property_id: 12908,
-                            value: result.properties[11].value
-                        }
-                    ],
-                }
-                moloni.products('update', params, function (error, result2) {
-                    if (error) {
-                        console.log(error)
-                        res.status(400).send({ error: error });
-                    } else {
-                        res.status(200).send(result2);
+        adminFb.auth().getUser(decodedClaims.uid).then(user => {
+            if (decodedClaims.admin) {
+                if (accept === 'true') { status = 'Pendente' } else { status = 'Rejeitado' }
+                moloni.products('getOne', { company_id: company_id, product_id: eventId }, function (error, result) {
+                    var params = {
+                        company_id: company_id,
+                        product_id: eventId,
+                        category_id: 2151197,
+                        type: 2,
+                        price: 0.0,
+                        unit_id: 1076333,
+                        has_stock: 1,
+                        exemption_reason: "M99",
+                        stock: 1000,
+                        properties: [
+                            {
+                                property_id: 11542,
+                                value: status
+                            },
+                            {
+                                property_id: 11549,
+                                value: result.properties[1].value
+                            },
+                            {
+                                property_id: 11623,
+                                value: result.properties[2].value
+                            },
+                            {
+                                property_id: 11625,
+                                value: result.properties[3].value
+                            },
+                            {
+                                property_id: 11627,
+                                value: result.properties[4].value
+                            },
+                            {
+                                property_id: 11632,
+                                value: result.properties[5].value
+                            },
+                            {
+                                property_id: 11633,
+                                value: result.properties[6].value
+                            },
+                            {
+                                property_id: 11634,
+                                value: result.properties[7].value
+                            },
+                            {
+                                property_id: 11640,
+                                value: result.properties[8].value
+                            },
+                            /*{
+                                property_id: 11847,
+                                value: result.properties[9].value
+                            },*/
+                            {
+                                property_id: 12774,
+                                value: result.properties[9].value
+                            },
+                            {
+                                property_id: 12850,
+                                value: result.properties[10].value
+                            },
+                            {
+                                property_id: 12908,
+                                value: result.properties[11].value
+                            }
+                        ],
                     }
-                })
+                    moloni.products('update', params, function (error, result2) {
+                        if (error) {
+                            console.log(error)
+                            res.status(400).send({ error: error });
+                        } else {
+                            adminFb.auth().listUsers().then(userRecords => {
+                                userRecords.users.forEach(userRecord => {
+                                    if (userRecords.displayName.includes(result.properties[8].value)) {
+                                        var msg = 'Tem um novo evento para aceitar!';
+                                        sendNotifications.sendNoti(msg, user, userRecord.email, "evento");
+                                    }
+                                })
+                            })
+                            res.status(200).send(result2);
+                        }
+                    })
 
-                if (error) res.status(400).send({ error: error });
-            })
-        }
-        else {
-            res.redirect('/denied');
-            res.end();
-        }
+                    if (error) res.status(400).send({ error: error });
+                })
+            }
+            else {
+                res.redirect('/denied');
+                res.end();
+            }
+        })
     }).catch(error => {
         console.log(error);
         res.redirect('/denied');
@@ -279,95 +289,101 @@ exports.camaraAccept = function (req, res, err) {
     let status;
 
     adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
-        if (decodedClaims.admin || decodedClaims.camara) {
-            if (accept === 'true') { status = 'Aceite' } else { status = 'Rejeitado' }
+        adminFb.auth().getUser(decodedClaims.uid).then(user => {
+            if (decodedClaims.admin || decodedClaims.camara) {
+                if (accept === 'true') { status = 'Aceite' } else { status = 'Rejeitado' }
 
-            var initDate = req.sanitize('initDate').escape();
-            var endDate = req.sanitize('endDate').escape();
+                var initDate = req.sanitize('initDate').escape();
+                var endDate = req.sanitize('endDate').escape();
 
-            moloni.products('getOne', { company_id: company_id, product_id: eventId }, function (error, result) {
-                var params = {
-                    company_id: company_id,
-                    product_id: eventId,
-                    category_id: 2151197,
-                    type: 2,
-                    price: 0.0,
-                    unit_id: 1076333,
-                    has_stock: 1,
-                    exemption_reason: "M99",
-                    stock: 1000,
-                    properties: [
-                        {
-                            property_id: 11543,
-                            value: status
-                        },
-                        {
-                            property_id: 11549,
-                            value: result.properties[1].value
-                        },
-                        {
-                            property_id: 11623,
-                            value: result.properties[2].value
-                        },
-                        {
-                            property_id: 11625,
-                            value: result.properties[3].value
-                        },
-                        {
-                            property_id: 11627,
-                            value: result.properties[4].value
-                        },
-                        {
-                            property_id: 11632,
-                            value: initDate
-                        },
-                        {
-                            property_id: 11633,
-                            value: endDate
-                        },
-                        {
-                            property_id: 11634,
-                            value: result.properties[7].value
-                        },
-                        {
-                            property_id: 11640,
-                            value: result.properties[8].value
-                        },
-                        /*{
-                            property_id: 11847,
-                            value: result.properties[9].value
-                        },*/
-                        {
-                            property_id: 12774,
-                            value: result.properties[9].value
-                        },
-                        {
-                            property_id: 12850,
-                            value: result.properties[10].value
-                        },
-                        {
-                            property_id: 12908,
-                            value: result.properties[11].value
-                        }
-                    ],
-                }
-                moloni.products('update', params, function (error, result2) {
-                    if (error) {
-                        console.log(error)
-                        res.status(400).send({ error: error });
-                    } else {
-                        if (status == 'Aceite') {
-                            res.status(200).send(result2);
-                        }
+                moloni.products('getOne', { company_id: company_id, product_id: eventId }, function (error, result) {
+                    var params = {
+                        company_id: company_id,
+                        product_id: eventId,
+                        category_id: 2151197,
+                        type: 2,
+                        price: 0.0,
+                        unit_id: 1076333,
+                        has_stock: 1,
+                        exemption_reason: "M99",
+                        stock: 1000,
+                        properties: [
+                            {
+                                property_id: 11543,
+                                value: status
+                            },
+                            {
+                                property_id: 11549,
+                                value: result.properties[1].value
+                            },
+                            {
+                                property_id: 11623,
+                                value: result.properties[2].value
+                            },
+                            {
+                                property_id: 11625,
+                                value: result.properties[3].value
+                            },
+                            {
+                                property_id: 11627,
+                                value: result.properties[4].value
+                            },
+                            {
+                                property_id: 11632,
+                                value: initDate
+                            },
+                            {
+                                property_id: 11633,
+                                value: endDate
+                            },
+                            {
+                                property_id: 11634,
+                                value: result.properties[7].value
+                            },
+                            {
+                                property_id: 11640,
+                                value: result.properties[8].value
+                            },
+                            /*{
+                                property_id: 11847,
+                                value: result.properties[9].value
+                            },*/
+                            {
+                                property_id: 12774,
+                                value: result.properties[9].value
+                            },
+                            {
+                                property_id: 12850,
+                                value: result.properties[10].value
+                            },
+                            {
+                                property_id: 12908,
+                                value: result.properties[11].value
+                            }
+                        ],
                     }
+                    moloni.products('update', params, function (error, result2) {
+                        if (error) {
+                            console.log(error)
+                            res.status(400).send({ error: error });
+                        } else {
+                            if (status == 'Aceite') {
+                                adminFb.auth().getUserByEmail(result.properties[1].value).then(userRecord => {
+                                    var msg = 'O seu evento ' + result.name + " foi aceite!";
+                                    sendNotifications.sendNoti(msg, user, userRecord.email, "evento");
+                                })
+                                res.status(200).send(result2);
+                            }
+                        }
+                    })
+                    if (error) res.status(400).send({ error: error });
                 })
-                if (error) res.status(400).send({ error: error });
-            })
-        }
-        else {
-            res.redirect('/denied');
-            res.end();
-        }
+            }
+            else {
+                res.redirect('/denied');
+                res.end();
+            }
+        })
     }).catch(error => {
         console.log(error);
         res.redirect('/denied');
