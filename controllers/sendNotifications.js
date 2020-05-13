@@ -9,23 +9,29 @@ exports.sendNoti = function (creator, eventName, email) {
 
             var avatar = creator.photoURL;
             var from = creator.displayName;
-            var msg = 'Criou um Evento ' + eventName + "!";
+            var msg = 'Criou o evento ' + eventName + "!";
+            var date = Date.now();
 
-            adminFb.database().ref('/notifications/'+ user.uid).once("value").then(snapshot => {
-                if(!snapshot.hasChildren()){
-                    adminFb.database().ref('/notifications/' + user.uid + "/0").set({ status: 'unread', from: from, avatar: avatar, msg: msg })
-                }else{
-                    var number = parseInt(snapshot.key());
-                    var newnumber = number++;
-                    adminFb.database().ref('/notifications/' + user.uid + "/" + newnumber.toString()).set({ status: 'unread', from: from, avatar: avatar, msg: msg })
-                }  
+            var ref = adminFb.database().ref('/notifications/');
+
+            ref.child(user.uid).once("value").then(snapshot => {
+                if (!snapshot.hasChildren()) {
+                    adminFb.database().ref('/notifications/' + user.uid + "/0" ).set({ status: 'unread', from: from, avatar: avatar, msg: msg, date: date})
+                } else {
+                    ref.child(user.uid).orderByKey().limitToLast(1).once("value").then(snapshot => {
+                        const data = snapshot.val() || null;     
+                        var number = parseInt(Object.keys(data)[0])
+                        number++;
+                        adminFb.database().ref('/notifications/' + user.uid + "/" + number.toString()).set({ status: 'unread', from: from, avatar: avatar, msg: msg, date: date })
+                    })
+                }
             })
 
             if (userInfo.notiToken) {
                 var message = {
                     notification: {
-                        body : msg,
-                        title : from
+                        body: msg,
+                        title: from
                     },
                     token: userInfo.notiToken
                 }
