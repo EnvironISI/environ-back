@@ -144,9 +144,9 @@ exports.createEvent = function (req, res, err) {
                                 ],
                             }
                             moloni.products('insert', params, function (error, result) {
-                                if (error || !result.includes("valid")) {
+                                if (error) {
                                     console.log(error)
-                                    res.status(400).send({ error: "Ocorreu um erro ao criar o evento! Tente outra vez!" });
+                                    res.status(400).send({ error: "Ocorreu um erro ao criar o evento! Tente novamente!" });
                                 } else {
                                     adminFb.auth().listUsers().then(userRecords => {
                                         userRecords.users.forEach(userRecord => {
