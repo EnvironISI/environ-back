@@ -210,7 +210,9 @@ exports.readNotification = function(req, res, err){
         var refUID = adminFb.database().ref('/notifications/' + decodedClaims.uid + "/" + notificationID);
         refUID.once('value').then(snapshot => {
             var notification = snapshot.val();
-            adminFb.database().ref('/notifications/' + decodedClaims.uid + "/" + notificationID).set({ status: 'read', from: notification.from, avatar: notification.avatar, msg: notification.msg });
+            adminFb.database().ref('/notifications/' + decodedClaims.uid + "/" + notificationID).set({ status: 'read', from: notification.from, avatar: notification.avatar, msg: notification.msg, date: notification.date, notificationID: notification.notificationID }).then(() => {
+                res.status(200).send('Read');
+            })
         })
     })
 }
