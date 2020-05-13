@@ -15,13 +15,13 @@ exports.sendNoti = function (msg, creator, email) {
 
             ref.child(user.uid).once("value").then(snapshot => {
                 if (!snapshot.hasChildren()) {
-                    adminFb.database().ref('/notifications/' + user.uid + "/0" ).set({ status: 'unread', from: from, avatar: avatar, msg: msg, date: date})
+                    adminFb.database().ref('/notifications/' + user.uid + "/0" ).set({ status: 'unread', from: from, avatar: avatar, msg: msg, date: date, notificationID: 0})
                 } else {
                     ref.child(user.uid).orderByKey().limitToLast(1).once("value").then(snapshot => {
                         const data = snapshot.val() || null;     
                         var number = parseInt(Object.keys(data)[0])
                         number++;
-                        adminFb.database().ref('/notifications/' + user.uid + "/" + number.toString()).set({ status: 'unread', from: from, avatar: avatar, msg: msg, date: date })
+                        adminFb.database().ref('/notifications/' + user.uid + "/" + number.toString()).set({ status: 'unread', from: from, avatar: avatar, msg: msg, date: date, notificationID: number })
                     })
                 }
             })
