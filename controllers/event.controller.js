@@ -152,7 +152,7 @@ exports.createEvent = function (req, res, err) {
                                         userRecords.users.forEach(userRecord => {
                                             if(userRecord.customClaims.admin){
                                                 var msg = 'Tem um novo evento para aceitar!';
-                                                sendNotifications.sendNoti(msg, user, userRecord.email);
+                                                sendNotifications.sendNoti(msg, user, userRecord.email, "evento");
                                             }
                                         })
                                     })
