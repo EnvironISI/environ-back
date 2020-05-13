@@ -257,7 +257,7 @@ exports.adminAccept = function (req, res, err) {
                         } else {
                             adminFb.auth().listUsers().then(userRecords => {
                                 userRecords.users.forEach(userRecord => {
-                                    if (userRecords.displayName.includes(result.properties[8].value)) {
+                                    if (userRecord.displayName.includes(result.properties[8].value)) {
                                         var msg = 'Tem um novo evento para aceitar!';
                                         sendNotifications.sendNoti(msg, user, userRecord.email, "evento");
                                     }
