@@ -190,7 +190,13 @@ exports.getNotifications = function(req, res, err){
             }
             else{
                 var notifications = snapshot.val();
-                res.status(200).send({notifications: notifications, length: notifications.length});
+                var count = 0;
+                notifications.forEach(element => {
+                    if(element.status == "unread"){
+                        count++;
+                    }
+                });
+                res.status(200).send({notifications: notifications, length: count});
             }
             
         })
