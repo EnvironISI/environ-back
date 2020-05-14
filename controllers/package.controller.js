@@ -436,11 +436,11 @@ exports.sendMail = function (req, res, err) {
                         console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
                         // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
                     }
-                    main().catch(console.error);
-                    break;
+                    await main().catch(console.error);
                 }
             }
             res.status(200).send({msg: "Email enviado com sucesso!"});
+            res.end();
         })
     }).catch(() => {
         res.redirect('/denied');
