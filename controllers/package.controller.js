@@ -436,7 +436,7 @@ exports.sendMail = function (req, res, err) {
                         console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
                         // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
                     }
-                    await main().then(() => {
+                    main().then(() => {
                         res.status(200).send({msg: "Email enviado com sucesso!"});
                         res.end();
                     }).catch(console.error);
