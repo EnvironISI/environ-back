@@ -13,7 +13,7 @@ user.put('/changePassword', isUser, userController.changePassword);
 user.delete('/delete/me', isUser, userController.deleteMe);
 user.get('/notifications', isUser, userController.getNotifications);
 user.put('/read/notification', isUser, userController.readNotification);
-user.get('/camara/name', isUser, userController.getCamaraByName)
+user.post('/camara/name', isUser, userController.getCamaraByName)
 
 function isUser(req, res, next) {
     var sessionCookie = req.cookies.session || '';
