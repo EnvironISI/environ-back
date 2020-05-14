@@ -217,7 +217,7 @@ exports.readNotification = function (req, res, err) {
     })
 }
 exports.getCamaraByName = function (req, res, err) {
-    const name = req.sanitize('name').escape();
+    const name = req.params.id;
 
     adminFb.auth().listUsers().then(userRecords => {
         for (var i;i<userRecords.users.length;i++) {
