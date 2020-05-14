@@ -142,17 +142,17 @@ exports.changePhone = function (req, res, err) {
         res.end();
     });
 }
-exports.changePassword = function (req, res, err){
+exports.changePassword = function (req, res, err) {
     var sessionCookie = req.cookies.session || '';
     var newPassword = req.sanitize('password').escape();
     adminFb.auth().verifySessionCookie(sessionCookie, true).then((decodedClaims) => {
         adminFb.auth().updateUser(decodedClaims.uid, {
             password: newPassword
         }).then(() => {
-            res.status(200).send({msg: "Password alterada com sucesso!"});
+            res.status(200).send({ msg: "Password alterada com sucesso!" });
             res.end();
         }).catch(error => {
-            res.status(500).send({error: error});
+            res.status(500).send({ error: error });
             res.end();
         });
     }).catch(() => {
@@ -179,30 +179,30 @@ exports.deleteMe = function (req, res, err) {
         res.end();
     });
 }
-exports.getNotifications = function(req, res, err){
+exports.getNotifications = function (req, res, err) {
     const sessionCookie = req.cookies.session || '';
 
     adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
         var refUID = adminFb.database().ref('/notifications/' + decodedClaims.uid);
         refUID.once('value').then(snapshot => {
-            if(!snapshot.hasChildren()){
-                res.status(200).send({msg: 'Não tem notificações'});
+            if (!snapshot.hasChildren()) {
+                res.status(200).send({ msg: 'Não tem notificações' });
             }
-            else{
+            else {
                 var notifications = snapshot.val();
                 var count = 0;
                 notifications.forEach(element => {
-                    if(element.status == "unread"){
+                    if (element.status == "unread") {
                         count++;
                     }
                 });
-                res.status(200).send({notifications: notifications, length: count});
+                res.status(200).send({ notifications: notifications, length: count });
             }
-            
+
         })
     })
 }
-exports.readNotification = function(req, res, err){
+exports.readNotification = function (req, res, err) {
     const sessionCookie = req.cookies.session || '';
     var notificationID = req.sanitize('notificationID').escape();
 
@@ -214,5 +214,18 @@ exports.readNotification = function(req, res, err){
                 res.status(200).send('Read');
             })
         })
+    })
+}
+exports.getCamaraByName = function (req, res, err) {
+    const name = req.sanitize('name').escape();
+
+    adminFb.auth().listUsers().then(userRecords => {
+        for (var user of userRecords.users) {
+            if (user.displayName.includes(name)) {
+                res.status(200).send(user);
+                res.end();
+                break;
+            }
+        };
     })
 }
