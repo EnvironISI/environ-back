@@ -68,16 +68,19 @@ exports.createEvent = function (req, res, err) {
                         },
                         json: true
                     }, function (err, result, body) {
+                        try {
+                            var description = body.complementaryDescription;
+                            var args = description.split(" | ");
 
-                        var description = body.complementaryDescription;
-                        var args = description.split(" | ");
-
-                        args.forEach(element => {
-                            if (element.includes("TipoEvento")) {
-                                var rep = element.replace("TipoEvento: ", "");
-                                tipoEvento = rep;
-                            }
-                        });
+                            args.forEach(element => {
+                                if (element.includes("TipoEvento")) {
+                                    var rep = element.replace("TipoEvento: ", "");
+                                    tipoEvento = rep;
+                                }
+                            });
+                        } catch (error) {
+                            res.status(400).send({error: "Erro nos dados"})
+                        }
 
                         adminFb.auth().getUser(decodedClaims.uid).then(user => {
                             var params = {
