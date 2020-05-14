@@ -4,6 +4,15 @@ const jsonMessages = require(jsonMessagesPath + "packages");
 var request = require('request');
 const nodemailer = require("nodemailer");
 
+let transporter = nodemailer.createTransport({
+    host: "smtp.mailtrap.io",
+    port: 25,
+    auth: {
+        user: "b129b2c92f6d57", // generated ethereal user
+        pass: "2b367cd95c53d5" // generated ethereal password
+    }
+});
+
 var { adminFb } = require('../config/firebaseConfig.js');
 var { moloni } = require('../config/moloniConfig.js');
 var { hubspot } = require('../config/hubspotConfig');
@@ -396,36 +405,20 @@ exports.delete = function (req, res, err) {
 exports.sendMail = function (req, res, err) {
 
     var sessionCookie = req.cookies.session || '';
-    var email = req.sanitize('email').escape();
     var municipioName = req.sanitize('municipio').escape();
     var msg = req.sanitize('msg').escape();
 
     adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
-        adminFb.auth().listUsers().then(userRecords => {
-            for (var i = 0; i < userRecords.users.length; i++) {
-                var municipio = userRecords.users[i];
-                if (municipio.displayName.includes(municipioName)) {
-                    // async..await is not allowed in global scope, must use a wrapper
-                    async function main() {
-                        // Generate test SMTP service account from ethereal.email
-                        // Only needed if you don't have a real mail account for testing
+        adminFb.auth().getUser(decodedClaims.uid).then(user => {
+            adminFb.auth().listUsers().then(async userRecords => {
+                for (var i = 0; i < userRecords.users.length; i++) {
+                    var municipio = userRecords.users[i];
+                    if (municipio.displayName.includes(municipioName)) {
 
-                        // create reusable transporter object using the default SMTP transport
-                        let transporter = nodemailer.createTransport({
-                            host: "smtp.mailtrap.io",
-                            port: 587,
-                            secure: true, // true for 465, false for other ports
-                            auth: {
-                                user: "61b073d6be421f", // generated ethereal user
-                                pass: "73e0153d1d5efc" // generated ethereal password
-                            }
-                        });
-
-                        // send mail with defined transport object
                         let info = await transporter.sendMail({
-                            from: email, // sender address
+                            from: user.email, // sender address
                             to: municipio.email, // list of receivers
-                            subject: "Nova opção de pacote requisitado pela empresa " + email, // Subject line
+                            subject: "Nova opção de pacote requisitado pela empresa " + user.displayName, // Subject line
                             text: msg // plain text body
                         });
 
@@ -435,14 +428,11 @@ exports.sendMail = function (req, res, err) {
                         // Preview only available when sending through an Ethereal account
                         console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
                         // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
-                    }
-                    main().then(() => {
-                        res.status(200).send({msg: "Email enviado com sucesso!"});
+                        res.status(200).send({ msg: "Email enviado com sucesso!" });
                         res.end();
-                    }).catch(console.error);
+                    }
                 }
-            }
-
+            })
         })
     }).catch(() => {
         res.redirect('/denied');
