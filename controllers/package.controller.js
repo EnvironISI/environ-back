@@ -2,6 +2,7 @@ const jsonMessagesPath = __dirname + "/../assets/jsonMessages/";
 const jsonMessages = require(jsonMessagesPath + "packages");
 
 var request = require('request');
+const nodemailer = require("nodemailer");
 
 var { adminFb } = require('../config/firebaseConfig.js');
 var { moloni } = require('../config/moloniConfig.js');
@@ -390,5 +391,59 @@ exports.delete = function (req, res, err) {
     }).catch(() => {
         res.redirect('denied');
         res.end();
+    })
+}
+exports.sendMail = function (req, res, err) {
+
+    var sessionCookie = req.cookies.session || '';
+    var email = req.sanitize('email').escape();
+    var municipioName = req.sanitize('municipio').escape();
+    var msg = req.sanitize('msg').escape();
+
+    adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
+        adminFb.auth().listUsers().then(userRecords => {
+            for (var i = 0; i < userRecords.users.length; i++) {
+                var municipio = userRecords.users[i];
+                if (municipio.displayName.includes(municipioName)) {
+                    // async..await is not allowed in global scope, must use a wrapper
+                    async function main() {
+                        // Generate test SMTP service account from ethereal.email
+                        // Only needed if you don't have a real mail account for testing
+
+                        // create reusable transporter object using the default SMTP transport
+                        let transporter = nodemailer.createTransport({
+                            host: "smtp.mailtrap.io",
+                            port: 587,
+                            secure: true, // true for 465, false for other ports
+                            auth: {
+                                user: "61b073d6be421f", // generated ethereal user
+                                pass: "73e0153d1d5efc" // generated ethereal password
+                            }
+                        });
+
+                        // send mail with defined transport object
+                        let info = await transporter.sendMail({
+                            from: email, // sender address
+                            to: municipio.email, // list of receivers
+                            subject: "Nova opção de pacote requisitado pela empresa " + email, // Subject line
+                            text: msg // plain text body
+                        });
+
+                        console.log("Message sent: %s", info.messageId);
+                        // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+
+                        // Preview only available when sending through an Ethereal account
+                        console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+                        // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+                    }
+                    main().catch(console.error);
+                    break;
+                }
+            }
+            res.status(200).send({msg: "Email enviado com sucesso!"});
+        })
+    }).catch(() => {
+        res.redirect('/denied');
+        res.end()
     })
 }
