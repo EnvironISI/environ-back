@@ -220,7 +220,8 @@ exports.getCamaraByName = function (req, res, err) {
     const name = req.sanitize('name').escape();
 
     adminFb.auth().listUsers().then(userRecords => {
-        for (var user of userRecords.users) {
+        for (var i;i<userRecords.users.length;i++) {
+            var user = userRecords.users[i];
             if (user.displayName.includes(name)) {
                 res.status(200).send(user);
                 res.end();
