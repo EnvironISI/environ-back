@@ -258,6 +258,7 @@ exports.adminAccept = function (req, res, err) {
                             console.log(error)
                             res.status(400).send({ error: error });
                         } else {
+                            //Colocar notificação de rejeição
                             adminFb.auth().listUsers().then(userRecords => {
                                 userRecords.users.forEach(userRecord => {
                                     if (userRecord.displayName.includes(result.properties[8].value)) {
