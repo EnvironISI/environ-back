@@ -69,7 +69,7 @@ exports.camara = function (req, res, err) {
                 var json = JSON.parse(result.body);
                 console.log(json);
                 request({
-                    url: 'https://my.jasminsoftware.com/api/236243/236243-0001/businesscore/items',
+                    url: 'https://my.jasminsoftware.com/api/237056/237056-0001//businesscore/items',
                     method: 'GET',
                     headers: {
                         Authorization: 'Bearer ' + json.access_token
@@ -78,20 +78,22 @@ exports.camara = function (req, res, err) {
                 }, function (err, result, body) {
                     if (body) {
                         let resp = [];
-                        body.forEach(item => {
-                            console.log(item)
-                            if (item.itemKey !== 'PORTES') {
-                                let obj = {
-                                    id: item.id,
-                                    name: item.itemKey,
-                                    description: item.description,
-                                    summary: item.complementaryDescription,
-                                    image: item.image,
-                                    ativo: item.isActive
+                        if (body) {
+                            body.forEach(item => {
+                                console.log(item)
+                                if (item.itemKey !== 'PORTES') {
+                                    let obj = {
+                                        id: item.id,
+                                        name: item.itemKey,
+                                        description: item.description,
+                                        summary: item.complementaryDescription,
+                                        image: item.image,
+                                        ativo: item.isActive
+                                    }
+                                    resp.push(obj);
                                 }
-                                resp.push(obj);
-                            }
-                        })
+                            })
+                        }
                         res.status(200).send(resp);
                     } else {
                         console.log(err);
@@ -130,7 +132,7 @@ exports.getByID = function (req, res, err) {
             if (result) {
                 var json = JSON.parse(result.body);
                 request({
-                    url: 'https://my.jasminsoftware.com/api/236243/236243-0001/businesscore/items/' + id,
+                    url: 'https://my.jasminsoftware.com/api/237056/237056-0001//businesscore/items/' + id,
                     method: 'GET',
                     headers: {
                         Authorization: 'Bearer ' + json.access_token
@@ -195,7 +197,7 @@ exports.create = function (req, res, err) {
                     }
 
                     request({
-                        url: 'https://my.jasminsoftware.com/api/236243/236243-0001/businesscore/items',
+                        url: 'https://my.jasminsoftware.com/api/237056/237056-0001/businesscore/items',
                         method: 'POST',
                         headers: {
                             Authorization: 'Bearer ' + json.access_token
@@ -261,7 +263,7 @@ exports.edit = function (req, res, err) {
 
                     if (image !== undefined) {
                         request({
-                            url: 'https://my.jasminsoftware.com/api/236243/236243-0001/businesscore/items/' + id + "/image",
+                            url: 'https://my.jasminsoftware.com/api/237056/237056-0001//businesscore/items/' + id + "/image",
                             method: 'PUT',
                             headers: {
                                 Authorization: 'Bearer ' + json.access_token
@@ -283,7 +285,7 @@ exports.edit = function (req, res, err) {
                     }
                     else if (description !== undefined) {
                         request({
-                            url: 'https://my.jasminsoftware.com/api/236243/236243-0001/businesscore/items/' + id + "/description",
+                            url: 'https://my.jasminsoftware.com/api/237056/237056-0001//businesscore/items/' + id + "/description",
                             method: 'PUT',
                             headers: {
                                 Authorization: 'Bearer ' + json.access_token
@@ -305,7 +307,7 @@ exports.edit = function (req, res, err) {
                     }
                     else if (itemKey !== undefined) {
                         request({
-                            url: 'https://my.jasminsoftware.com/api/236243/236243-0001/businesscore/items/' + id + "/itemKey",
+                            url: 'https://my.jasminsoftware.com/api/237056/237056-0001//businesscore/items/' + id + "/itemKey",
                             method: 'PUT',
                             headers: {
                                 Authorization: 'Bearer ' + json.access_token
@@ -327,7 +329,7 @@ exports.edit = function (req, res, err) {
                     }
                     else if (summary !== undefined) {
                         request({
-                            url: 'https://my.jasminsoftware.com/api/236243/236243-0001/businesscore/items/' + id + "/complementaryDescription",
+                            url: 'https://my.jasminsoftware.com/api/237056/237056-0001//businesscore/items/' + id + "/complementaryDescription",
                             method: 'PUT',
                             headers: {
                                 Authorization: 'Bearer ' + json.access_token
@@ -385,7 +387,7 @@ exports.delete = function (req, res, err) {
                 if (result) {
                     var json = JSON.parse(result.body);
                     request({
-                        url: 'https://my.jasminsoftware.com/api/236243/236243-0001/businesscore/items/' + id,
+                        url: 'https://my.jasminsoftware.com/api/237056/237056-0001//businesscore/items/' + id,
                         method: 'DELETE',
                         headers: {
                             Authorization: 'Bearer ' + json.access_token

@@ -60,7 +60,7 @@ exports.createEvent = function (req, res, err) {
                 if (result) {
                     var json = JSON.parse(result.body);
                     request({
-                        url: 'https://my.jasminsoftware.com/api/236243/236243-0001/businesscore/items/' + pacote,
+                        url: 'https://my.jasminsoftware.com/api/237056/237056-0001//businesscore/items/' + pacote,
                         method: 'GET',
                         headers: {
                             Authorization: 'Bearer ' + json.access_token
@@ -671,7 +671,7 @@ exports.handlePdf = function (req, res, err) {
                         var json = JSON.parse(jsonKey.body);
 
                         request({
-                            url: 'https://my.jasminsoftware.com/api/236243/236243-0001/businesscore/items/' + eventResult.properties[9].value,
+                            url: 'https://my.jasminsoftware.com/api/237056/237056-0001//businesscore/items/' + eventResult.properties[9].value,
                             method: 'GET',
                             headers: {
                                 Authorization: 'Bearer ' + json.access_token
