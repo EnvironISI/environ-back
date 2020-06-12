@@ -1,7 +1,6 @@
 const jsonMessagesPath = __dirname + "/../assets/jsonMessages/";
 const jsonMessages = require(jsonMessagesPath + "login");
 
-var request = require('request');
 var { adminFb, firebase } = require('../config/firebaseConfig.js');
 var { hubspot } = require('../config/hubspotConfig');
 
@@ -215,4 +214,51 @@ exports.readNotification = function (req, res, err) {
             })
         })
     })
+}
+exports.news = function (req, res, err) {
+    var info;
+    var date = new Date;
+
+    date.setDate(date.getDate() - 15);
+    var ano = date.getFullYear().toString(),
+        mes = ((date.getMonth() + 1) < 10) ? "0" + (date.getMonth() + 1) : (date.getMonth() + 1).toString(),
+        dia = (date.getDate() < 10) ? "0" + date.getDate() : date.getDate().toString();
+
+    var url =
+        "https://newsapi.org/v2/everything?" +
+        "q=Environment%20OR%20Preservation%20OR%20Cleaning%20forests%20OR%20Pollution&" +
+        "from=" + ano + "-" + mes + "-" + dia + "&" +
+        "pageSize=20&" +
+        "sortBy=popularity&" +
+        "apiKey=1602c707c35b423f946e6f8c60b76dde";
+
+    var req = new Request(url);
+    
+    fetch(req)
+        .then(response => response.json())
+        .then(data => {
+            articles = data;
+        }).catch(error => {
+            console.log(error);
+        })
+
+    function data() {
+        if (articles == undefined) {
+            console.log("Parsing data.");
+        } else {
+            clearInterval(loadData);
+            generateData(articles);
+            setCardData();
+        }
+    }
+
+    const loadData = setInterval(data, 1000);
+
+    function generateData(articles) {
+        let newData = articles.articles;
+        this.info = newData;
+
+        res.status(200).send(this.info);
+    }
+
 }

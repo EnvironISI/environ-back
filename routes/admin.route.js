@@ -1,7 +1,8 @@
-const admin = require('express').Router();
-const adminController = require('../controllers/admin.controller');
 const jsonMessagesPath = __dirname + "/../assets/jsonMessages/";
 const jsonMessages = require(jsonMessagesPath + "login");
+
+const admin = require('express').Router();
+const adminController = require('../controllers/admin.controller');
 
 var { adminFb } = require('../config/firebaseConfig.js');
 

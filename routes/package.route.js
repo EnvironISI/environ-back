@@ -1,8 +1,8 @@
-const package = require('express').Router();
-const packageController = require('../controllers/package.controller');
-
 const jsonMessagesPath = __dirname + "/../assets/jsonMessages/";
 const jsonMessages = require(jsonMessagesPath + "packages");
+
+const package = require('express').Router();
+const packageController = require('../controllers/package.controller');
 
 package.get('/token', packageController.getToken);
 

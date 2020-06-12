@@ -1,7 +1,8 @@
-const user = require('express').Router();
-const userController = require('../controllers/user.controller');
 const jsonMessagesPath = __dirname + "/../assets/jsonMessages/";
 const jsonMessages = require(jsonMessagesPath + "login");
+
+const user = require('express').Router();
+const userController = require('../controllers/user.controller');
 
 const { adminFb } = require('../config/firebaseConfig');
 
@@ -13,6 +14,7 @@ user.put('/changePassword', isUser, userController.changePassword);
 user.delete('/delete/me', isUser, userController.deleteMe);
 user.get('/notifications', isUser, userController.getNotifications);
 user.put('/read/notification', isUser, userController.readNotification);
+user.get('/news', isUser, userController.news);
 
 function isUser(req, res, next) {
     var sessionCookie = req.cookies.session || '';

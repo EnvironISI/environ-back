@@ -1,7 +1,6 @@
 const jsonMessagesPath = __dirname + "/../assets/jsonMessages/";
 const jsonMessages = require(jsonMessagesPath + "login");
 
-var request = require("request");
 var { adminFb, firebase } = require('../config/firebaseConfig.js');
 var { hubspot } = require('../config/hubspotConfig');
 
