@@ -232,33 +232,14 @@ exports.news = function (req, res, err) {
         "sortBy=popularity&" +
         "apiKey=1602c707c35b423f946e6f8c60b76dde";
 
-    var req = new Request(url);
+    var request = new Request(url);
     
-    fetch(req)
+    fetch(request)
         .then(response => response.json())
         .then(data => {
-            articles = data;
+            res.status(200).send(data);
         }).catch(error => {
             console.log(error);
         })
-
-    function data() {
-        if (articles == undefined) {
-            console.log("Parsing data.");
-        } else {
-            clearInterval(loadData);
-            generateData(articles);
-            setCardData();
-        }
-    }
-
-    const loadData = setInterval(data, 1000);
-
-    function generateData(articles) {
-        let newData = articles.articles;
-        this.info = newData;
-
-        res.status(200).send(this.info);
-    }
 
 }
