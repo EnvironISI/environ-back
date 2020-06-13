@@ -15,6 +15,7 @@ user.delete('/delete/me', isUser, userController.deleteMe);
 user.get('/notifications', isUser, userController.getNotifications);
 user.put('/read/notification', isUser, userController.readNotification);
 user.get('/news', isUser, userController.news);
+user.put('/tutorial', isUser, userController.doneTutorial);
 
 function isUser(req, res, next) {
     var sessionCookie = req.cookies.session || '';

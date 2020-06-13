@@ -243,3 +243,18 @@ exports.news = function (req, res, err) {
         })
 
 }
+exports.doneTutorial = function(req, res, err){
+    var sessionCookie = req.cookies.session || '';
+
+    adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
+        adminFb.database().ref('/users/' + decodedClaims.uid).once('value').then(snapshot => {
+            var user = snapshot.val();
+            adminFb.database().ref('/users/' + decodedClaims.uid).set({hubspot_id: user.companyId, email: user.email, newUser: 0}).then(() => {
+                res.status(200).send('Lido')
+            })
+        })
+    }).catch(error => {
+        console.log(error);
+    })
+
+}
