@@ -249,7 +249,7 @@ exports.doneTutorial = function(req, res, err){
     adminFb.auth().verifySessionCookie(sessionCookie, true).then(decodedClaims => {
         adminFb.database().ref('/users/' + decodedClaims.uid).once('value').then(snapshot => {
             var user = snapshot.val();
-            adminFb.database().ref('/users/' + decodedClaims.uid).set({hubspot_id: user.companyId, email: user.email, newUser: 0}).then(() => {
+            adminFb.database().ref('/users/' + decodedClaims.uid).set({hubspot_id: user.hubspot_id, email: user.email, newUser: 0}).then(() => {
                 res.status(200).send('Lido')
             })
         })
