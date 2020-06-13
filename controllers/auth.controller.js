@@ -246,7 +246,7 @@ exports.saveNotiToken = function (req, res, err) {
     adminFb.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */).then((decodedClaims) => {
         adminFb.database().ref('/users/' + decodedClaims.uid).once('value').then(snapshot => {
             var userInfo = snapshot.val();
-            adminFb.database().ref('/users/' + decodedClaims.uid).set({ hubspot_id: userInfo.hubspot_id, email: userInfo.email, notiToken: notiToken }).then(() => {
+            adminFb.database().ref('/users/' + decodedClaims.uid).set({ hubspot_id: userInfo.hubspot_id, email: userInfo.email, notiToken: notiToken, newUser: userInfo.newUser }).then(() => {
                 res.status(200).send("Token de notificação salva");
             })
         })
