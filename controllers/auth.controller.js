@@ -38,7 +38,8 @@ exports.user = function (req, res, err) {
                         nif: nif,
                         country: country,
                         city: city,
-                        setor: setor
+                        setor: setor,
+                        newUser: userInfo.newUser
                     };
                     res.status(200).send({ user: info, token: sessionCookie });
                 }).catch(error => {
@@ -159,7 +160,7 @@ exports.register = function (req, res, err) {
                         { name: 'responsible', value: responsible }]
                 }
                 hubspot.companies.create(params).then((body) => {
-                    adminFb.database().ref('/users/' + result.uid).set({ hubspot_id: body.companyId, email: email }).then(() => {
+                    adminFb.database().ref('/users/' + result.uid).set({ hubspot_id: body.companyId, email: email, newUser: 1}).then(() => {
                         if (type == "empresa") {
                             adminFb.auth().setCustomUserClaims(result.uid, { empresa: true }).then(() => {
                                 adminFb.auth().getUserByEmail(email).then(user => {
