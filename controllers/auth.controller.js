@@ -108,7 +108,7 @@ exports.logout = function (req, res, err) {
             adminFb.database().ref('/users/' + decodedClaims.uid).once('value').then(snapshot => {
                 var userInfo = snapshot.val();
                 if (userInfo.notiToken) {
-                    adminFb.database().ref('/users/' + decodedClaims.uid).set({ hubspot_id: userInfo.hubspot_id, email: userInfo.email });
+                    adminFb.database().ref('/users/' + decodedClaims.uid).set({ hubspot_id: userInfo.hubspot_id, email: userInfo.email, newUser: userInfo.newUser });
                 }
             })
         })
