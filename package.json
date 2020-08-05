@@ -12,7 +12,7 @@
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.4",
     "express": "^4.17.1",
-    "express-fileupload": "^1.1.6",
+    "express-fileupload": "^1.1.9",
     "express-sanitizer": "^1.0.4",
     "express-session": "^1.15.6",
     "express-validator": "^5.3.0",
